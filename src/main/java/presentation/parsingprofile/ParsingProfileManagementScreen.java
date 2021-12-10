@@ -1,4 +1,6 @@
 package presentation.parsingprofile;
 
-public class ParsingProfileManagementScreen {
+import javax.swing.JPanel;
+
+public class ParsingProfileManagementScreen extends JPanel {
 }

@@ -1,4 +1,6 @@
 package presentation.metricsprofile;
 
-public class MetricsProfileManagementScreen {
+import javax.swing.JPanel;
+
+public class MetricsProfileManagementScreen extends JPanel {
 }

@@ -1,4 +1,6 @@
 package presentation.organization;
 
-public class OrganizationScreen {
+import javax.swing.JPanel;
+
+public class OrganizationScreen extends JPanel {
 }
