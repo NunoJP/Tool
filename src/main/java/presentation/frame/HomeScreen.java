@@ -63,4 +63,8 @@ public class HomeScreen {
         }
         return basePanel;
     }
+
+    public JFrame getFrame() {
+        return frame;
+    }
 }

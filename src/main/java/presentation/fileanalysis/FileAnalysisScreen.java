@@ -1,4 +1,6 @@
 package presentation.fileanalysis;
 
-public class FileAnalysisScreen {
+import javax.swing.JPanel;
+
+public class FileAnalysisScreen extends JPanel {
 }

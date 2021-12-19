@@ -6,6 +6,7 @@ import presentation.common.GuiConstants;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -25,8 +26,10 @@ public class FileAnalysisSetupScreen extends JPanel {
     private JButton startButton;
     private JComboBox<ParsingProfileDo> parsingProfileDropdown;
     private JComboBox<MetricsProfileDo> metricsProfileDropdown;
+    private JFrame motherFrame;
 
-    public FileAnalysisSetupScreen() {
+    public FileAnalysisSetupScreen(JFrame motherFrame) {
+        this.motherFrame = motherFrame;
         this.setLayout(new BorderLayout(H_GAP, V_GAP));
         this.setBorder(new EmptyBorder(V_GAP, H_GAP, V_GAP, H_GAP));
         JPanel filePanel = createFilePanel();
@@ -90,6 +93,10 @@ public class FileAnalysisSetupScreen extends JPanel {
 
     public JButton getStartButton() {
         return startButton;
+    }
+
+    public JFrame getMotherFrame() {
+        return motherFrame;
     }
 
     public JComboBox<ParsingProfileDo> getParsingProfileDropdown() {

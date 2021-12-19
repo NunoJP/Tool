@@ -19,7 +19,7 @@ public class HomeScreenPresenter implements IPresenter {
 
     private void defineViewBehavior() {
 //        basePanel.addTab(GuiConstants.ANALYSIS_TAB, new );
-        FileAnalysisSetupScreenPresenter fileAnalysisSetupScreenPresenter = new FileAnalysisSetupScreenPresenter();
+        FileAnalysisSetupScreenPresenter fileAnalysisSetupScreenPresenter = new FileAnalysisSetupScreenPresenter(view.getFrame());
         view.getBasePanel().addTab(GuiConstants.ANALYSIS_TAB, fileAnalysisSetupScreenPresenter.getView());
         MonitoringSetupScreenPresenter monitoringSetupScreenPresenter = new MonitoringSetupScreenPresenter();
         view.getBasePanel().addTab(GuiConstants.MONITORING_TAB, monitoringSetupScreenPresenter.getView());

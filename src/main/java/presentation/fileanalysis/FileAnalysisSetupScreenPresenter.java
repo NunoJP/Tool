@@ -8,7 +8,9 @@ import presentation.common.ITabPresenter;
 import presentation.common.custom.CellRenderer;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.io.File;
 import java.nio.file.Paths;
@@ -26,8 +28,8 @@ public class FileAnalysisSetupScreenPresenter implements ITabPresenter {
     private File selectedFile;
 
 
-    public FileAnalysisSetupScreenPresenter() {
-        view = new FileAnalysisSetupScreen();
+    public FileAnalysisSetupScreenPresenter(JFrame motherFrame) {
+        view = new FileAnalysisSetupScreen(motherFrame);
         parsingService = new ParsingProfileManagementService();
         metricsService = new MetricsProfileManagementService();
         defineViewBehavior();
@@ -56,17 +58,22 @@ public class FileAnalysisSetupScreenPresenter implements ITabPresenter {
                 selectedFile = fc.getSelectedFile();
                 if (!selectedFile.isDirectory()) {
                     view.getNameField().setText(selectedFile.getPath());
+                    view.getStartButton().setEnabled(true);
                 }
             }
         });
 
-        view.getStartButton().addActionListener(
+        // Define start button behavior
+        JButton startButton = view.getStartButton();
+        startButton.setEnabled(false);
+        startButton.addActionListener(
             e -> {
                 ParsingProfileDo parsingProfile = (ParsingProfileDo) view.getParsingProfileDropdown().getSelectedItem();
                 MetricsProfileDo metricsProfile = (MetricsProfileDo) view.getMetricsProfileDropdown().getSelectedItem();
-                var metricsScreenPresenter = new FileAnalysisMetricsScreenPresenter(
-                        selectedFile, parsingProfile, metricsProfile
+                var metricsScreenPresenter = new FileAnalysisBaseDialogPresenter(
+                        view.getMotherFrame(), selectedFile, parsingProfile, metricsProfile
                 );
+                metricsScreenPresenter.execute();
             }
         );
     }

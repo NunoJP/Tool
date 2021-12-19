@@ -3,6 +3,8 @@ package presentation.common;
 public class GuiConstants {
     public static final int H_GAP = 5;
     public static final int V_GAP = 5;
+    public static final int H_FILE_ANALYSIS_SCREEN_SIZE = 1200;
+    public static final int V_FILE_ANALYSIS_SCREEN_SIZE = 700;
 
     // Screen names
     public static final String HOME_SCREEN_TITLE = "Simplify software log analysis";
@@ -23,6 +25,8 @@ public class GuiConstants {
     public static final String PARSING_PROFILES_TAB = "Parsing profiles";
     public static final String METRICS_PROFILES_TAB = "Metrics profiles";
     public static final String ORGANIZATION_TAB = "Organization";
+    public static final String FILE_METRICS_TAB = "File metrics";
+    public static final String FILE_OPERATIONS_TAB = "File operations";
 
     // Buttons
     public static final String ANALYSIS_BUTTON = "Analysis";
