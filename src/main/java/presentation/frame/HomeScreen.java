@@ -21,7 +21,7 @@ public class HomeScreen {
     public HomeScreen() {
         setLookAndFeel();
         frame = new JFrame(HOME_SCREEN_TITLE);
-        frame.setPreferredSize(new Dimension(500, 300));
+        frame.setPreferredSize(new Dimension(550, 250));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         createComponents();
         frame.pack();
@@ -52,8 +52,6 @@ public class HomeScreen {
     }
 
     private void createComponents() {
-//        JPanel spacerPanel = new JPanel(new BorderLayout(H_GAP, V_GAP));
-//        spacerPanel.setBorder(BorderFactory.createEmptyBorder(V_GAP, H_GAP, V_GAP, H_GAP));
         basePanel = new JTabbedPane();
         frame.getContentPane().add(basePanel, BorderLayout.CENTER);
     }
