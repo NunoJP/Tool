@@ -1,6 +1,7 @@
 package presentation.frame;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -54,6 +55,7 @@ public class HomeScreen {
     private void createComponents() {
         basePanel = new JTabbedPane();
         frame.getContentPane().add(basePanel, BorderLayout.CENTER);
+        frame.getContentPane().add(new JLabel("Developed by Nuno Pereira, ISEL, 2022"), BorderLayout.SOUTH);
     }
 
     public JTabbedPane getBasePanel() {
