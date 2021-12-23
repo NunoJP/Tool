@@ -72,8 +72,8 @@ public class GuiConstants {
     public static final String KEYWORD_LABEL = "Keyword";
     public static final String CASE_SENSITIVE_LABEL = "Case sensitive";
     public static final String THRESHOLD_LABEL = "Threshold";
-    public static final String START_DATE_LABEL = "Start date:";
-    public static final String END_DATE_LABEL = "End date:";
+    public static final String START_DATE_LABEL = "Start date: ";
+    public static final String END_DATE_LABEL = "End date: ";
     public static final String LOG_LEVEL_DISTRIBUTION_LABEL = "Log level distribution";
     public static final String WARNINGS_LABEL = "Warnings";
     public static final String FROM_LABEL = "From:";
@@ -90,8 +90,15 @@ public class GuiConstants {
     public static final String WORD_LABEL = "Word";
     public static final String SIZE_LABEL = "Size";
 
-
-
+    // Columns
+    public static final String LEVEL_COLUMN = "Level";
+    public static final String PERCENTAGE_COLUMN = "%";
+    public static final String KEYWORD_COLUMN = "Keyword";
+    public static final String MESSAGE_COLUMN = "Level";
+    public static final String SIZE_COLUMN = "Size";
+    public static final String FILE_COLUMN = "File";
+    public static final String VALUE_COLUMN = "Value";
+    public static final String WORD_COLUMN = "Word";
 
 
 

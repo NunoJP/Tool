@@ -43,6 +43,8 @@ public class FileAnalysisBaseDialogPresenter {
     public void execute(){
         fileAnalysisBaseDialog.setLocationRelativeTo(motherFrame);
         fileAnalysisBaseDialog.setVisible(true);
+        fileAnalysisMetricsScreenPresenter.execute();
+        fileAnalysisScreenPresenter.execute();
     }
 
 

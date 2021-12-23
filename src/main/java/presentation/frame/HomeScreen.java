@@ -36,6 +36,7 @@ public class HomeScreen {
         try {
             // Set System L&F
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
             setUIFont(new javax.swing.plaf.FontUIResource("CustomFont", Font.PLAIN,12));
         } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             LOGGER.log(Level.SEVERE, "Error at setting up look and feel", e);

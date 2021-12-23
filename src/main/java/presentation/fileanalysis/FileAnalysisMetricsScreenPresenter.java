@@ -4,10 +4,14 @@ import domain.entities.displayobjects.MetricsProfileDo;
 import domain.entities.displayobjects.ParsingProfileDo;
 import domain.entities.domainobjects.MetricsReport;
 import domain.services.FileAnalysisMetricsService;
+import general.util.Pair;
 import presentation.common.ITabPresenter;
 
 import javax.swing.JPanel;
+import java.awt.Color;
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
 
 public class FileAnalysisMetricsScreenPresenter implements ITabPresenter {
 
@@ -33,7 +37,31 @@ public class FileAnalysisMetricsScreenPresenter implements ITabPresenter {
 
     public void execute(){
         MetricsReport metricsReport = fileAnalysisMetricsService.getMetricsReport();
+        String [][] kwdThresholdData = metricsReport.getKwdThresholdData();
+        view.getKwdThTable().setData(kwdThresholdData);
+        view.getKwdThTable().setStringColorRenderMap(generateDefaultColorMap());
+        String [][] logLevelData = metricsReport.getLogLevelData();
+        view.getLogLevelTable().setData(logLevelData);
+        view.getLogLevelTable().setStringColorRenderMap(generateDefaultColorMap());
+        String [][] mostCommonWordsData = metricsReport.getMostCommonWordsData();
+        view.getMostCommonWordsTable().setData(mostCommonWordsData);
+        view.getMostCommonWordsTable().setStringColorRenderMap(generateDefaultColorMap());
+        String [][] warningsData = metricsReport.getWarningsData();
+        view.getWarningsTable().setData(warningsData);
+        view.getWarningsTable().setStringColorRenderMap(generateDefaultColorMap());
 
+        // File name and dates
+        view.getFileNamePanel().setVariableLabelText(metricsReport.getFileName());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        view.getStartDatePanel().setVariableLabelText(sdf.format(metricsReport.getStartDate()));
+        view.getEndDatePanel().setVariableLabelText(sdf.format(metricsReport.getEndDate()));
+    }
+
+    private HashMap<String, Pair<Color, Color>> generateDefaultColorMap() {
+        HashMap<String, Pair<Color, Color>> colorMap = new HashMap<>();
+        colorMap.put("Error", Pair.of(new Color(255, 102, 102), Color.BLACK));
+        colorMap.put("Warning", Pair.of(new Color(255, 255, 179), Color.BLACK));
+        return colorMap;
     }
 
 }
