@@ -30,27 +30,24 @@ public class FileAnalysisSetupScreen extends JPanel {
 
     public FileAnalysisSetupScreen(JFrame motherFrame) {
         this.motherFrame = motherFrame;
-        this.setLayout(new BorderLayout(H_GAP, V_GAP));
-        this.setBorder(new EmptyBorder(V_GAP, H_GAP, V_GAP, H_GAP));
+        this.setLayout(new BorderLayout());
+
         JPanel filePanel = createFilePanel();
         JPanel parsingProfilePanel = createParsingProfilePanel();
         JPanel metricsProfilePanel = createMetricsProfilePanel();
         JPanel startPanel = createStartPanel();
         this.add(filePanel, BorderLayout.NORTH);
-        JPanel holder = new JPanel(new GridLayout(5,1));
-        holder.add(new JPanel());
+        JPanel holder = new JPanel(new GridLayout(2,1, H_GAP, V_GAP));
         holder.add(parsingProfilePanel);
-        holder.add(new JPanel());
         holder.add(metricsProfilePanel);
-        holder.add(new JPanel());
         this.add(holder, BorderLayout.CENTER);
         this.add(startPanel, BorderLayout.SOUTH);
     }
 
     private JPanel createFilePanel() {
-        JPanel filePanel = new JPanel(new FlowLayout());
+        JPanel filePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, V_GAP));
         filePanel.add(new JLabel(GuiConstants.FILE_INDICATION_LABEL));
-        nameField = new JTextField(30);
+        nameField = new JTextField(GuiConstants.FILE_NAME_FIELD_SIZE);
         nameField.setEditable(false);
         filePanel.add(nameField);
         chooseFileButton = new JButton(GuiConstants.CHOOSE_FILE_BUTTON);
@@ -62,6 +59,7 @@ public class FileAnalysisSetupScreen extends JPanel {
         JPanel profilePanel = new JPanel(new BorderLayout(H_GAP, V_GAP));
         profilePanel.add(new JLabel(GuiConstants.PARSING_PROFILE_LABEL, SwingConstants.RIGHT), BorderLayout.WEST);
         parsingProfileDropdown = new JComboBox<>();
+        profilePanel.setBorder(new EmptyBorder(V_GAP*2, H_GAP, V_GAP*2, H_GAP));
         profilePanel.add(parsingProfileDropdown, BorderLayout.CENTER);
         return profilePanel;
     }
@@ -70,12 +68,13 @@ public class FileAnalysisSetupScreen extends JPanel {
         JPanel metricsPanel = new JPanel(new BorderLayout(H_GAP, V_GAP));
         metricsPanel.add(new JLabel(GuiConstants.METRICS_LABEL, SwingConstants.RIGHT), BorderLayout.WEST);
         metricsProfileDropdown = new JComboBox<>();
+        metricsPanel.setBorder(new EmptyBorder(V_GAP*2, H_GAP, V_GAP*2, H_GAP));
         metricsPanel.add(metricsProfileDropdown, BorderLayout.CENTER);
         return metricsPanel;
     }
 
     private JPanel createStartPanel() {
-        JPanel startButtonPanel = new JPanel(new GridLayout(1, 3));
+        JPanel startButtonPanel = new JPanel(new GridLayout(1, 3, H_GAP, V_GAP));
         startButton = new JButton(GuiConstants.START_BUTTON);
         startButtonPanel.add(new JPanel());
         startButtonPanel.add(startButton);

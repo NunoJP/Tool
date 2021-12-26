@@ -1,10 +1,23 @@
 package presentation.common;
 
 public class GuiConstants {
+    // Numeric constants
     public static final int H_GAP = 5;
     public static final int V_GAP = 5;
     public static final int H_FILE_ANALYSIS_SCREEN_SIZE = 1200;
     public static final int V_FILE_ANALYSIS_SCREEN_SIZE = 700;
+    public static final int FILE_NAME_FIELD_SIZE = 100/3;
+    public static final int KEYWORD_FIELD_SIZE = 50;
+    public static final int SPECIFIC_FORMAT_FIELD_SIZE = 20;
+    public static final int METHOD_FIELD_SIZE = 100/10;
+    public static final int LEVEL_FIELD_SIZE = 10;
+    public static final int MESSAGE_FIELD_SIZE = 255/10;
+
+
+    // Formatters
+    public static final String DATE_TIME_FORMATTER = "yyyy-MM-dd HH:mm:ss.SSS";
+    public static final String DATE_FORMATTER = "yyyy-MM-dd";
+    public static final String TIME_FORMATTER = "HH:mm:ss.SSS";
 
     // Screen names
     public static final String HOME_SCREEN_TITLE = "Simplify software log analysis";
@@ -94,11 +107,14 @@ public class GuiConstants {
     public static final String LEVEL_COLUMN = "Level";
     public static final String PERCENTAGE_COLUMN = "%";
     public static final String KEYWORD_COLUMN = "Keyword";
-    public static final String MESSAGE_COLUMN = "Level";
+    public static final String MESSAGE_COLUMN = "Message";
     public static final String SIZE_COLUMN = "Size";
     public static final String FILE_COLUMN = "File";
     public static final String VALUE_COLUMN = "Value";
     public static final String WORD_COLUMN = "Word";
+    public static final String DATE_COLUMN = "Date";
+    public static final String TIME_COLUMN = "Time";
+    public static final String ORIGIN_COLUMN = "Origin";
 
 
 

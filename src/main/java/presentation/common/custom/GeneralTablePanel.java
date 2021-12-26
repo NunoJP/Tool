@@ -23,11 +23,17 @@ public class GeneralTablePanel extends JPanel {
     private final JTable table;
     private HashMap<String, Pair<Color,Color>> colorRenderMap;
 
+    public GeneralTablePanel(String [] columns) {
+        this(null, columns);
+    }
+
     public GeneralTablePanel(String title, String [] columns) {
         this.setLayout(new BorderLayout(H_GAP, V_GAP));
         this.setBorder(new EmptyBorder(V_GAP, H_GAP, V_GAP, H_GAP));
-        JLabel titleLabel = new JLabel(title);
-        this.add(titleLabel, BorderLayout.NORTH);
+        if(title != null) {
+            JLabel titleLabel = new JLabel(title);
+            this.add(titleLabel, BorderLayout.NORTH);
+        }
         table = new JTable(new DefaultTableModel(columns, 25));
         JScrollPane scrollPane = new JScrollPane(table);
         this.add(scrollPane, BorderLayout.CENTER);

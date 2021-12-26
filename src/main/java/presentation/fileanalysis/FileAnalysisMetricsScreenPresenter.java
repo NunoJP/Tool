@@ -13,6 +13,8 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 
+import static presentation.common.GuiConstants.DATE_TIME_FORMATTER;
+
 public class FileAnalysisMetricsScreenPresenter implements ITabPresenter {
 
     private final File selectedFile;
@@ -52,7 +54,7 @@ public class FileAnalysisMetricsScreenPresenter implements ITabPresenter {
 
         // File name and dates
         view.getFileNamePanel().setVariableLabelText(metricsReport.getFileName());
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_TIME_FORMATTER);
         view.getStartDatePanel().setVariableLabelText(sdf.format(metricsReport.getStartDate()));
         view.getEndDatePanel().setVariableLabelText(sdf.format(metricsReport.getEndDate()));
     }
