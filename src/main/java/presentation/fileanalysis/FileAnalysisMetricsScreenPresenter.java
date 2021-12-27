@@ -5,7 +5,7 @@ import domain.entities.displayobjects.ParsingProfileDo;
 import domain.entities.domainobjects.MetricsReport;
 import domain.services.FileAnalysisMetricsService;
 import general.util.Pair;
-import presentation.common.ITabPresenter;
+import presentation.common.IViewPresenter;
 
 import javax.swing.JPanel;
 import java.awt.Color;
@@ -15,7 +15,7 @@ import java.util.HashMap;
 
 import static presentation.common.GuiConstants.DATE_TIME_FORMATTER;
 
-public class FileAnalysisMetricsScreenPresenter implements ITabPresenter {
+public class FileAnalysisMetricsScreenPresenter implements IViewPresenter {
 
     private final File selectedFile;
     private final ParsingProfileDo parsingProfile;

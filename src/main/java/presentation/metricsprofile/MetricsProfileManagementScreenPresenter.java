@@ -1,10 +1,10 @@
 package presentation.metricsprofile;
 
-import presentation.common.ITabPresenter;
+import presentation.common.IViewPresenter;
 
 import javax.swing.JPanel;
 
-public class MetricsProfileManagementScreenPresenter implements ITabPresenter {
+public class MetricsProfileManagementScreenPresenter implements IViewPresenter {
 
 
     private final MetricsProfileManagementScreen view;

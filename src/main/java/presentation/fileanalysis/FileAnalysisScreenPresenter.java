@@ -5,14 +5,14 @@ import domain.entities.displayobjects.ParsingProfileDo;
 import domain.entities.domainobjects.LogLine;
 import domain.services.FileAnalysisService;
 import presentation.common.GuiConstants;
-import presentation.common.ITabPresenter;
+import presentation.common.IViewPresenter;
 
 import javax.swing.JPanel;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-public class FileAnalysisScreenPresenter implements ITabPresenter {
+public class FileAnalysisScreenPresenter implements IViewPresenter {
     private final File selectedFile;
     private final ParsingProfileDo parsingProfile;
     private final MetricsProfileDo metricsProfile;

@@ -32,19 +32,19 @@ public class FileAnalysisMetricsScreen extends JPanel {
         JPanel holder = new JPanel( new GridLayout(2, 1, H_GAP, V_GAP) );
         JPanel statisticsPanel = createStatisticsPanel();
         logLevelTable = new GeneralTablePanel(GuiConstants.LOG_LEVEL_DISTRIBUTION_LABEL,
-                new String[]{GuiConstants.LEVEL_COLUMN, GuiConstants.PERCENTAGE_COLUMN});
+                new String[]{GuiConstants.LEVEL_COLUMN, GuiConstants.PERCENTAGE_COLUMN}, false);
         logLevelTable.setGeneralSelection(false);
         holder.add(statisticsPanel);
         holder.add(logLevelTable);
         kwdThTable = new GeneralTablePanel(GuiConstants.KEYWORD_THRESHOLD_LABEL,
-                new String[]{GuiConstants.KEYWORD_COLUMN, GuiConstants.VALUE_COLUMN});
+                new String[]{GuiConstants.KEYWORD_COLUMN, GuiConstants.VALUE_COLUMN}, false);
         kwdThTable.setGeneralSelection(false);
         warningsTable = new GeneralTablePanel(GuiConstants.WARNINGS_LABEL,
-                new String[]{GuiConstants.LEVEL_COLUMN, GuiConstants.MESSAGE_COLUMN});
+                new String[]{GuiConstants.LEVEL_COLUMN, GuiConstants.MESSAGE_COLUMN}, false);
         warningsTable.setGeneralSelection(false);
         KeywordHistogramPanel keywordHistogram = new KeywordHistogramPanel();
         mostCommonWordsTable = new GeneralTablePanel(GuiConstants.MOST_COMMON_WORDS_LABEL,
-                new String[]{GuiConstants.WORD_COLUMN, GuiConstants.VALUE_COLUMN});
+                new String[]{GuiConstants.WORD_COLUMN, GuiConstants.VALUE_COLUMN}, false);
         mostCommonWordsTable.setGeneralSelection(false);
         KeywordsOverTimePanel keywordOverTime = new KeywordsOverTimePanel();
         this.add(holder);

@@ -22,4 +22,11 @@ public class ParsingProfileManagementService {
         return Arrays.stream(profiles).map(Converter::toDisplayObject).collect(Collectors.toList()).toArray(ParsingProfileDo[]::new);
     }
 
+    public boolean updateProfile(ParsingProfileDo parsingProfile) {
+        return false;
+    }
+
+    public boolean deleteProfile(ParsingProfileDo parsingProfile) {
+        return false;
+    }
 }

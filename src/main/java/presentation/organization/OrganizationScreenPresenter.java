@@ -1,10 +1,10 @@
 package presentation.organization;
 
-import presentation.common.ITabPresenter;
+import presentation.common.IViewPresenter;
 
 import javax.swing.JPanel;
 
-public class OrganizationScreenPresenter implements ITabPresenter {
+public class OrganizationScreenPresenter implements IViewPresenter {
 
     private final OrganizationScreen view;
 

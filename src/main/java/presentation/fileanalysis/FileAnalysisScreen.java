@@ -37,7 +37,7 @@ public class FileAnalysisScreen extends JPanel {
         this.add(filterPanel, BorderLayout.NORTH);
         fileContentsTable = new GeneralTablePanel(
                 new String[]{GuiConstants.DATE_COLUMN, GuiConstants.TIME_COLUMN,
-                        GuiConstants.ORIGIN_COLUMN, GuiConstants.LEVEL_COLUMN, GuiConstants.MESSAGE_COLUMN}
+                        GuiConstants.ORIGIN_COLUMN, GuiConstants.LEVEL_COLUMN, GuiConstants.MESSAGE_COLUMN}, false
         );
         this.add(fileContentsTable, BorderLayout.CENTER);
     }

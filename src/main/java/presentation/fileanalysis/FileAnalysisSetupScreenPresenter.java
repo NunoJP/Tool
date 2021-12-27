@@ -4,7 +4,7 @@ import domain.entities.displayobjects.MetricsProfileDo;
 import domain.entities.displayobjects.ParsingProfileDo;
 import domain.services.MetricsProfileManagementService;
 import domain.services.ParsingProfileManagementService;
-import presentation.common.ITabPresenter;
+import presentation.common.IViewPresenter;
 import presentation.common.custom.CellRenderer;
 
 import javax.swing.DefaultComboBoxModel;
@@ -18,7 +18,7 @@ import java.nio.file.Paths;
 import static javax.swing.JFileChooser.APPROVE_OPTION;
 import static javax.swing.JFileChooser.FILES_ONLY;
 
-public class FileAnalysisSetupScreenPresenter implements ITabPresenter {
+public class FileAnalysisSetupScreenPresenter implements IViewPresenter {
 
     private final FileAnalysisSetupScreen view;
     private final ParsingProfileManagementService parsingService;

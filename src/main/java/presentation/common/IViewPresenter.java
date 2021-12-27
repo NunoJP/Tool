@@ -2,7 +2,7 @@ package presentation.common;
 
 import javax.swing.JPanel;
 
-public interface ITabPresenter extends IPresenter {
+public interface IViewPresenter extends IPresenter {
 
     JPanel getView();
 }

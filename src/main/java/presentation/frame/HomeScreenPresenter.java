@@ -11,6 +11,11 @@ import presentation.parsingprofile.ParsingProfileManagementScreenPresenter;
 public class HomeScreenPresenter implements IPresenter {
 
     private final HomeScreen view;
+    private FileAnalysisSetupScreenPresenter fileAnalysisSetupScreenPresenter;
+    private MonitoringSetupScreenPresenter monitoringSetupScreenPresenter;
+    private ParsingProfileManagementScreenPresenter parsingProfileManagementScreenPresenter;
+    private MetricsProfileManagementScreenPresenter metricsProfileManagementScreenPresenter;
+    private OrganizationScreenPresenter organizationScreenPresenter;
 
     public HomeScreenPresenter() {
         view = new HomeScreen();
@@ -19,22 +24,26 @@ public class HomeScreenPresenter implements IPresenter {
 
     private void defineViewBehavior() {
 //        basePanel.addTab(GuiConstants.ANALYSIS_TAB, new );
-        FileAnalysisSetupScreenPresenter fileAnalysisSetupScreenPresenter = new FileAnalysisSetupScreenPresenter(view.getFrame());
+        fileAnalysisSetupScreenPresenter = new FileAnalysisSetupScreenPresenter(view.getFrame());
         view.getBasePanel().addTab(GuiConstants.ANALYSIS_TAB, fileAnalysisSetupScreenPresenter.getView());
-        MonitoringSetupScreenPresenter monitoringSetupScreenPresenter = new MonitoringSetupScreenPresenter();
+        monitoringSetupScreenPresenter = new MonitoringSetupScreenPresenter();
         view.getBasePanel().addTab(GuiConstants.MONITORING_TAB, monitoringSetupScreenPresenter.getView());
-        ParsingProfileManagementScreenPresenter parsingProfileManagementScreenPresenter = new ParsingProfileManagementScreenPresenter();
+        parsingProfileManagementScreenPresenter = new ParsingProfileManagementScreenPresenter();
         view.getBasePanel().addTab(GuiConstants.PARSING_PROFILES_TAB, parsingProfileManagementScreenPresenter.getView());
-        MetricsProfileManagementScreenPresenter metricsProfileManagementScreenPresenter = new MetricsProfileManagementScreenPresenter();
+        metricsProfileManagementScreenPresenter = new MetricsProfileManagementScreenPresenter();
         view.getBasePanel().addTab(GuiConstants.METRICS_PROFILES_TAB, metricsProfileManagementScreenPresenter.getView());
-        OrganizationScreenPresenter organizationScreenPresenter = new OrganizationScreenPresenter();
+        organizationScreenPresenter = new OrganizationScreenPresenter();
         view.getBasePanel().addTab(GuiConstants.ORGANIZATION_TAB, organizationScreenPresenter.getView());
-
     }
 
 
     @Override
     public void execute() {
         view.setVisible();
+        fileAnalysisSetupScreenPresenter.execute();
+        monitoringSetupScreenPresenter.execute();
+        parsingProfileManagementScreenPresenter.execute();
+        metricsProfileManagementScreenPresenter.execute();
+        organizationScreenPresenter.execute();
     }
 }

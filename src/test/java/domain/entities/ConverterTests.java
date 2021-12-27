@@ -12,18 +12,20 @@ public class ConverterTests {
 
     @Test
     public void testParsingProfileToDomainObject(){
-        ParsingProfileDo displayObject = new ParsingProfileDo(1, "Name");
+        ParsingProfileDo displayObject = new ParsingProfileDo(1, "Name", "Description");
         ParsingProfile domainObject = Converter.toDomainObject(displayObject);
         assertEquals(displayObject.getId(), domainObject.getId());
         assertEquals(displayObject.getName(), domainObject.getName());
+        assertEquals(displayObject.getDescription(), domainObject.getDescription());
     }
 
     @Test
     public void testParsingProfileToDisplayObject(){
-        ParsingProfile domainObject = new ParsingProfile(1, "Name");
+        ParsingProfile domainObject = new ParsingProfile(1, "Name", "Description");
         ParsingProfileDo displayObject = Converter.toDisplayObject(domainObject);
         assertEquals(domainObject.getId(), displayObject.getId());
         assertEquals(domainObject.getName(), displayObject.getName());
+        assertEquals(domainObject.getDescription(), displayObject.getDescription());
     }
 
     @Test

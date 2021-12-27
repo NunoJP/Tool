@@ -115,7 +115,8 @@ public class GuiConstants {
     public static final String DATE_COLUMN = "Date";
     public static final String TIME_COLUMN = "Time";
     public static final String ORIGIN_COLUMN = "Origin";
-
+    public static final String DESCRIPTION_COLUMN = "Description";
+    public static final String NAME_COLUMN = "Name";
 
 
 }

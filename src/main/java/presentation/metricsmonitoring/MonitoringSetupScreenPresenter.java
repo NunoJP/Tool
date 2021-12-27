@@ -1,10 +1,10 @@
 package presentation.metricsmonitoring;
 
-import presentation.common.ITabPresenter;
+import presentation.common.IViewPresenter;
 
 import javax.swing.JPanel;
 
-public class MonitoringSetupScreenPresenter implements ITabPresenter {
+public class MonitoringSetupScreenPresenter implements IViewPresenter {
 
     private final MonitoringSetupScreen view;
 
