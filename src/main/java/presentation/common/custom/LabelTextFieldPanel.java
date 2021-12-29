@@ -11,7 +11,7 @@ import static presentation.common.GuiConstants.V_GAP;
 public class LabelTextFieldPanel extends JPanel {
 
     private final JLabel staticLabel;
-    private final JTextField variableLabel;
+    private final JTextField variableTextField;
 
     public LabelTextFieldPanel(String staticText) {
         this(staticText, 0);
@@ -20,12 +20,24 @@ public class LabelTextFieldPanel extends JPanel {
     public LabelTextFieldPanel(String staticText, int fieldSize) {
         this.setLayout(new BorderLayout(H_GAP, V_GAP));
         staticLabel = new JLabel(staticText);
-        variableLabel = new JTextField(fieldSize);
+        variableTextField = new JTextField(fieldSize);
         this.add(staticLabel, BorderLayout.WEST);
-        this.add(variableLabel, BorderLayout.CENTER);
+        this.add(variableTextField, BorderLayout.CENTER);
     }
 
     public void setVariableLabelText(String text){
-        this.variableLabel.setText(text);
+        this.variableTextField.setText(text);
+    }
+
+    public void setMaxSizeAsPreferredSize(){
+        variableTextField.setMaximumSize( variableTextField.getPreferredSize() );
+    }
+
+    public void setTextFieldWidth(int numberOfColumns) {
+        variableTextField.setColumns(numberOfColumns);
+    }
+
+    public JTextField getVariableTextField() {
+        return variableTextField;
     }
 }

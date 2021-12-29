@@ -8,11 +8,11 @@ import domain.entities.domainobjects.ParsingProfile;
 public class Converter {
 
     public static ParsingProfile toDomainObject(ParsingProfileDo parsingProfileDo){
-        return new ParsingProfile(parsingProfileDo.getId(), parsingProfileDo.getName(), parsingProfileDo.getDescription());
+        return new ParsingProfile(parsingProfileDo.getId(), parsingProfileDo.getName(), parsingProfileDo.getPortions());
     }
 
     public static ParsingProfileDo toDisplayObject(ParsingProfile parsingProfile) {
-        return new ParsingProfileDo(parsingProfile.getId(), parsingProfile.getName(), parsingProfile.getDescription());
+        return new ParsingProfileDo(parsingProfile.getId(), parsingProfile.getName(), parsingProfile.getPortions());
     }
 
     public static MetricsProfile toDomainObject(MetricsProfileDo metricsProfileDo){

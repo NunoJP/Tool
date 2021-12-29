@@ -41,7 +41,7 @@ public class ParsingProfileManagementScreenPresenter implements IViewPresenter {
 
         view.getNewProfileButton().addActionListener( (e -> {
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(view);
-            ParsingProfileEditorScreenPresenter editorScreenPresenter = new ParsingProfileEditorScreenPresenter(frame);
+            ParsingProfileEditorScreenPresenter editorScreenPresenter = new ParsingProfileEditorScreenPresenter(frame, null, this);
             editorScreenPresenter.execute();
         }));
 
@@ -59,7 +59,7 @@ public class ParsingProfileManagementScreenPresenter implements IViewPresenter {
         view.getUpdateSelectedButton().addActionListener( (e -> {
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(view);
             ParsingProfileEditorScreenPresenter editorScreenPresenter
-                    = new ParsingProfileEditorScreenPresenter(frame, parsingProfiles[selectedItem]);
+                    = new ParsingProfileEditorScreenPresenter(frame, parsingProfiles[selectedItem], this);
             editorScreenPresenter.execute();
         }));
     }
@@ -68,8 +68,7 @@ public class ParsingProfileManagementScreenPresenter implements IViewPresenter {
 
     @Override
     public void execute() {
-        parsingProfiles = service.getParsingProfiles();
-        view.getParsingProfilesPanel().setData(convertDataForTable(parsingProfiles));
+        updateViewTable();
     }
 
     @Override
@@ -88,5 +87,10 @@ public class ParsingProfileManagementScreenPresenter implements IViewPresenter {
             objects[i] = new Object[] { data[i].getName(), data[i].getDescription() };
         }
         return objects;
+    }
+
+    public void updateViewTable() {
+        parsingProfiles = service.getParsingProfiles();
+        view.getParsingProfilesPanel().setData(convertDataForTable(parsingProfiles));
     }
 }

@@ -1,18 +1,30 @@
 package domain.entities.domainobjects;
 
+import domain.entities.common.ParsingProfilePortion;
+
+import java.util.ArrayList;
+
 public class ParsingProfile {
     private String name;
     private Integer id;
-    private String description;
+    private final ArrayList<ParsingProfilePortion> portions;
 
-    public ParsingProfile(int id, String name) {
-        this(id, name, "");
-    }
 
-    public ParsingProfile(int id, String name, String description) {
+    public ParsingProfile(int id, String name, ArrayList<ParsingProfilePortion> portions) {
         this.id = id;
         this.name = name;
-        this.description = description;
+        this.portions = portions;
+    }
+
+    public ParsingProfile(int id, String name) {
+        this(id, name, new ArrayList<>());
+    }
+
+    /*
+    Constructor for a new completely empty profile
+     */
+    public ParsingProfile() {
+        this(-1, null);
     }
 
     public String getName() {
@@ -31,11 +43,11 @@ public class ParsingProfile {
         this.id = id;
     }
 
-    public String getDescription() {
-        return description;
+    public ArrayList<ParsingProfilePortion> getPortions() {
+        return portions;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void addPortion(ParsingProfilePortion portion) {
+        this.portions.add(portion);
     }
 }

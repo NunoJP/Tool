@@ -6,7 +6,10 @@ public class GuiConstants {
     public static final int V_GAP = 5;
     public static final int H_FILE_ANALYSIS_SCREEN_SIZE = 1200;
     public static final int V_FILE_ANALYSIS_SCREEN_SIZE = 700;
+    public static final int H_PROFILES_EDITOR_SCREEN_SIZE = 650;
+    public static final int V_PROFILES_EDITOR_SCREEN_SIZE = 250;
     public static final int FILE_NAME_FIELD_SIZE = 100/3;
+    public static final int RESULT_FIELD_SIZE = 100/2;
     public static final int KEYWORD_FIELD_SIZE = 50;
     public static final int SPECIFIC_FORMAT_FIELD_SIZE = 20;
     public static final int METHOD_FIELD_SIZE = 100/10;

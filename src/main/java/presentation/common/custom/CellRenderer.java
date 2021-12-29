@@ -1,5 +1,7 @@
 package presentation.common.custom;
 
+import domain.entities.common.SeparatorEnum;
+import domain.entities.common.TextClassesEnum;
 import domain.entities.displayobjects.MetricsProfileDo;
 import domain.entities.displayobjects.ParsingProfileDo;
 
@@ -19,6 +21,10 @@ public class CellRenderer extends DefaultListCellRenderer {
             value = ((ParsingProfileDo) value).getName();
         } else if(value instanceof MetricsProfileDo) {
             value = ((MetricsProfileDo) value).getName();
+        } else if(value instanceof TextClassesEnum) {
+            value = ((TextClassesEnum) value).getName();
+        } else if(value instanceof SeparatorEnum) {
+            value = ((SeparatorEnum) value).getName();
         }
         super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
         return this;
