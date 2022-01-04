@@ -122,4 +122,5 @@ public class GuiConstants {
     public static final String NAME_COLUMN = "Name";
 
 
+    public static final String NO_NAME_PROVIDED = "No name provided";
 }
