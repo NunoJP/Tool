@@ -1,7 +1,5 @@
 package data.dataaccess.common;
 
-import presentation.common.GuiConstants;
-
 public class ParsingProfileReadWriteConstants {
     public static final String PORTION_SEPARATOR = ";";
     public static final String NAME_TOKEN = "Name";
@@ -11,4 +9,5 @@ public class ParsingProfileReadWriteConstants {
     public static final String IGNORE_TOKEN = "IGNORE";
     public static final String KEEP_TOKEN = "KEEP";
     public static final String KEEP_SPECIFIC_TOKEN = "KEEP-SPECIFIC";
+    public static final String EXPECTED_FIRST_LINE = "Parsing Profile";
 }

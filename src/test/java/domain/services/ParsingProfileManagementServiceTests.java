@@ -31,7 +31,7 @@ public class ParsingProfileManagementServiceTests {
     }
 
     private class ParsingProfileReaderOverride extends ParsingProfileReader {
-        public ParsingProfile[] getProfiles() {
+        public ParsingProfile[] getParsingProfiles() {
             ParsingProfile p1 = new ParsingProfile(EXPECTED_ID_1, EXPECTED_NAME_1);
             ParsingProfile p2 = new ParsingProfile(EXPECTED_ID_2, EXPECTED_NAME_2);
             return new ParsingProfile[] { p1, p2 };

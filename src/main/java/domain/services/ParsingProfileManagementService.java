@@ -17,7 +17,7 @@ public class ParsingProfileManagementService {
 
     private final ParsingProfileWriter writer;
     protected ParsingProfileReader reader;
-    private String DEFAULT_PARSING_PROFILE_FOLDER_NAME = "parsing_profiles";
+    public static final String DEFAULT_PARSING_PROFILE_FOLDER_NAME = "parsing_profiles";
 
     public ParsingProfileManagementService() {
         reader = new ParsingProfileReader(DEFAULT_PARSING_PROFILE_FOLDER_NAME);

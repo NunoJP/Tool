@@ -24,9 +24,9 @@ import static presentation.common.GuiMessages.LOG_ERROR_ERROR_READING_FILE;
 public class ParsingProfileReader {
 
     private static final Logger LOGGER = Logger.getLogger(ParsingProfileReader.class.getName());
-    private MemoryRepository instance;
+    private final MemoryRepository instance;
     private String default_parsing_profile_folder_name = "ParsingProfiles";
-    private ParsingProfileConsumer consumer = new ParsingProfileConsumer();
+    private final ParsingProfileConsumer consumer = new ParsingProfileConsumer();
 
     public ParsingProfileReader(String default_parsing_profile_folder_name) {
         this.default_parsing_profile_folder_name = default_parsing_profile_folder_name;
@@ -54,8 +54,8 @@ public class ParsingProfileReader {
             throw new InvalidParameterException(ERROR_FOLDER_DOES_NOT_EXIST);
         }
 
-        //return instance.getParsingProfiles().toArray(ParsingProfile[]::new);
-        return accumulator.toArray(ParsingProfile[]::new);
+        instance.createParsingProfiles(accumulator);
+        return instance.getParsingProfiles().toArray(ParsingProfile[]::new);
     }
 
     private ParsingProfile[] readProfiles(File file) { // TODO add a warnings consumer ??

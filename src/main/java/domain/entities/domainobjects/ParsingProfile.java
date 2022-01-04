@@ -20,6 +20,14 @@ public class ParsingProfile {
         this(id, name, new ArrayList<>());
     }
 
+    public ParsingProfile(String name, ArrayList<ParsingProfilePortion> portions) {
+        this(-1, name, portions);
+    }
+
+    public ParsingProfile(String name) {
+        this(-1, name, new ArrayList<>());
+    }
+
     /*
     Constructor for a new completely empty profile
      */

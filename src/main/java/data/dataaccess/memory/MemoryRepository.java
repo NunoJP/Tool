@@ -1,15 +1,15 @@
 package data.dataaccess.memory;
 
-import domain.entities.common.SeparatorEnum;
-import domain.entities.common.TextClassesEnum;
-import domain.entities.displayobjects.ParsingProfileDo;
 import domain.entities.domainobjects.ParsingProfile;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class MemoryRepository {
 
     public static MemoryRepository instance;
+    private AtomicInteger idx = new AtomicInteger(0);
 
     public static MemoryRepository getInstance(){
         if(instance == null) {
@@ -18,26 +18,46 @@ public class MemoryRepository {
         return instance;
     }
 
-    private ArrayList<ParsingProfile> parsingProfiles;
+    private HashMap<Integer, ParsingProfile> parsingProfiles;
+    private HashMap<Integer, String> parsingProfileNames;
     private MemoryRepository() {
-        parsingProfiles = new ArrayList<>();
-        ParsingProfileDo profile = new ParsingProfileDo();
-        profile.addPortionAndGetProfile(TextClassesEnum.DATE.getName(), true, false, false);
-        profile.addPortionAndGetProfile(SeparatorEnum.SPACE.getName(), false, true, false);
-        profile.addPortionAndGetProfile(TextClassesEnum.TIMESTAMP.getName(), false, false, false);
-
-        ParsingProfile p1 = new ParsingProfile(1, "Test 1", profile.getPortions());
-        ParsingProfile p2 = new ParsingProfile(2, "Test 2", profile.getPortions());
-        parsingProfiles.add(p1);
-        parsingProfiles.add(p2);
+        parsingProfiles = new HashMap<>();
+        parsingProfileNames = new HashMap<>();
     }
 
     public ArrayList<ParsingProfile> getParsingProfiles(){
-        return parsingProfiles;
+        return new ArrayList<>(parsingProfiles.values());
     }
 
 
     public boolean createProfile(ParsingProfile toDomainObject) {
-        return parsingProfiles.add(toDomainObject);
+        if(profileExists(toDomainObject)){
+            return false; // profile id already exists
+        }
+        int i = idx.getAndIncrement();
+        toDomainObject.setId(i);
+        parsingProfiles.put(i, toDomainObject);
+        parsingProfileNames.put(i, toDomainObject.getName());
+        return true;
+    }
+
+    public boolean profileExists(ParsingProfile toDomainObject) {
+        return parsingProfileNames.containsValue(toDomainObject.getName());
+    }
+
+    public ParsingProfile getProfile(int id) {
+        return parsingProfiles.get(id);
+    }
+
+    public void createParsingProfiles(ArrayList<ParsingProfile> accumulator) {
+        for (ParsingProfile profile : accumulator) {
+            createProfile(profile);
+        }
+    }
+
+    public void fullReset() {
+        parsingProfiles = new HashMap<>();
+        parsingProfileNames = new HashMap<>();
+        idx = new AtomicInteger(0);
     }
 }

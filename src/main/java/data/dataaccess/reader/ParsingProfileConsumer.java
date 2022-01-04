@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.function.Consumer;
 
 import static data.dataaccess.common.ParsingProfileReadWriteConstants.END_PROFILE_TOKEN;
+import static data.dataaccess.common.ParsingProfileReadWriteConstants.EXPECTED_FIRST_LINE;
 import static data.dataaccess.common.ParsingProfileReadWriteConstants.IGNORE_TOKEN;
 import static data.dataaccess.common.ParsingProfileReadWriteConstants.KEEP_SPECIFIC_TOKEN;
 import static data.dataaccess.common.ParsingProfileReadWriteConstants.KEEP_TOKEN;
@@ -27,8 +28,7 @@ public class ParsingProfileConsumer implements Consumer<String> {
     boolean hasProfileStarted = false;
     boolean hasProfileEnded = false;
     private int currentProfileIdx = -1;
-    private ParsingStatus status = ParsingStatus.OK;
-    private final String expectedFirstLine = "Parsing Profile";
+
 
     public ParsingProfileConsumer() {
         this.profiles = new ArrayList<ParsingProfile>();
@@ -38,8 +38,7 @@ public class ParsingProfileConsumer implements Consumer<String> {
     public void accept(String s) {
         // identify if the file contains parsing profiles
         if(firstLine) {
-            if(!expectedFirstLine.equalsIgnoreCase(s)){
-                status = ParsingStatus.FAILURE;
+            if(!EXPECTED_FIRST_LINE.equalsIgnoreCase(s)){
                 return;
             }
             firstLine = false;
@@ -147,10 +146,6 @@ public class ParsingProfileConsumer implements Consumer<String> {
     public void clearList() {
         profiles = new ArrayList<>();
         currentProfileIdx = -1;
-    }
-
-    public boolean keepGoing() {
-        return status.getStatus() != ParsingStatus.FAILURE.getStatus();
     }
 
     public ParsingProfile[] getProfiles() {
