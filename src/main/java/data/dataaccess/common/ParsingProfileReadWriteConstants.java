@@ -10,4 +10,8 @@ public class ParsingProfileReadWriteConstants {
     public static final String KEEP_TOKEN = "KEEP";
     public static final String KEEP_SPECIFIC_TOKEN = "KEEP-SPECIFIC";
     public static final String EXPECTED_FIRST_LINE = "Parsing Profile";
+
+
+    public static final String DEFAULT_PARSING_PROFILE_FOLDER_NAME = "ParsingProfiles";
+    public static final String DEFAULT_PARSING_PROFILE_FILE_NAME = "parsingProfiles.txt";
 }

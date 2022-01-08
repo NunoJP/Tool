@@ -13,10 +13,12 @@ public class GuiMessages {
     // Log Messages
     // Info
     public static final String LOG_INFO_READER_FINISHED_PROCESSING = "Reader finished processing: ";
+    public static final String LOG_INFO_WRITER_FINISHED_PROCESSING = "Writer finished processing: ";
 
     // Error
     public static final String LOG_ERROR_ERROR_OPENING_FILE = "Error opening file: ";
     public static final String LOG_ERROR_ERROR_READING_FILE = "Error reading file: ";
+    public static final String LOG_ERROR_ERROR_CREATING_FILE = "Error creating file: ";
 
 
 }

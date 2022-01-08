@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static data.dataaccess.common.ParsingProfileReadWriteConstants.DEFAULT_PARSING_PROFILE_FOLDER_NAME;
 import static presentation.common.GuiMessages.ERROR_FOLDER_DOES_NOT_EXIST;
 import static presentation.common.GuiMessages.LOG_ERROR_ERROR_OPENING_FILE;
 import static presentation.common.GuiMessages.LOG_ERROR_ERROR_READING_FILE;
@@ -25,20 +26,22 @@ public class ParsingProfileReader {
 
     private static final Logger LOGGER = Logger.getLogger(ParsingProfileReader.class.getName());
     private final MemoryRepository instance;
-    private String default_parsing_profile_folder_name = "ParsingProfiles";
-    private final ParsingProfileConsumer consumer = new ParsingProfileConsumer();
 
-    public ParsingProfileReader(String default_parsing_profile_folder_name) {
-        this.default_parsing_profile_folder_name = default_parsing_profile_folder_name;
+    private final ParsingProfileConsumer consumer = new ParsingProfileConsumer();
+    private final String parsingProfileFolderName;
+
+    public ParsingProfileReader(String parsingProfileFolderName) {
+        this.parsingProfileFolderName = parsingProfileFolderName;
         instance = MemoryRepository.getInstance();
     }
 
     public ParsingProfileReader() {
+        this.parsingProfileFolderName = DEFAULT_PARSING_PROFILE_FOLDER_NAME;
         instance = MemoryRepository.getInstance();
     }
 
     public ParsingProfile[] getParsingProfiles() {
-        Path currentRelativePath = Paths.get(default_parsing_profile_folder_name);
+        Path currentRelativePath = Paths.get(parsingProfileFolderName);
         File f = currentRelativePath.toAbsolutePath().toFile();
         ArrayList<ParsingProfile> accumulator = new ArrayList<>();
         if (f.exists() && f.isDirectory()) {
@@ -61,12 +64,18 @@ public class ParsingProfileReader {
     private ParsingProfile[] readProfiles(File file) { // TODO add a warnings consumer ??
         consumer.clearList();
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            String line = null;
+            String line;
             while ((line = br.readLine()) != null) {
                 consumer.accept(line);
             }
             LOGGER.log(Level.INFO, GuiMessages.LOG_INFO_READER_FINISHED_PROCESSING + file.getName());
-            return consumer.getProfiles();
+
+            // As the users may add their own files, we need to know where each profile comes from
+            ParsingProfile[] profiles = consumer.getProfiles();
+            for (ParsingProfile profile : profiles) {
+                profile.setOriginFile(file.getName());
+            }
+            return profiles;
         } catch (FileNotFoundException e) {
             LOGGER.log(Level.SEVERE, LOG_ERROR_ERROR_OPENING_FILE + file.getName(), e);
         } catch (IOException | IndexOutOfBoundsException e) {

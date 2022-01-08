@@ -19,7 +19,7 @@ public class MemoryRepository {
     }
 
     private HashMap<Integer, ParsingProfile> parsingProfiles;
-    private HashMap<Integer, String> parsingProfileNames;
+    private HashMap<Integer, ProfileNameFileNamePair> parsingProfileNames;
     private MemoryRepository() {
         parsingProfiles = new HashMap<>();
         parsingProfileNames = new HashMap<>();
@@ -30,19 +30,20 @@ public class MemoryRepository {
     }
 
 
-    public boolean createProfile(ParsingProfile toDomainObject) {
+    public boolean createProfile(ParsingProfile toDomainObject, String targetFile) {
         if(profileExists(toDomainObject)){
             return false; // profile id already exists
         }
         int i = idx.getAndIncrement();
         toDomainObject.setId(i);
         parsingProfiles.put(i, toDomainObject);
-        parsingProfileNames.put(i, toDomainObject.getName());
+        parsingProfileNames.put(i, new ProfileNameFileNamePair(toDomainObject.getName(), targetFile));
         return true;
     }
 
     public boolean profileExists(ParsingProfile toDomainObject) {
-        return parsingProfileNames.containsValue(toDomainObject.getName());
+        long count = parsingProfileNames.values().stream().filter(c -> c.getProfileName().equals(toDomainObject.getName())).count();
+        return count != 0;
     }
 
     public ParsingProfile getProfile(int id) {
@@ -51,7 +52,7 @@ public class MemoryRepository {
 
     public void createParsingProfiles(ArrayList<ParsingProfile> accumulator) {
         for (ParsingProfile profile : accumulator) {
-            createProfile(profile);
+            createProfile(profile, profile.getOriginFile());
         }
     }
 

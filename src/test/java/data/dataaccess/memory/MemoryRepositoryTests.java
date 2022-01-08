@@ -23,7 +23,7 @@ public class MemoryRepositoryTests {
     public void testCreateProfileSimple(){
         MemoryRepository repository = MemoryRepository.getInstance();
         ParsingProfile profile = new ParsingProfile("Name");
-        assertTrue(repository.createProfile(profile));
+        assertTrue(repository.createProfile(profile, profile.getOriginFile()));
         ParsingProfile mapProfile = repository.getProfile(0);
         assertEquals(profile.getName(), mapProfile.getName());
     }
@@ -39,8 +39,8 @@ public class MemoryRepositoryTests {
         ParsingProfile profile = new ParsingProfile( "Name", parsingProfilePortions);
         ParsingProfile profile2 = new ParsingProfile( "Name");
 
-        assertTrue(repository.createProfile(profile));
-        assertFalse(repository.createProfile(profile2));
+        assertTrue(repository.createProfile(profile, profile.getOriginFile()));
+        assertFalse(repository.createProfile(profile2, profile2.getOriginFile()));
 
         ParsingProfile mapProfile = repository.getProfile(0);
         assertEquals(profile.getName(), mapProfile.getName());
@@ -57,8 +57,8 @@ public class MemoryRepositoryTests {
         ParsingProfile profile = new ParsingProfile( "Name", parsingProfilePortions);
         ParsingProfile profile2 = new ParsingProfile( "Name2");
 
-        assertTrue(repository.createProfile(profile));
-        assertTrue(repository.createProfile(profile2));
+        assertTrue(repository.createProfile(profile, profile.getOriginFile()));
+        assertTrue(repository.createProfile(profile2, profile2.getOriginFile()));
 
         ParsingProfile mapProfile = repository.getProfile(0);
         assertEquals(profile.getName(), mapProfile.getName());

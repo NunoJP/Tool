@@ -57,7 +57,9 @@ public class ParsingProfileDo {
     }
 
     public void finishProfile() {
-        portions.get(portions.size() - 1).setLast(true);
+        if(portions.size() != 0) {
+            portions.get(portions.size() - 1).setLast(true);
+        }
     }
 
     public String removeLastPortionAndGetProfile(){

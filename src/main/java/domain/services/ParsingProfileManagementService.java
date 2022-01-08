@@ -6,18 +6,19 @@ import domain.entities.Converter;
 import domain.entities.displayobjects.ParsingProfileDo;
 import domain.entities.domainobjects.ParsingProfile;
 
-import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 
+import static data.dataaccess.common.ParsingProfileReadWriteConstants.DEFAULT_PARSING_PROFILE_FOLDER_NAME;
+
 public class ParsingProfileManagementService {
 
     private final ParsingProfileWriter writer;
     protected ParsingProfileReader reader;
-    public static final String DEFAULT_PARSING_PROFILE_FOLDER_NAME = "parsing_profiles";
+
 
     public ParsingProfileManagementService() {
         reader = new ParsingProfileReader(DEFAULT_PARSING_PROFILE_FOLDER_NAME);

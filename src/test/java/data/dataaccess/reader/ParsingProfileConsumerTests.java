@@ -20,7 +20,6 @@ import static org.junit.Assert.assertEquals;
 public class ParsingProfileConsumerTests {
 
     public static final String VALUE = "Value";
-    public static final String LEVEL = "Level";
     private static final String GARBAGE = "assfsadaskh bdakbdkajsbdv";
     private final String EXPECTED_FIRST_LINE = "Parsing Profile";
 
@@ -43,7 +42,7 @@ public class ParsingProfileConsumerTests {
         assertEquals(VALUE, profile.getName());
         ArrayList<ParsingProfilePortion> portions = profile.getPortions();
         assertEquals(1, portions.size());
-        validatePortion(portions, portions.get(0), false, false, false, TextClassesEnum.LEVEL.getName());
+        validatePortion(portions.get(0), false, false, false, TextClassesEnum.LEVEL.getName());
     }
 
     @Test
@@ -74,7 +73,7 @@ public class ParsingProfileConsumerTests {
             assertEquals(VALUE + (i + 1), profile.getName());
             ArrayList<ParsingProfilePortion> portions = profile.getPortions();
             assertEquals(1, portions.size());
-            validatePortion(portions, portions.get(0), false, false, false, TextClassesEnum.LEVEL.getName());
+            validatePortion(portions.get(0), false, false, false, TextClassesEnum.LEVEL.getName());
         }
     }
 
@@ -100,10 +99,10 @@ public class ParsingProfileConsumerTests {
         assertEquals(VALUE, profile.getName());
         ArrayList<ParsingProfilePortion> portions = profile.getPortions();
         assertEquals(4, portions.size());
-        validatePortion(portions, portions.get(0), false, false, false, TextClassesEnum.LEVEL.getName());
-        validatePortion(portions, portions.get(1), true, false, false, SeparatorEnum.COLON.getName());
-        validatePortion(portions, portions.get(2), false, true, false, TextClassesEnum.TIME.getName());
-        validatePortion(portions, portions.get(3), true, false, false, SeparatorEnum.HIFEN.getName());
+        validatePortion(portions.get(0), false, false, false, TextClassesEnum.LEVEL.getName());
+        validatePortion(portions.get(1), true, false, false, SeparatorEnum.COLON.getName());
+        validatePortion(portions.get(2), false, true, false, TextClassesEnum.TIME.getName());
+        validatePortion(portions.get(3), true, false, false, SeparatorEnum.HIFEN.getName());
     }
 
 
@@ -129,10 +128,10 @@ public class ParsingProfileConsumerTests {
         assertEquals(VALUE, profile.getName());
         ArrayList<ParsingProfilePortion> portions = profile.getPortions();
         assertEquals(4, portions.size());
-        validatePortion(portions, portions.get(0), false, false, false, TextClassesEnum.LEVEL.getName());
-        validatePortion(portions, portions.get(1), true, false, false, SeparatorEnum.COLON.getName());
-        validatePortion(portions, portions.get(2), false, true, false, TextClassesEnum.TIME.getName());
-        validatePortion(portions, portions.get(3), true, false, false, SeparatorEnum.HIFEN.getName());
+        validatePortion(portions.get(0), false, false, false, TextClassesEnum.LEVEL.getName());
+        validatePortion(portions.get(1), true, false, false, SeparatorEnum.COLON.getName());
+        validatePortion(portions.get(2), false, true, false, TextClassesEnum.TIME.getName());
+        validatePortion(portions.get(3), true, false, false, SeparatorEnum.HIFEN.getName());
     }
 
 
@@ -158,12 +157,12 @@ public class ParsingProfileConsumerTests {
         assertEquals(VALUE, profile.getName());
         ArrayList<ParsingProfilePortion> portions = profile.getPortions();
         assertEquals(4, portions.size());
-        validatePortion(portions, portions.get(0), false, false, true, TextClassesEnum.DATE.getName() + " " + portions.get(0).getSpecificFormat());
+        validatePortion(portions.get(0), false, false, true, TextClassesEnum.DATE.getName() + " " + portions.get(0).getSpecificFormat());
         assertEquals(GuiConstants.DATE_FORMATTER, portions.get(0).getSpecificFormat());
-        validatePortion(portions, portions.get(1), true, false, false, SeparatorEnum.COLON.getName());
-        validatePortion(portions, portions.get(2), false, false, true, TextClassesEnum.TIME.getName() + " " + portions.get(2).getSpecificFormat());
+        validatePortion(portions.get(1), true, false, false, SeparatorEnum.COLON.getName());
+        validatePortion(portions.get(2), false, false, true, TextClassesEnum.TIME.getName() + " " + portions.get(2).getSpecificFormat());
         assertEquals(GuiConstants.DATE_TIME_FORMATTER, portions.get(2).getSpecificFormat());
-        validatePortion(portions, portions.get(3), true, false, false, SeparatorEnum.HIFEN.getName());
+        validatePortion(portions.get(3), true, false, false, SeparatorEnum.HIFEN.getName());
     }
 
     @Test
@@ -186,8 +185,8 @@ public class ParsingProfileConsumerTests {
         assertEquals(VALUE, profile.getName());
         ArrayList<ParsingProfilePortion> portions = profile.getPortions();
         assertEquals(2, portions.size());
-        validatePortion(portions, portions.get(0), true, false, false, SeparatorEnum.COLON.getName());
-        validatePortion(portions, portions.get(1), true, false, false, SeparatorEnum.HIFEN.getName());
+        validatePortion(portions.get(0), true, false, false, SeparatorEnum.COLON.getName());
+        validatePortion(portions.get(1), true, false, false, SeparatorEnum.HIFEN.getName());
     }
 
     @Test
@@ -210,8 +209,8 @@ public class ParsingProfileConsumerTests {
         assertEquals(VALUE, profile.getName());
         ArrayList<ParsingProfilePortion> portions = profile.getPortions();
         assertEquals(2, portions.size());
-        validatePortion(portions, portions.get(0), false, false, false, TextClassesEnum.LEVEL.getName());
-        validatePortion(portions, portions.get(1), false, true, false, TextClassesEnum.TIME.getName());
+        validatePortion(portions.get(0), false, false, false, TextClassesEnum.LEVEL.getName());
+        validatePortion(portions.get(1), false, true, false, TextClassesEnum.TIME.getName());
     }
 
     @Test
@@ -335,7 +334,7 @@ public class ParsingProfileConsumerTests {
         assertEquals(VALUE + 1, profile.getName());
         ArrayList<ParsingProfilePortion> portions = profile.getPortions();
         assertEquals(2, portions.size());
-        validatePortion(portions, portions.get(0), false, false, false, TextClassesEnum.LEVEL.getName());
+        validatePortion(portions.get(0), false, false, false, TextClassesEnum.LEVEL.getName());
     }
 
 
@@ -366,7 +365,7 @@ public class ParsingProfileConsumerTests {
         assertEquals(VALUE + 1, profile.getName());
         ArrayList<ParsingProfilePortion> portions = profile.getPortions();
         assertEquals(2, portions.size());
-        validatePortion(portions, portions.get(0), false, false, false, TextClassesEnum.LEVEL.getName());
+        validatePortion(portions.get(0), false, false, false, TextClassesEnum.LEVEL.getName());
     }
 
 
@@ -393,8 +392,8 @@ public class ParsingProfileConsumerTests {
         assertEquals(VALUE, profile.getName());
         ArrayList<ParsingProfilePortion> portions = profile.getPortions();
         assertEquals(2, portions.size());
-        validatePortion(portions, portions.get(0), true, false, false, SeparatorEnum.COLON.getName());
-        validatePortion(portions, portions.get(1), true, false, false, SeparatorEnum.HIFEN.getName());
+        validatePortion(portions.get(0), true, false, false, SeparatorEnum.COLON.getName());
+        validatePortion(portions.get(1), true, false, false, SeparatorEnum.HIFEN.getName());
     }
 
 
@@ -477,7 +476,7 @@ public class ParsingProfileConsumerTests {
     }
 
 
-    private void validatePortion(ArrayList<ParsingProfilePortion> portions, ParsingProfilePortion portion, boolean isSeparator, boolean isIgnore, boolean isSpecificFormat, String name) {
+    private void validatePortion(ParsingProfilePortion portion, boolean isSeparator, boolean isIgnore, boolean isSpecificFormat, String name) {
         assertEquals(isSeparator, portion.isSeparator());
         assertEquals(isIgnore, portion.isIgnore());
         assertEquals(isSpecificFormat, portion.isSpecificFormat());

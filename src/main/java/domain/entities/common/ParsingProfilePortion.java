@@ -1,6 +1,7 @@
 package domain.entities.common;
 
 public class ParsingProfilePortion {
+    public static final String NO_SPECIFIC_FORMAT = "NoFormat";
 
     private String portion;
     private boolean ignore;
@@ -14,7 +15,7 @@ public class ParsingProfilePortion {
     }
 
     public ParsingProfilePortion(String portion, boolean ignore, boolean isSeparator, boolean specificFormat) {
-        this(portion, ignore, isSeparator, specificFormat, "");
+        this(portion, ignore, isSeparator, specificFormat, NO_SPECIFIC_FORMAT);
     }
 
     public ParsingProfilePortion(String portion, boolean isIgnore, boolean isSeparator, boolean isSpecificFormat, String specificFormat) {
@@ -31,6 +32,10 @@ public class ParsingProfilePortion {
 
     public void setPortion(String portion) {
         this.portion = portion;
+    }
+
+    public String getPortion() {
+        return portion;
     }
 
     public boolean isIgnore() {

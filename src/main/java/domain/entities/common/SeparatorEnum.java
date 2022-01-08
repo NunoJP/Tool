@@ -5,10 +5,32 @@ public enum SeparatorEnum {
     HIFEN("-", "-", "HIFEN"),
     COLON(":", ":", "COLON"),
     SEMI_COLON(";", ";", "SEMI_COLON"),
-    TAB("\t", "\t", "TAB"),
+    TAB("\\t", "\t", "TAB"),
     COMMA(",", ",", "COMMA"),
     OPEN_BRACKET("[", "[", "OPEN_BRACKET"),
     CLOSE_BRACKET("]", "]", "CLOSE_BRACKET");
+
+
+    public static String getParsingStringByName(String portion) {
+        if(SPACE.getName().equalsIgnoreCase(portion)) {
+            return SPACE.parsingString;
+        } else if(HIFEN.getName().equalsIgnoreCase(portion)){
+            return HIFEN.parsingString;
+        } else if(COLON.getName().equalsIgnoreCase(portion)){
+            return COLON.parsingString;
+        } else if(SEMI_COLON.getName().equalsIgnoreCase(portion)){
+            return SEMI_COLON.parsingString;
+        } else if(TAB.getName().equalsIgnoreCase(portion)){
+            return TAB.parsingString;
+        } else if(COMMA.getName().equalsIgnoreCase(portion)){
+            return COMMA.parsingString;
+        } else if(OPEN_BRACKET.getName().equalsIgnoreCase(portion)){
+            return OPEN_BRACKET.parsingString;
+        } else if(CLOSE_BRACKET.getName().equalsIgnoreCase(portion)){
+            return CLOSE_BRACKET.parsingString;
+        }
+        return "";
+    }
 
     public String getName() {
         return name;

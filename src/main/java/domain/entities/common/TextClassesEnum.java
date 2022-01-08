@@ -9,6 +9,25 @@ public enum TextClassesEnum {
     METHOD("Method", "METHOD"),
     ID("ID", "ID");
 
+    public static String getParsingStringByName(String portion) {
+        if(TIMESTAMP.getName().equalsIgnoreCase(portion)) {
+            return TIMESTAMP.parsingString;
+        } else if(DATE.getName().equalsIgnoreCase(portion)){
+            return DATE.parsingString;
+        } else if(TIME.getName().equalsIgnoreCase(portion)){
+            return TIME.parsingString;
+        } else if(LEVEL.getName().equalsIgnoreCase(portion)){
+            return LEVEL.parsingString;
+        } else if(MESSAGE.getName().equalsIgnoreCase(portion)){
+            return MESSAGE.parsingString;
+        } else if(METHOD.getName().equalsIgnoreCase(portion)){
+            return METHOD.parsingString;
+        } else if(ID.getName().equalsIgnoreCase(portion)){
+            return ID.parsingString;
+        }
+        return "";
+    }
+
     public String getName() {
         return name;
     }
@@ -18,7 +37,7 @@ public enum TextClassesEnum {
     }
 
     private final String name;
-    private String parsingString;
+    private final String parsingString;
 
     TextClassesEnum(String name, String parsingString ) {
         this.name = name;
