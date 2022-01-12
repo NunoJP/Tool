@@ -43,7 +43,7 @@ public class ParsingProfileManagementService {
     }
 
     public boolean deleteProfile(ParsingProfileDo parsingProfile) {
-        return false;
+        return writer.deleteProfile(Converter.toDomainObject(parsingProfile));
     }
 
     public boolean createProfile(ParsingProfileDo newObject) {

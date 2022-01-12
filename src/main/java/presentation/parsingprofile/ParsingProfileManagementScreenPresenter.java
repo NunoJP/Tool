@@ -2,9 +2,11 @@ package presentation.parsingprofile;
 
 import domain.entities.displayobjects.ParsingProfileDo;
 import domain.services.ParsingProfileManagementService;
+import presentation.common.GuiMessages;
 import presentation.common.IViewPresenter;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
@@ -50,10 +52,17 @@ public class ParsingProfileManagementScreenPresenter implements IViewPresenter {
             if(userConfirmedOperation()) {
                 boolean success = service.deleteProfile(parsingProfiles[selectedItem]);
                 if(success) {
-                    // show popup
+                    JOptionPane.showMessageDialog(view,
+                            GuiMessages.DELETE_SUCCESSFUL,
+                            GuiMessages.SUCCESS_TITLE,
+                            JOptionPane.INFORMATION_MESSAGE);
                 } else {
-                    // show popup
+                    JOptionPane.showMessageDialog(view,
+                            GuiMessages.DELETE_FAILED,
+                            GuiMessages.FAILURE_TITLE,
+                            JOptionPane.INFORMATION_MESSAGE);
                 }
+                updateViewTable();
             }
         }));
 
@@ -79,7 +88,11 @@ public class ParsingProfileManagementScreenPresenter implements IViewPresenter {
     }
 
     private boolean userConfirmedOperation() {
-        return false;
+        int confirmation = JOptionPane.showConfirmDialog(view,
+                GuiMessages.CONFIRM_DELETE_PARSING_PROFILE,
+                GuiMessages.PLEASE_CONFIRM_DIALOG_TITLE,
+                JOptionPane.YES_NO_OPTION);
+        return confirmation == JOptionPane.YES_OPTION;
     }
 
 

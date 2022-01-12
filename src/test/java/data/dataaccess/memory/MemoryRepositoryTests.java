@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class MemoryRepositoryTests {
@@ -95,6 +96,29 @@ public class MemoryRepositoryTests {
         assertFalse(repository.updateProfile(profileUp));
     }
 
+    @Test
+    public void removeProfileSimple() {
+        // Basic create for setup
+        MemoryRepository repository = MemoryRepository.getInstance();
+        ParsingProfile profile = new ParsingProfile("Name");
+        assertTrue(repository.createProfile(profile, profile.getOriginFile()));
+        ParsingProfile mapProfile = repository.getProfile(0);
+        assertEquals(profile.getName(), mapProfile.getName());
+        // Remove and validation
+        assertTrue(repository.deleteProfile(profile));
+        assertNull(repository.getProfile(0));
+    }
+
+    @Test
+    public void removeProfileWithoutExistingProfile() {
+        // Basic create for setup
+        MemoryRepository repository = MemoryRepository.getInstance();
+        ParsingProfile profile = new ParsingProfile("Name");
+        // empty repository
+        assertNull(repository.getProfile(0));
+        // Remove and validation
+        assertFalse(repository.deleteProfile(profile));
+    }
 
 
 }

@@ -74,11 +74,25 @@ public class MemoryRepository {
         if (profileExists(parsingProfile)) {
             parsingProfiles.put(parsingProfile.getId(), parsingProfile);
             // add to storage file map the new profile
-            ArrayList<ParsingProfile> parsingProfiles = parsingProfileByFile.get(parsingProfile.getOriginFile());
-            for (int i = 0; i < parsingProfiles.size(); i++) {
-                if (parsingProfiles.get(i).getName().equals(parsingProfile.getName())){
-                    parsingProfiles.remove(i);
-                    parsingProfiles.add(parsingProfile);
+            ArrayList<ParsingProfile> profileArrayList = parsingProfileByFile.get(parsingProfile.getOriginFile());
+            for (int i = 0; i < profileArrayList.size(); i++) {
+                if (profileArrayList.get(i).getName().equals(parsingProfile.getName())){
+                    profileArrayList.remove(i);
+                    profileArrayList.add(parsingProfile);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean deleteProfile(ParsingProfile parsingProfile) {
+        if(profileExists(parsingProfile)) {
+            parsingProfiles.remove(parsingProfile.getId());
+            ArrayList<ParsingProfile> profileArrayList = parsingProfileByFile.get(parsingProfile.getOriginFile());
+            for (int i = 0; i < profileArrayList.size(); i++) {
+                if (profileArrayList.get(i).getName().equals(parsingProfile.getName())){
+                    profileArrayList.remove(i);
                     return true;
                 }
             }

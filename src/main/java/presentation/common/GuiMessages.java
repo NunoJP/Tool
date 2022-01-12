@@ -22,9 +22,13 @@ public class GuiMessages {
 
 
     public static final String CONFIRM_OVERWRITE_PARSING_PROFILE = "You will overwrite the existing profile, are you sure?";
+    public static final String CONFIRM_DELETE_PARSING_PROFILE = "You will delete the existing profile, are you sure?";
     public static final String PLEASE_CONFIRM_DIALOG_TITLE = "Please confirm";
     public static final String UPDATE_SUCCESSFUL = "The update was successful";
+    public static final String DELETE_SUCCESSFUL = "The delete was successful";
+    public static final String UPDATE_FAILED = "Update failed";
+    public static final String DELETE_FAILED = "Delete failed";
     public static final String SUCCESS_TITLE = "Success";
     public static final String FAILURE_TITLE = "Failed";
-    public static final String UPDATE_FAILED = "Update failed";
+
 }

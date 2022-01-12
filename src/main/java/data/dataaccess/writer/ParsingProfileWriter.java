@@ -54,6 +54,14 @@ public class ParsingProfileWriter {
         return false;
     }
 
+    public boolean deleteProfile(ParsingProfile parsingProfile) {
+        String originFile = parsingProfile.getOriginFile();
+        if(instance.deleteProfile(parsingProfile)) {
+            return writeProfiles(instance.getParsingProfilesByOriginFile(originFile), originFile);
+        }
+        return false;
+    }
+
     private boolean writeProfiles(ArrayList<ParsingProfile> parsingProfilesByOriginFile, String originFile) {
         Path currentRelativePath = Paths.get(parsingProfileFolderName + File.separator + originFile);
         File file = currentRelativePath.toAbsolutePath().toFile();
@@ -96,6 +104,5 @@ public class ParsingProfileWriter {
         }
         return false;
     }
-
 
 }
