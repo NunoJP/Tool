@@ -1,7 +1,7 @@
 package presentation.parsingprofile;
 
-import domain.entities.Converter;
 import domain.entities.Validator;
+import domain.entities.common.ParsingProfilePortion;
 import domain.entities.common.SeparatorEnum;
 import domain.entities.common.TextClassesEnum;
 import domain.entities.displayobjects.ParsingProfileDo;
@@ -12,6 +12,7 @@ import presentation.common.IViewPresenter;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import java.util.ArrayList;
 
 public class ParsingProfileEditorScreenPresenter implements IViewPresenter {
 
@@ -19,17 +20,31 @@ public class ParsingProfileEditorScreenPresenter implements IViewPresenter {
     private final ParsingProfileEditorScreen dialogView;
     private final ParsingProfileManagementService service;
     private final ParsingProfileDo parsingProfileDo;
+    private final ParsingProfileDo existingProfile;
     private final ParsingProfileManagementScreenPresenter callerPresenter;
     private boolean wasLastPortionTextClass;
 
     public ParsingProfileEditorScreenPresenter(JFrame motherFrame, ParsingProfileDo existingProfile, ParsingProfileManagementScreenPresenter parsingProfileManagementScreenPresenter) {
         this.motherFrame = motherFrame;
+        this.existingProfile = existingProfile;
         this.callerPresenter = parsingProfileManagementScreenPresenter;
         dialogView = new ParsingProfileEditorScreen(motherFrame);
         service = new ParsingProfileManagementService();
-        parsingProfileDo = new ParsingProfileDo();
+        parsingProfileDo = existingProfile == null ? new ParsingProfileDo() : existingProfile;
+        populateViewWithExistingProfile();
         defineViewBehavior();
 
+    }
+
+    private void populateViewWithExistingProfile() {
+        if(existingProfile != null) {
+            dialogView.setProfileNameText(existingProfile.getName());
+            dialogView.setResultPanelText(existingProfile.getGuiRepresentation());
+            ArrayList<ParsingProfilePortion> portions = existingProfile.getPortions();
+            if(!portions.isEmpty()) {
+                changeTextClassSeparatorStates(!portions.get(portions.size() - 1).isSeparator());
+            }
+        }
     }
 
     private void defineViewBehavior() {
@@ -98,7 +113,31 @@ public class ParsingProfileEditorScreenPresenter implements IViewPresenter {
             } else {
                 parsingProfileDo.setName(profileName);
                 parsingProfileDo.finishProfile();
-                service.createProfile(parsingProfileDo);
+                if(existingProfile != null) {
+                    int confirmation = JOptionPane.showConfirmDialog(dialogView,
+                            GuiMessages.CONFIRM_OVERWRITE_PARSING_PROFILE,
+                            GuiMessages.PLEASE_CONFIRM_DIALOG_TITLE,
+                            JOptionPane.YES_NO_OPTION);
+                    if(confirmation == JOptionPane.YES_OPTION) {
+                        boolean updateSuccess = service.updateProfile(parsingProfileDo);
+                        if(updateSuccess) {
+                            JOptionPane.showMessageDialog(dialogView,
+                                    GuiMessages.UPDATE_SUCCESSFUL,
+                                    GuiMessages.SUCCESS_TITLE,
+                                    JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(dialogView,
+                                    GuiMessages.UPDATE_FAILED,
+                                    GuiMessages.FAILURE_TITLE,
+                                    JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    }
+                    // Stop the save procedure
+                    return;
+                } else {
+                    service.createProfile(parsingProfileDo);
+                }
+
                 callerPresenter.updateViewTable();
                 fullReset();
             }

@@ -70,12 +70,29 @@ public class MemoryRepositoryTests {
 
     @Test
     public void testUpdateProfileSimple(){
-
+        // Basic create for setup
+        MemoryRepository repository = MemoryRepository.getInstance();
+        ParsingProfile profile = new ParsingProfile("Name");
+        assertTrue(repository.createProfile(profile, profile.getOriginFile()));
+        ParsingProfile mapProfile = repository.getProfile(0);
+        assertEquals(profile.getName(), mapProfile.getName());
+        // Update and validation
+        ParsingProfile profileUp = new ParsingProfile("Name");
+        profileUp.addPortion(new ParsingProfilePortion("Portion", false, false));
+        assertTrue(repository.updateProfile(profileUp));
+        mapProfile = repository.getProfile(0);
+        assertEquals(profileUp.getName(), mapProfile.getName());
+        assertEquals(profile.getName(), profileUp.getName());
+        assertFalse(profileUp.getPortions().isEmpty());
+        ParsingProfilePortion portion = profileUp.getPortions().get(0);
+        assertEquals("Portion", portion.getPortion());
     }
 
     @Test
-    public void testUpdateProfileCollision(){
-
+    public void testUpdateProfileWithoutExistingProfile(){
+        MemoryRepository repository = MemoryRepository.getInstance();
+        ParsingProfile profileUp = new ParsingProfile("Name");
+        assertFalse(repository.updateProfile(profileUp));
     }
 
 

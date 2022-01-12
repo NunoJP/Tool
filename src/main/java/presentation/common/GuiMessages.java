@@ -21,4 +21,10 @@ public class GuiMessages {
     public static final String LOG_ERROR_ERROR_CREATING_FILE = "Error creating file: ";
 
 
+    public static final String CONFIRM_OVERWRITE_PARSING_PROFILE = "You will overwrite the existing profile, are you sure?";
+    public static final String PLEASE_CONFIRM_DIALOG_TITLE = "Please confirm";
+    public static final String UPDATE_SUCCESSFUL = "The update was successful";
+    public static final String SUCCESS_TITLE = "Success";
+    public static final String FAILURE_TITLE = "Failed";
+    public static final String UPDATE_FAILED = "Update failed";
 }

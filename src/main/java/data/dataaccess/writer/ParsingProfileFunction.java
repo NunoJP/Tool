@@ -16,7 +16,7 @@ import static data.dataaccess.common.ParsingProfileReadWriteConstants.PORTION_SE
 
 public class ParsingProfileFunction implements Function<ParsingProfile, String> {
 
-    private final boolean isNewFile;
+    private boolean isNewFile;
 
     public ParsingProfileFunction(boolean isNewFile) {
         this.isNewFile = isNewFile;
@@ -67,4 +67,7 @@ public class ParsingProfileFunction implements Function<ParsingProfile, String> 
         return TextClassesEnum.getParsingStringByName(portion) + PORTION_SEPARATOR + KEEP_TOKEN;
     }
 
+    public void setIsNewFile(boolean isNew) {
+        isNewFile = isNew;
+    }
 }

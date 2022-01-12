@@ -99,21 +99,21 @@ public class ParsingProfileConsumer implements Consumer<String> {
         } else if(s.startsWith(TextClassesEnum.ID.getParsingString())) {
             parseSpecifically(s, TextClassesEnum.ID, currentProfile);
         } else if(s.startsWith(SeparatorEnum.SPACE.getParsingString())) {
-            currentProfile.addPortion(new ParsingProfilePortion(SeparatorEnum.SPACE.getSymbol(), false, true));
+            currentProfile.addPortion(new ParsingProfilePortion(SeparatorEnum.SPACE.getName(), false, true));
         } else if(s.startsWith(SeparatorEnum.HIFEN.getParsingString())) {
-            currentProfile.addPortion(new ParsingProfilePortion(SeparatorEnum.HIFEN.getSymbol(), false, true));
+            currentProfile.addPortion(new ParsingProfilePortion(SeparatorEnum.HIFEN.getName(), false, true));
         } else if(s.startsWith(SeparatorEnum.COLON.getParsingString())) {
-            currentProfile.addPortion(new ParsingProfilePortion(SeparatorEnum.COLON.getSymbol(), false, true));
+            currentProfile.addPortion(new ParsingProfilePortion(SeparatorEnum.COLON.getName(), false, true));
         } else if(s.startsWith(SeparatorEnum.SEMI_COLON.getParsingString())) {
-            currentProfile.addPortion(new ParsingProfilePortion(SeparatorEnum.SEMI_COLON.getSymbol(), false, true));
+            currentProfile.addPortion(new ParsingProfilePortion(SeparatorEnum.SEMI_COLON.getName(), false, true));
         } else if(s.startsWith(SeparatorEnum.TAB.getParsingString())) {
-            currentProfile.addPortion(new ParsingProfilePortion(SeparatorEnum.TAB.getSymbol(), false, true));
+            currentProfile.addPortion(new ParsingProfilePortion(SeparatorEnum.TAB.getName(), false, true));
         } else if(s.startsWith(SeparatorEnum.COMMA.getParsingString())) {
-            currentProfile.addPortion(new ParsingProfilePortion(SeparatorEnum.COMMA.getSymbol(), false, true));
+            currentProfile.addPortion(new ParsingProfilePortion(SeparatorEnum.COMMA.getName(), false, true));
         } else if(s.startsWith(SeparatorEnum.OPEN_BRACKET.getParsingString())) {
-            currentProfile.addPortion(new ParsingProfilePortion(SeparatorEnum.OPEN_BRACKET.getSymbol(), false, true));
+            currentProfile.addPortion(new ParsingProfilePortion(SeparatorEnum.OPEN_BRACKET.getName(), false, true));
         } else if(s.startsWith(SeparatorEnum.CLOSE_BRACKET.getParsingString())) {
-            currentProfile.addPortion(new ParsingProfilePortion(SeparatorEnum.CLOSE_BRACKET.getSymbol(), false, true));
+            currentProfile.addPortion(new ParsingProfilePortion(SeparatorEnum.CLOSE_BRACKET.getName(), false, true));
         }
     }
 

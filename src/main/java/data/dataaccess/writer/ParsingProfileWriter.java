@@ -11,6 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,9 +42,37 @@ public class ParsingProfileWriter {
         if(instance.createProfile(parsingProfile, DEFAULT_PARSING_PROFILE_FILE_NAME)) {
             return writeProfile(parsingProfile,
                     parsingProfile.getOriginFile() == null ? DEFAULT_PARSING_PROFILE_FILE_NAME : parsingProfile.getOriginFile());
-        } else {
-            return false;
         }
+        return false;
+    }
+
+    public boolean updateProfile(ParsingProfile parsingProfile) {
+        String originFile = parsingProfile.getOriginFile();
+        if(instance.updateProfile(parsingProfile)) {
+            return writeProfiles(instance.getParsingProfilesByOriginFile(originFile), originFile);
+        }
+        return false;
+    }
+
+    private boolean writeProfiles(ArrayList<ParsingProfile> parsingProfilesByOriginFile, String originFile) {
+        Path currentRelativePath = Paths.get(parsingProfileFolderName + File.separator + originFile);
+        File file = currentRelativePath.toAbsolutePath().toFile();
+        function = new ParsingProfileFunction(true); // if the file exists we don't need to add the first line
+
+        try (BufferedWriter wr = new BufferedWriter(new FileWriter(file))) {
+            for (ParsingProfile parsingProfile : parsingProfilesByOriginFile) {
+                String line = function.apply(parsingProfile);
+                wr.append(line);
+                function.setIsNewFile(false);
+            }
+            LOGGER.log(Level.INFO, GuiMessages.LOG_INFO_WRITER_FINISHED_PROCESSING + file.getName());
+            return true;
+        } catch (FileNotFoundException e) {
+            LOGGER.log(Level.SEVERE, LOG_ERROR_ERROR_OPENING_FILE + file.getName(), e);
+        } catch (IOException | IndexOutOfBoundsException e) {
+            LOGGER.log(Level.SEVERE, LOG_ERROR_ERROR_READING_FILE + file.getName(), e);
+        }
+        return false;
     }
 
     private boolean writeProfile(ParsingProfile parsingProfile, String defaultParsingProfileFileName) {
@@ -67,4 +96,6 @@ public class ParsingProfileWriter {
         }
         return false;
     }
+
+
 }

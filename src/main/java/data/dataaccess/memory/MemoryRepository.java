@@ -19,10 +19,10 @@ public class MemoryRepository {
     }
 
     private HashMap<Integer, ParsingProfile> parsingProfiles;
-    private HashMap<Integer, ProfileNameFileNamePair> parsingProfileNames;
+    private HashMap<String, ArrayList<ParsingProfile>> parsingProfileByFile;
     private MemoryRepository() {
         parsingProfiles = new HashMap<>();
-        parsingProfileNames = new HashMap<>();
+        parsingProfileByFile = new HashMap<>();
     }
 
     public ArrayList<ParsingProfile> getParsingProfiles(){
@@ -37,17 +37,31 @@ public class MemoryRepository {
         int i = idx.getAndIncrement();
         toDomainObject.setId(i);
         parsingProfiles.put(i, toDomainObject);
-        parsingProfileNames.put(i, new ProfileNameFileNamePair(toDomainObject.getName(), targetFile));
+        // add to storage file map the new profile
+        if(!parsingProfileByFile.containsKey(targetFile)) {
+            // new listing
+            parsingProfileByFile.put(targetFile, new ArrayList<>());
+        }
+        ArrayList<ParsingProfile> parsingProfiles = parsingProfileByFile.get(targetFile);
+        parsingProfiles.add(toDomainObject);
         return true;
     }
 
     public boolean profileExists(ParsingProfile toDomainObject) {
-        long count = parsingProfileNames.values().stream().filter(c -> c.getProfileName().equals(toDomainObject.getName())).count();
+        ArrayList<ParsingProfile> parsingProfiles = parsingProfileByFile.get(toDomainObject.getOriginFile());
+        if (parsingProfiles == null || parsingProfiles.isEmpty()) {
+            return false;
+        }
+        long count = parsingProfiles.stream().filter(c -> c.getName().equals(toDomainObject.getName())).count();
         return count != 0;
     }
 
     public ParsingProfile getProfile(int id) {
         return parsingProfiles.get(id);
+    }
+
+    public ArrayList<ParsingProfile> getParsingProfilesByOriginFile(String originFile) {
+        return parsingProfileByFile.getOrDefault(originFile, new ArrayList<>());
     }
 
     public void createParsingProfiles(ArrayList<ParsingProfile> accumulator) {
@@ -56,9 +70,27 @@ public class MemoryRepository {
         }
     }
 
+    public boolean updateProfile(ParsingProfile parsingProfile) {
+        if (profileExists(parsingProfile)) {
+            parsingProfiles.put(parsingProfile.getId(), parsingProfile);
+            // add to storage file map the new profile
+            ArrayList<ParsingProfile> parsingProfiles = parsingProfileByFile.get(parsingProfile.getOriginFile());
+            for (int i = 0; i < parsingProfiles.size(); i++) {
+                if (parsingProfiles.get(i).getName().equals(parsingProfile.getName())){
+                    parsingProfiles.remove(i);
+                    parsingProfiles.add(parsingProfile);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public void fullReset() {
         parsingProfiles = new HashMap<>();
-        parsingProfileNames = new HashMap<>();
+        parsingProfileByFile = new HashMap<>();
         idx = new AtomicInteger(0);
     }
+
+
 }

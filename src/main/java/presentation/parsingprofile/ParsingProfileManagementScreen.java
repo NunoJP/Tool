@@ -29,6 +29,7 @@ public class ParsingProfileManagementScreen extends JPanel {
         parsingProfilesPanel = new GeneralTablePanel(
                 new String[]{GuiConstants.NAME_COLUMN, GuiConstants.DESCRIPTION_COLUMN}, false
         );
+        parsingProfilesPanel.changeColumnWidths(new int[] { 10, 150 });
         this.add(parsingProfilesPanel, BorderLayout.CENTER);
     }
 

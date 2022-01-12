@@ -11,11 +11,11 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.event.FocusListener;
 import java.util.HashMap;
 
 import static presentation.common.GuiConstants.H_GAP;
@@ -73,6 +73,14 @@ public class GeneralTablePanel extends JPanel {
         model.setRowCount(0);
         for (Object[] datum : data) {
             model.addRow(datum);
+        }
+    }
+
+    public void changeColumnWidths(int [] columnSizes) {
+        TableColumn column = null;
+        for (int i = 0; i < columnSizes.length; i++) {
+            column = table.getColumnModel().getColumn(i);
+            column.setPreferredWidth(columnSizes[i]);
         }
     }
 

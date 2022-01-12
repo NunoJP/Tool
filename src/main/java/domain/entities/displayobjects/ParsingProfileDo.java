@@ -8,11 +8,19 @@ public class ParsingProfileDo {
     private String name;
     private Integer id;
     private ArrayList<ParsingProfilePortion> portions;
+    private String originFile;
 
     public ParsingProfileDo(int id, String name, ArrayList<ParsingProfilePortion> portions) {
         this.id = id;
         this.name = name;
         this.portions = portions;
+    }
+
+    public ParsingProfileDo(int id, String name, ArrayList<ParsingProfilePortion> portions, String originFile) {
+        this.id = id;
+        this.name = name;
+        this.portions = portions;
+        this.originFile = originFile;
     }
 
     public ParsingProfileDo(int id, String name) {
@@ -26,6 +34,13 @@ public class ParsingProfileDo {
         this(-1, null);
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -35,12 +50,12 @@ public class ParsingProfileDo {
         this.name = name;
     }
 
-    public Integer getId() {
-        return id;
+    public String getOriginFile() {
+        return originFile;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setOriginFile(String originFile) {
+        this.originFile = originFile;
     }
 
     public String getDescription() {
@@ -58,6 +73,11 @@ public class ParsingProfileDo {
 
     public void finishProfile() {
         if(portions.size() != 0) {
+            for (ParsingProfilePortion portion : portions) {
+                if(portion.isLast()) {
+                    portion.setLast(false);
+                }
+            }
             portions.get(portions.size() - 1).setLast(true);
         }
     }
@@ -85,7 +105,7 @@ public class ParsingProfileDo {
             if(portion.isIgnore()){
                 builder.append(createIgnoreString(portion.getPortionRepresentation()));
             } else if(portion.isSeparator()) {
-                builder.append(createSeparatorString(portion.getPortionRepresentation()));
+                builder.append(createSeparatorString(portion.getPortion()));
             } else if(portion.isSpecificFormat()) {
                 builder.append(createKeepSpecificFormatString(portion.getPortionRepresentation()));
             } else {

@@ -8,6 +8,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class ParsingProfileDoTests {
 
@@ -66,6 +68,47 @@ public class ParsingProfileDoTests {
         profile.addPortionAndGetProfile(TextClassesEnum.TIMESTAMP.getName(), false, false, false);
         String sProfile = profile.getGuiRepresentation();
         assertEquals(" Ignore<Date>  \" \"  Keep<Timestamp> ", sProfile);
+    }
+
+    @Test
+    public void testFinish(){
+        ParsingProfileDo profile = new ParsingProfileDo();
+        profile.addPortionAndGetProfile(TextClassesEnum.DATE.getName(), true, false, false);
+        profile.addPortionAndGetProfile(SeparatorEnum.SPACE.getName(), false, true, false);
+        profile.addPortionAndGetProfile(TextClassesEnum.TIMESTAMP.getName(), false, false, false);
+        String sProfile = profile.getGuiRepresentation();
+        assertEquals(" Ignore<Date>  \" \"  Keep<Timestamp> ", sProfile);
+        ParsingProfilePortion lastPortion = profile.getPortions().get(2); // get the last portion
+        assertFalse(lastPortion.isLast());
+        // finish the profile
+        profile.finishProfile();
+        assertTrue(lastPortion.isLast());
+    }
+
+
+    @Test
+    public void testAddElementsAfterFinishAndThenFinish(){
+        ParsingProfileDo profile = new ParsingProfileDo();
+        profile.addPortionAndGetProfile(TextClassesEnum.DATE.getName(), true, false, false);
+        profile.addPortionAndGetProfile(SeparatorEnum.SPACE.getName(), false, true, false);
+        profile.addPortionAndGetProfile(TextClassesEnum.TIMESTAMP.getName(), false, false, false);
+        String sProfile = profile.getGuiRepresentation();
+        assertEquals(" Ignore<Date>  \" \"  Keep<Timestamp> ", sProfile);
+        ParsingProfilePortion lastPortion = profile.getPortions().get(2); // get the last portion
+        assertFalse(lastPortion.isLast());
+        // finish the profile
+        profile.finishProfile();
+        assertTrue(lastPortion.isLast());
+        // add new portion after doing the finish (simulating an update)
+        profile.addPortionAndGetProfile(TextClassesEnum.TIMESTAMP.getName(), false, false, false);
+        ParsingProfilePortion newLastPortion = profile.getPortions().get(3); // get the last portion
+        // before a finish the states should not change
+        assertTrue(lastPortion.isLast());
+        assertFalse(newLastPortion.isLast());
+        // finish the profile once again
+        profile.finishProfile();
+        assertFalse(lastPortion.isLast());
+        assertTrue(newLastPortion.isLast());
     }
 
 
