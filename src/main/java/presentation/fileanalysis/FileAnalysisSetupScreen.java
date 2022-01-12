@@ -26,22 +26,19 @@ public class FileAnalysisSetupScreen extends JPanel {
     private JButton startButton;
     private JComboBox<ParsingProfileDo> parsingProfileDropdown;
     private JComboBox<MetricsProfileDo> metricsProfileDropdown;
-    private JFrame motherFrame;
+    private final JFrame motherFrame;
 
-    public FileAnalysisSetupScreen(JFrame motherFrame) {
+    public FileAnalysisSetupScreen(final JFrame motherFrame) {
         this.motherFrame = motherFrame;
         this.setLayout(new BorderLayout());
-
-        JPanel filePanel = createFilePanel();
-        JPanel parsingProfilePanel = createParsingProfilePanel();
-        JPanel metricsProfilePanel = createMetricsProfilePanel();
-        JPanel startPanel = createStartPanel();
-        this.add(filePanel, BorderLayout.NORTH);
         JPanel holder = new JPanel(new GridLayout(2,1, H_GAP, V_GAP));
-        holder.add(parsingProfilePanel);
-        holder.add(metricsProfilePanel);
-        this.add(holder, BorderLayout.CENTER);
-        this.add(startPanel, BorderLayout.SOUTH);
+        holder.add(createParsingProfilePanel());
+        holder.add(createMetricsProfilePanel());
+        JPanel northPanel = new JPanel(new BorderLayout(H_GAP, V_GAP));
+        northPanel.add(createFilePanel(), BorderLayout.NORTH);
+        northPanel.add(holder, BorderLayout.CENTER);
+        northPanel.add(createStartPanel(), BorderLayout.SOUTH);
+        this.add(northPanel, BorderLayout.NORTH);
     }
 
     private JPanel createFilePanel() {
@@ -61,6 +58,7 @@ public class FileAnalysisSetupScreen extends JPanel {
         parsingProfileDropdown = new JComboBox<>();
         profilePanel.setBorder(new EmptyBorder(V_GAP*2, H_GAP, V_GAP*2, H_GAP));
         profilePanel.add(parsingProfileDropdown, BorderLayout.CENTER);
+        profilePanel.add(new JPanel(), BorderLayout.EAST);
         return profilePanel;
     }
 
@@ -70,6 +68,7 @@ public class FileAnalysisSetupScreen extends JPanel {
         metricsProfileDropdown = new JComboBox<>();
         metricsPanel.setBorder(new EmptyBorder(V_GAP*2, H_GAP, V_GAP*2, H_GAP));
         metricsPanel.add(metricsProfileDropdown, BorderLayout.CENTER);
+        metricsPanel.add(new JPanel(), BorderLayout.EAST);
         return metricsPanel;
     }
 

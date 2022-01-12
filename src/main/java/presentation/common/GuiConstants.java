@@ -4,6 +4,8 @@ public class GuiConstants {
     // Numeric constants
     public static final int H_GAP = 5;
     public static final int V_GAP = 5;
+    public static final int MAIN_FRAME_WIDTH = 800;
+    public static final int MAIN_FRAME_HEIGHT = 500;
     public static final int H_FILE_ANALYSIS_SCREEN_SIZE = 1200;
     public static final int V_FILE_ANALYSIS_SCREEN_SIZE = 700;
     public static final int H_PROFILES_EDITOR_SCREEN_SIZE = 650;

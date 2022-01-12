@@ -12,6 +12,8 @@ import presentation.common.IViewPresenter;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 public class ParsingProfileEditorScreenPresenter implements IViewPresenter {
@@ -33,7 +35,6 @@ public class ParsingProfileEditorScreenPresenter implements IViewPresenter {
         parsingProfileDo = existingProfile == null ? new ParsingProfileDo() : existingProfile;
         populateViewWithExistingProfile();
         defineViewBehavior();
-
     }
 
     private void populateViewWithExistingProfile() {
@@ -48,6 +49,14 @@ public class ParsingProfileEditorScreenPresenter implements IViewPresenter {
     }
 
     private void defineViewBehavior() {
+
+        dialogView.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                super.windowClosed(e);
+                callerPresenter.dialogWindowClosed();
+            }
+        });
 
         // Clear button behavior
         dialogView.getClearButton().addActionListener(actionEvent ->  {

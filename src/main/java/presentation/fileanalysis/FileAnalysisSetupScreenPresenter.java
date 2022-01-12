@@ -74,6 +74,7 @@ public class FileAnalysisSetupScreenPresenter implements IViewPresenter {
                         view.getMotherFrame(), selectedFile, parsingProfile, metricsProfile
                 );
                 metricsScreenPresenter.execute();
+                startButton.setEnabled(false);
             }
         );
     }

@@ -12,6 +12,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static presentation.common.GuiConstants.HOME_SCREEN_TITLE;
+import static presentation.common.GuiConstants.MAIN_FRAME_HEIGHT;
+import static presentation.common.GuiConstants.MAIN_FRAME_WIDTH;
 
 public class HomeScreen {
 
@@ -22,10 +24,11 @@ public class HomeScreen {
     public HomeScreen() {
         setLookAndFeel();
         frame = new JFrame(HOME_SCREEN_TITLE);
-        frame.setPreferredSize(new Dimension(550, 250));
+        frame.setPreferredSize(new Dimension(MAIN_FRAME_WIDTH, MAIN_FRAME_HEIGHT));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         createComponents();
         frame.pack();
+        frame.setLocationRelativeTo(null); // center the frame
     }
 
     public void setVisible(){

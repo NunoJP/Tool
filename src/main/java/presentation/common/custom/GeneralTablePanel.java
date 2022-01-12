@@ -81,7 +81,9 @@ public class GeneralTablePanel extends JPanel {
         for (int i = 0; i < columnSizes.length; i++) {
             column = table.getColumnModel().getColumn(i);
             column.setPreferredWidth(columnSizes[i]);
+            column.setMinWidth(columnSizes[i]);
         }
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
     }
 
     public void setStringColorRenderMap(HashMap<String, Pair<Color,Color>> colorRenderMap){

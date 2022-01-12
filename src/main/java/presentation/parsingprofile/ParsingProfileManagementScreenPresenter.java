@@ -43,6 +43,7 @@ public class ParsingProfileManagementScreenPresenter implements IViewPresenter {
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(view);
             ParsingProfileEditorScreenPresenter editorScreenPresenter = new ParsingProfileEditorScreenPresenter(frame, null, this);
             editorScreenPresenter.execute();
+            setButtonsEnabled(false);
         }));
 
         view.getDeleteSelectedButton().addActionListener( (e -> {
@@ -61,6 +62,7 @@ public class ParsingProfileManagementScreenPresenter implements IViewPresenter {
             ParsingProfileEditorScreenPresenter editorScreenPresenter
                     = new ParsingProfileEditorScreenPresenter(frame, parsingProfiles[selectedItem], this);
             editorScreenPresenter.execute();
+            setButtonsEnabled(false);
         }));
     }
 
@@ -92,5 +94,15 @@ public class ParsingProfileManagementScreenPresenter implements IViewPresenter {
     public void updateViewTable() {
         parsingProfiles = service.getParsingProfiles();
         view.getParsingProfilesPanel().setData(convertDataForTable(parsingProfiles));
+    }
+
+    public void dialogWindowClosed() {
+        setButtonsEnabled(true);
+    }
+
+    private void setButtonsEnabled(boolean enabled) {
+        view.getNewProfileButton().setEnabled(enabled);
+        view.getUpdateSelectedButton().setEnabled(enabled);
+        view.getDeleteSelectedButton().setEnabled(enabled);
     }
 }

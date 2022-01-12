@@ -24,13 +24,16 @@ public class ParsingProfileManagementScreen extends JPanel {
     }
 
     private void createComponents() {
-        JPanel buttonPanel = createButtonPanel();
-        this.add(buttonPanel, BorderLayout.NORTH);
+        this.add(createButtonPanel(), BorderLayout.NORTH);
+        this.add(createParsingProfilesPanel(), BorderLayout.CENTER);
+    }
+
+    private JPanel createParsingProfilesPanel() {
         parsingProfilesPanel = new GeneralTablePanel(
                 new String[]{GuiConstants.NAME_COLUMN, GuiConstants.DESCRIPTION_COLUMN}, false
         );
-        parsingProfilesPanel.changeColumnWidths(new int[] { 10, 150 });
-        this.add(parsingProfilesPanel, BorderLayout.CENTER);
+        parsingProfilesPanel.changeColumnWidths(new int[] { 100, 500 });
+        return parsingProfilesPanel;
     }
 
     private JPanel createButtonPanel() {
