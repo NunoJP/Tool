@@ -74,4 +74,15 @@ public class ParsingProfile {
     public void setOriginFile(String originFile) {
         this.originFile = originFile;
     }
+
+    public void finishProfile() {
+        if(portions.size() != 0) {
+            for (ParsingProfilePortion portion : portions) {
+                if(portion.isLast()) {
+                    portion.setLast(false);
+                }
+            }
+            portions.get(portions.size() - 1).setLast(true);
+        }
+    }
 }

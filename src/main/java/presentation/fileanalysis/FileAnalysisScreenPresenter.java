@@ -19,12 +19,14 @@ public class FileAnalysisScreenPresenter implements IViewPresenter {
     private final FileAnalysisScreen view;
     private final FileAnalysisService fileAnalysisService;
 
-    public FileAnalysisScreenPresenter(File selectedFile, ParsingProfileDo parsingProfile, MetricsProfileDo metricsProfile) {
+    public FileAnalysisScreenPresenter(File selectedFile, ParsingProfileDo parsingProfile,
+                                       MetricsProfileDo metricsProfile,
+                                       FileAnalysisService fileAnalysisService) {
         view = new FileAnalysisScreen();
+        this.fileAnalysisService = fileAnalysisService;
         this.selectedFile = selectedFile;
         this.parsingProfile = parsingProfile;
         this.metricsProfile = metricsProfile;
-        fileAnalysisService = new FileAnalysisService(selectedFile, parsingProfile, metricsProfile);
     }
 
     @Override
@@ -44,11 +46,18 @@ public class FileAnalysisScreenPresenter implements IViewPresenter {
         Object[][] objects = new Object[data.length][];
         for (int i = 0; i <data.length; i++) {
             objects[i] = new Object[] {
-                    dateFormat.format(data[i].getDate()), timeFormat.format(data[i].getDate()), data[i].getOrigin(),
+                    getDate(dateFormat, data[i]), getDate(timeFormat, data[i]), data[i].getOrigin(),
                     data[i].getLevel(), data[i].getMessage()
             };
         }
         return objects;
+    }
+
+    private String getDate(DateFormat dateFormat, LogLine datum) {
+        if(datum.getDate() == null) {
+            return "";
+        }
+        return dateFormat.format(datum.getDate());
     }
 
 

@@ -48,6 +48,9 @@ public class ParsingProfileConsumer implements Consumer<String> {
                     // The profile contents have now ended
                     hasProfileEnded = true;
                     hasProfileStarted = false;
+                    if(getCurrentProfile() != null) {
+                        getCurrentProfile().finishProfile();
+                    }
                 } else {
                     parseSpecifically(s, getCurrentProfile());
                 }
@@ -99,21 +102,29 @@ public class ParsingProfileConsumer implements Consumer<String> {
         } else if(s.startsWith(TextClassesEnum.ID.getParsingString())) {
             parseSpecifically(s, TextClassesEnum.ID, currentProfile);
         } else if(s.startsWith(SeparatorEnum.SPACE.getParsingString())) {
-            currentProfile.addPortion(new ParsingProfilePortion(SeparatorEnum.SPACE.getName(), false, true));
+            currentProfile.addPortion(new ParsingProfilePortion(SeparatorEnum.SPACE.getName(),
+                    SeparatorEnum.SPACE.getSymbol(), false, true));
         } else if(s.startsWith(SeparatorEnum.HIFEN.getParsingString())) {
-            currentProfile.addPortion(new ParsingProfilePortion(SeparatorEnum.HIFEN.getName(), false, true));
+            currentProfile.addPortion(new ParsingProfilePortion(SeparatorEnum.HIFEN.getName(),
+                    SeparatorEnum.HIFEN.getSymbol(), false, true));
         } else if(s.startsWith(SeparatorEnum.COLON.getParsingString())) {
-            currentProfile.addPortion(new ParsingProfilePortion(SeparatorEnum.COLON.getName(), false, true));
+            currentProfile.addPortion(new ParsingProfilePortion(SeparatorEnum.COLON.getName(),
+                    SeparatorEnum.COLON.getSymbol(), false, true));
         } else if(s.startsWith(SeparatorEnum.SEMI_COLON.getParsingString())) {
-            currentProfile.addPortion(new ParsingProfilePortion(SeparatorEnum.SEMI_COLON.getName(), false, true));
+            currentProfile.addPortion(new ParsingProfilePortion(SeparatorEnum.SEMI_COLON.getName(),
+                    SeparatorEnum.SEMI_COLON.getSymbol(), false, true));
         } else if(s.startsWith(SeparatorEnum.TAB.getParsingString())) {
-            currentProfile.addPortion(new ParsingProfilePortion(SeparatorEnum.TAB.getName(), false, true));
+            currentProfile.addPortion(new ParsingProfilePortion(SeparatorEnum.TAB.getName(),
+                    SeparatorEnum.TAB.getSymbol(), false, true));
         } else if(s.startsWith(SeparatorEnum.COMMA.getParsingString())) {
-            currentProfile.addPortion(new ParsingProfilePortion(SeparatorEnum.COMMA.getName(), false, true));
+            currentProfile.addPortion(new ParsingProfilePortion(SeparatorEnum.COMMA.getName(),
+                    SeparatorEnum.COMMA.getSymbol(), false, true));
         } else if(s.startsWith(SeparatorEnum.OPEN_BRACKET.getParsingString())) {
-            currentProfile.addPortion(new ParsingProfilePortion(SeparatorEnum.OPEN_BRACKET.getName(), false, true));
+            currentProfile.addPortion(new ParsingProfilePortion(SeparatorEnum.OPEN_BRACKET.getName(),
+                    SeparatorEnum.OPEN_BRACKET.getSymbol(), false, true));
         } else if(s.startsWith(SeparatorEnum.CLOSE_BRACKET.getParsingString())) {
-            currentProfile.addPortion(new ParsingProfilePortion(SeparatorEnum.CLOSE_BRACKET.getName(), false, true));
+            currentProfile.addPortion(new ParsingProfilePortion(SeparatorEnum.CLOSE_BRACKET.getName(),
+                    SeparatorEnum.CLOSE_BRACKET.getSymbol(), false, true));
         }
     }
 
@@ -123,11 +134,11 @@ public class ParsingProfileConsumer implements Consumer<String> {
             return;
         }
         if(IGNORE_TOKEN.equalsIgnoreCase(parts[1])){
-            currentProfile.addPortion(new ParsingProfilePortion(textClass.getName(), true, false));
+            currentProfile.addPortion(new ParsingProfilePortion(textClass.getName(), textClass.getName(), true, false));
         } else if(KEEP_TOKEN.equalsIgnoreCase(parts[1])){
-            currentProfile.addPortion(new ParsingProfilePortion(textClass.getName(), false, false));
+            currentProfile.addPortion(new ParsingProfilePortion(textClass.getName(), textClass.getName(), false, false));
         } else if(KEEP_SPECIFIC_TOKEN.equalsIgnoreCase(parts[1]) && parts.length >= SPECIFIC_FORMAT_INDEX + 1){
-            ParsingProfilePortion portion = new ParsingProfilePortion(textClass.getName(), false, false, true);
+            ParsingProfilePortion portion = new ParsingProfilePortion(textClass.getName(), textClass.getName(), false, false, true);
             portion.setSpecificFormat(parts[SPECIFIC_FORMAT_INDEX]);
             currentProfile.addPortion(portion);
         }

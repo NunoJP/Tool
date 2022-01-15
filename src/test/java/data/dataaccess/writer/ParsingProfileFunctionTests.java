@@ -33,7 +33,7 @@ public class ParsingProfileFunctionTests {
     public void simpleTest() {
         ParsingProfile profile = new ParsingProfile();
         profile.setName(VALUE);
-        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.LEVEL.getName(), false, false));
+        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.LEVEL.getName(), TextClassesEnum.LEVEL.getName(), false, false));
 
         // Process
         simulateWriteAndRead(function, consumer, profile);
@@ -54,11 +54,11 @@ public class ParsingProfileFunctionTests {
         // first profile
         ParsingProfile profile1 = new ParsingProfile();
         profile1.setName(VALUE + 1);
-        profile1.addPortion(new ParsingProfilePortion(TextClassesEnum.LEVEL.getName(), false, false));
+        profile1.addPortion(new ParsingProfilePortion(TextClassesEnum.LEVEL.getName(), TextClassesEnum.LEVEL.getName(), false, false));
         // second profile
         ParsingProfile profile2 = new ParsingProfile();
         profile2.setName(VALUE + 2);
-        profile2.addPortion(new ParsingProfilePortion(TextClassesEnum.LEVEL.getName(), false, false));
+        profile2.addPortion(new ParsingProfilePortion(TextClassesEnum.LEVEL.getName(), TextClassesEnum.LEVEL.getName(), false, false));
 
         // Process
         simulateWriteAndRead(function, consumer, profile1);
@@ -83,10 +83,10 @@ public class ParsingProfileFunctionTests {
         // profile
         ParsingProfile profile = new ParsingProfile();
         profile.setName(VALUE);
-        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.LEVEL.getName(), false, false));
-        profile.addPortion(new ParsingProfilePortion(SeparatorEnum.COLON.getName(), false, true));
-        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.TIME.getName(), true, false));
-        profile.addPortion(new ParsingProfilePortion(SeparatorEnum.HIFEN.getName(), false, true));
+        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.LEVEL.getName(), TextClassesEnum.LEVEL.getName(), false, false));
+        profile.addPortion(new ParsingProfilePortion(SeparatorEnum.COLON.getName(), SeparatorEnum.COLON.getSymbol(), false, true));
+        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.TIME.getName(), TextClassesEnum.TIME.getName(), true, false));
+        profile.addPortion(new ParsingProfilePortion(SeparatorEnum.HIFEN.getName(), SeparatorEnum.HIFEN.getSymbol(), false, true));
 
         // Process
         simulateWriteAndRead(function, consumer, profile);
@@ -110,17 +110,17 @@ public class ParsingProfileFunctionTests {
         // setup
         ParsingProfile profile = new ParsingProfile();
         profile.setName(VALUE);
-        ParsingProfilePortion parsingProfilePortion = new ParsingProfilePortion(TextClassesEnum.DATE.getName(), false, false, true);
+        ParsingProfilePortion parsingProfilePortion = new ParsingProfilePortion(TextClassesEnum.DATE.getName(), TextClassesEnum.DATE.getName(), false, false, true);
         parsingProfilePortion.setSpecificFormat(GuiConstants.DATE_FORMATTER);
         profile.addPortion(parsingProfilePortion);
 
-        profile.addPortion(new ParsingProfilePortion(SeparatorEnum.COLON.getName(), false, true));
+        profile.addPortion(new ParsingProfilePortion(SeparatorEnum.COLON.getName(), SeparatorEnum.COLON.getSymbol(), false, true));
 
-        ParsingProfilePortion parsingProfilePortion2 = new ParsingProfilePortion(TextClassesEnum.TIME.getName(), false, false, true);
+        ParsingProfilePortion parsingProfilePortion2 = new ParsingProfilePortion(TextClassesEnum.TIME.getName(), TextClassesEnum.TIME.getName(), false, false, true);
         parsingProfilePortion2.setSpecificFormat(GuiConstants.DATE_TIME_FORMATTER);
         profile.addPortion(parsingProfilePortion2);
 
-        profile.addPortion(new ParsingProfilePortion(SeparatorEnum.HIFEN.getName(), false, true));
+        profile.addPortion(new ParsingProfilePortion(SeparatorEnum.HIFEN.getName(), SeparatorEnum.HIFEN.getSymbol(), false, true));
 
         // Process
         simulateWriteAndRead(function, consumer, profile);
@@ -145,8 +145,8 @@ public class ParsingProfileFunctionTests {
         // setup
         ParsingProfile profile = new ParsingProfile();
         profile.setName(VALUE);
-        profile.addPortion(new ParsingProfilePortion(SeparatorEnum.COLON.getName(), false, true));
-        profile.addPortion(new ParsingProfilePortion(SeparatorEnum.HIFEN.getName(), false, true));
+        profile.addPortion(new ParsingProfilePortion(SeparatorEnum.COLON.getName(), SeparatorEnum.COLON.getSymbol(), false, true));
+        profile.addPortion(new ParsingProfilePortion(SeparatorEnum.HIFEN.getName(), SeparatorEnum.HIFEN.getSymbol(), false, true));
 
         // Process
         simulateWriteAndRead(function, consumer, profile);
@@ -167,8 +167,8 @@ public class ParsingProfileFunctionTests {
         // setup
         ParsingProfile profile = new ParsingProfile();
         profile.setName(VALUE);
-        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.LEVEL.getName(), false, false));
-        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.TIME.getName(), true, false));
+        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.LEVEL.getName(), TextClassesEnum.LEVEL.getName(), false, false));
+        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.TIME.getName(), TextClassesEnum.TIME.getName(), true, false));
 
         // Process
         simulateWriteAndRead(function, consumer, profile);
@@ -207,17 +207,17 @@ public class ParsingProfileFunctionTests {
         // setup
         ParsingProfile profile = new ParsingProfile();
         profile.setName(VALUE);
-        ParsingProfilePortion parsingProfilePortion = new ParsingProfilePortion(TextClassesEnum.DATE.getName(), false, false, true);
+        ParsingProfilePortion parsingProfilePortion = new ParsingProfilePortion(TextClassesEnum.DATE.getName(), TextClassesEnum.DATE.getName(), false, false, true);
         parsingProfilePortion.setSpecificFormat("");
         profile.addPortion(parsingProfilePortion);
 
-        profile.addPortion(new ParsingProfilePortion(SeparatorEnum.COLON.getName(), false, true));
+        profile.addPortion(new ParsingProfilePortion(SeparatorEnum.COLON.getName(), SeparatorEnum.COLON.getSymbol(), false, true));
 
-        ParsingProfilePortion parsingProfilePortion2 = new ParsingProfilePortion(TextClassesEnum.TIME.getName(), false, false, true);
+        ParsingProfilePortion parsingProfilePortion2 = new ParsingProfilePortion(TextClassesEnum.TIME.getName(), TextClassesEnum.TIME.getName(), false, false, true);
         parsingProfilePortion2.setSpecificFormat("");
         profile.addPortion(parsingProfilePortion2);
 
-        profile.addPortion(new ParsingProfilePortion(SeparatorEnum.HIFEN.getName(), false, true));
+        profile.addPortion(new ParsingProfilePortion(SeparatorEnum.HIFEN.getName(), SeparatorEnum.HIFEN.getSymbol(), false, true));
 
         // Process
         simulateWriteAndRead(function, consumer, profile);
@@ -240,8 +240,8 @@ public class ParsingProfileFunctionTests {
         // setup
         ParsingProfile profile = new ParsingProfile();
         profile.setName(VALUE);
-        profile.addPortion(new ParsingProfilePortion("NON_EXITING_CLASS", false, false));
-        profile.addPortion(new ParsingProfilePortion("NON_EXITING_CLASS_2", true, false));
+        profile.addPortion(new ParsingProfilePortion("NON_EXITING_CLASS", "NON_EXITING_CLASS", false, false));
+        profile.addPortion(new ParsingProfilePortion("NON_EXITING_CLASS_2", "NON_EXITING_CLASS_2", true, false));
 
         // Process
         simulateWriteAndRead(function, consumer, profile);
@@ -261,8 +261,8 @@ public class ParsingProfileFunctionTests {
         // setup
         ParsingProfile profile = new ParsingProfile();
         profile.setName(VALUE);
-        profile.addPortion(new ParsingProfilePortion("NON_EXITING_SEPARATOR", false, true));
-        profile.addPortion(new ParsingProfilePortion("NON_EXITING_SEPARATOR_2", false, true));
+        profile.addPortion(new ParsingProfilePortion("NON_EXITING_SEPARATOR", "NON_EXITING_SEPARATOR", false, true));
+        profile.addPortion(new ParsingProfilePortion("NON_EXITING_SEPARATOR_2", "NON_EXITING_SEPARATOR_2", false, true));
 
         // Process
         simulateWriteAndRead(function, consumer, profile);
@@ -282,7 +282,7 @@ public class ParsingProfileFunctionTests {
         // setup
         ParsingProfile profile = new ParsingProfile();
         profile.setName(VALUE);
-        profile.addPortion(new ParsingProfilePortion("NON_EXITING_SEPARATOR", true, true));
+        profile.addPortion(new ParsingProfilePortion("NON_EXITING_SEPARATOR", "NON_EXITING_SEPARATOR", true, true));
 
         // Process
         simulateWriteAndRead(function, consumer, profile);
@@ -301,11 +301,11 @@ public class ParsingProfileFunctionTests {
         // setup
         ParsingProfile profile = new ParsingProfile();
         profile.setName(VALUE);
-        ParsingProfilePortion parsingProfilePortion = new ParsingProfilePortion(TextClassesEnum.DATE.getName(), true, false, true);
+        ParsingProfilePortion parsingProfilePortion = new ParsingProfilePortion(TextClassesEnum.DATE.getName(), TextClassesEnum.DATE.getName(), true, false, true);
         parsingProfilePortion.setSpecificFormat(GuiConstants.DATE_FORMATTER);
         profile.addPortion(parsingProfilePortion);
 
-        profile.addPortion(new ParsingProfilePortion(SeparatorEnum.COLON.getName(), false, true));
+        profile.addPortion(new ParsingProfilePortion(SeparatorEnum.COLON.getName(), SeparatorEnum.COLON.getSymbol(), false, true));
 
         // Process
         simulateWriteAndRead(function, consumer, profile);

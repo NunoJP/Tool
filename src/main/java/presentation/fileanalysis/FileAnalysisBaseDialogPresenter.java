@@ -1,7 +1,9 @@
 package presentation.fileanalysis;
 
+import domain.entities.Converter;
 import domain.entities.displayobjects.MetricsProfileDo;
 import domain.entities.displayobjects.ParsingProfileDo;
+import domain.services.FileAnalysisService;
 import presentation.common.GuiConstants;
 
 import javax.swing.JFrame;
@@ -16,6 +18,7 @@ public class FileAnalysisBaseDialogPresenter {
     private FileAnalysisMetricsScreenPresenter fileAnalysisMetricsScreenPresenter;
     private FileAnalysisScreenPresenter fileAnalysisScreenPresenter;
     private FileAnalysisBaseDialog fileAnalysisBaseDialog;
+    private FileAnalysisService fileAnalysisService;
 
     public FileAnalysisBaseDialogPresenter(JFrame motherFrame, File selectedFile,
                                            ParsingProfileDo parsingProfile, MetricsProfileDo metricsProfile) {
@@ -28,8 +31,12 @@ public class FileAnalysisBaseDialogPresenter {
     }
 
     private void setupPresenters() {
-        fileAnalysisMetricsScreenPresenter = new FileAnalysisMetricsScreenPresenter(selectedFile, parsingProfile, metricsProfile);
-        fileAnalysisScreenPresenter = new FileAnalysisScreenPresenter(selectedFile, parsingProfile, metricsProfile);
+        fileAnalysisService = new FileAnalysisService(selectedFile, Converter.toDomainObject(parsingProfile),
+                Converter.toDomainObject(metricsProfile));
+        fileAnalysisMetricsScreenPresenter = new FileAnalysisMetricsScreenPresenter(selectedFile, parsingProfile,
+                metricsProfile, fileAnalysisService);
+        fileAnalysisScreenPresenter = new FileAnalysisScreenPresenter(selectedFile, parsingProfile,
+                metricsProfile, fileAnalysisService);
     }
 
 

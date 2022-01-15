@@ -67,20 +67,28 @@ public class ParsingProfileEditorScreenPresenter implements IViewPresenter {
         dialogView.getTextClassAddButton().addActionListener( actionEvent -> {
             // if there is a specific format chosen by the user
             if(dialogView.getSpecificFormatButton().isSelected()){
-                dialogView.setResultPanelText(parsingProfileDo.addPortionAndGetProfile(
-                        ((TextClassesEnum) dialogView.getTextClassComboBox().getSelectedItem()).getName(),
-                        dialogView.getIgnoreButton().isSelected(),
-                        false,
-                        dialogView.getSpecificFormatButton().isSelected(),
-                        dialogView.getSpecificFormatText()
-                ));
+                TextClassesEnum selectedItem = (TextClassesEnum) dialogView.getTextClassComboBox().getSelectedItem();
+                if(selectedItem != null) {
+                    dialogView.setResultPanelText(parsingProfileDo.addPortionAndGetProfile(
+                            selectedItem.getName(),
+                            selectedItem.getName(),
+                            dialogView.getIgnoreButton().isSelected(),
+                            false,
+                            dialogView.getSpecificFormatButton().isSelected(),
+                            dialogView.getSpecificFormatText()
+                    ));
+                }
             } else {
-                dialogView.setResultPanelText(parsingProfileDo.addPortionAndGetProfile(
-                        ((TextClassesEnum) dialogView.getTextClassComboBox().getSelectedItem()).getName(),
-                        dialogView.getIgnoreButton().isSelected(),
-                        false,
-                        false
-                ));
+                TextClassesEnum selectedItem = (TextClassesEnum) dialogView.getTextClassComboBox().getSelectedItem();
+                if(selectedItem != null) {
+                    dialogView.setResultPanelText(parsingProfileDo.addPortionAndGetProfile(
+                            selectedItem.getName(),
+                            selectedItem.getName(),
+                            dialogView.getIgnoreButton().isSelected(),
+                            false,
+                            false
+                    ));
+                }
             }
             // Added a Text Class so now it's a Separator
             changeTextClassSeparatorStates(true);
@@ -88,12 +96,16 @@ public class ParsingProfileEditorScreenPresenter implements IViewPresenter {
 
         // Separator Add button behavior
         dialogView.getSeparatorAddButton().addActionListener(actionEvent -> {
-            dialogView.setResultPanelText(parsingProfileDo.addPortionAndGetProfile(
-                    ((SeparatorEnum) dialogView.getSeparatorClassComboBox().getSelectedItem()).getName(),
-                    false,
-                    true,
-                    false
-            ));
+            SeparatorEnum selectedItem = (SeparatorEnum) dialogView.getSeparatorClassComboBox().getSelectedItem();
+            if(selectedItem != null) {
+                dialogView.setResultPanelText(parsingProfileDo.addPortionAndGetProfile(
+                        selectedItem.getName(),
+                        selectedItem.getSymbol(),
+                        false,
+                        true,
+                        false
+                ));
+            }
             // Added a Separator so now it's a Text Class
             changeTextClassSeparatorStates(false);
         });

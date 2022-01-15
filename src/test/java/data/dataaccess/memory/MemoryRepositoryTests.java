@@ -33,7 +33,7 @@ public class MemoryRepositoryTests {
     public void testCreateProfileCollision(){
         MemoryRepository repository = MemoryRepository.getInstance();
         ArrayList<ParsingProfilePortion> parsingProfilePortions = new ArrayList<>();
-        parsingProfilePortions.add(new ParsingProfilePortion("Test", true, true));
+        parsingProfilePortions.add(new ParsingProfilePortion("Test", "Test", true, true));
 
         // create two profiles with the same name but one has Portions, the one with portions (the first to be created)
         // should be the one remaining
@@ -52,7 +52,7 @@ public class MemoryRepositoryTests {
     public void testCreateMultipleProfiles(){
         MemoryRepository repository = MemoryRepository.getInstance();
         ArrayList<ParsingProfilePortion> parsingProfilePortions = new ArrayList<>();
-        parsingProfilePortions.add(new ParsingProfilePortion("Test", true, true));
+        parsingProfilePortions.add(new ParsingProfilePortion("Test", "Test", true, true));
 
         // create two profiles with the same name but one has Portions, there should be two profiles in the end
         ParsingProfile profile = new ParsingProfile( "Name", parsingProfilePortions);
@@ -79,14 +79,15 @@ public class MemoryRepositoryTests {
         assertEquals(profile.getName(), mapProfile.getName());
         // Update and validation
         ParsingProfile profileUp = new ParsingProfile("Name");
-        profileUp.addPortion(new ParsingProfilePortion("Portion", false, false));
+        profileUp.addPortion(new ParsingProfilePortion("PortionName", "PortionSymbol", false, false));
         assertTrue(repository.updateProfile(profileUp));
         mapProfile = repository.getProfile(0);
         assertEquals(profileUp.getName(), mapProfile.getName());
         assertEquals(profile.getName(), profileUp.getName());
         assertFalse(profileUp.getPortions().isEmpty());
         ParsingProfilePortion portion = profileUp.getPortions().get(0);
-        assertEquals("Portion", portion.getPortion());
+        assertEquals("PortionName", portion.getPortionName());
+        assertEquals("PortionSymbol", portion.getPortionSymbol());
     }
 
     @Test

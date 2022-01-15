@@ -4,6 +4,7 @@ import domain.entities.displayobjects.MetricsProfileDo;
 import domain.entities.displayobjects.ParsingProfileDo;
 import domain.entities.domainobjects.MetricsReport;
 import domain.services.FileAnalysisMetricsService;
+import domain.services.FileAnalysisService;
 import general.util.Pair;
 import presentation.common.IViewPresenter;
 
@@ -22,11 +23,14 @@ public class FileAnalysisMetricsScreenPresenter implements IViewPresenter {
     private final MetricsProfileDo metricsProfile;
     private final FileAnalysisMetricsScreen view;
     private final FileAnalysisMetricsService fileAnalysisMetricsService;
+    private FileAnalysisService fileAnalysisService;
 
-    public FileAnalysisMetricsScreenPresenter(File selectedFile,
-                                              ParsingProfileDo parsingProfile, MetricsProfileDo metricsProfile) {
+    public FileAnalysisMetricsScreenPresenter(File selectedFile, ParsingProfileDo parsingProfile,
+                                              MetricsProfileDo metricsProfile,
+                                              FileAnalysisService fileAnalysisService) {
         view = new FileAnalysisMetricsScreen();
-        fileAnalysisMetricsService = new FileAnalysisMetricsService();
+        this.fileAnalysisService = fileAnalysisService;
+        this.fileAnalysisMetricsService = new FileAnalysisMetricsService(fileAnalysisService);
         this.selectedFile = selectedFile;
         this.parsingProfile = parsingProfile;
         this.metricsProfile = metricsProfile;

@@ -62,12 +62,12 @@ public class ParsingProfileDo {
         return getGuiRepresentation();
     }
 
-    public String addPortionAndGetProfile(String portion, boolean isIgnore, boolean isSeparator, boolean isSpecificFormat){
-       return addPortionAndGetProfile(portion, isIgnore, isSeparator, isSpecificFormat, "");
+    public String addPortionAndGetProfile(String portionName, String portionSymbol, boolean isIgnore, boolean isSeparator, boolean isSpecificFormat){
+       return addPortionAndGetProfile(portionName, portionSymbol, isIgnore, isSeparator, isSpecificFormat, "");
     }
 
-    public String addPortionAndGetProfile(String portion, boolean isIgnore, boolean isSeparator, boolean isSpecificFormat, String specificFormat) {
-        portions.add(new ParsingProfilePortion(portion, isIgnore, isSeparator, isSpecificFormat, specificFormat));
+    public String addPortionAndGetProfile(String portionName, String portionSymbol, boolean isIgnore, boolean isSeparator, boolean isSpecificFormat, String specificFormat) {
+        portions.add(new ParsingProfilePortion(portionName, portionSymbol, isIgnore, isSeparator, isSpecificFormat, specificFormat));
         return getGuiRepresentation();
     }
 
@@ -105,7 +105,7 @@ public class ParsingProfileDo {
             if(portion.isIgnore()){
                 builder.append(createIgnoreString(portion.getPortionRepresentation()));
             } else if(portion.isSeparator()) {
-                builder.append(createSeparatorString(portion.getPortion()));
+                builder.append(createSeparatorString(portion.getPortionRepresentation()));
             } else if(portion.isSpecificFormat()) {
                 builder.append(createKeepSpecificFormatString(portion.getPortionRepresentation()));
             } else {

@@ -1,8 +1,9 @@
 package domain.services;
 
-import domain.entities.displayobjects.MetricsProfileDo;
-import domain.entities.displayobjects.ParsingProfileDo;
+import data.dataaccess.reader.LogFileReader;
 import domain.entities.domainobjects.LogLine;
+import domain.entities.domainobjects.MetricsProfile;
+import domain.entities.domainobjects.ParsingProfile;
 
 import java.io.File;
 import java.util.Calendar;
@@ -10,20 +11,30 @@ import java.util.Date;
 
 public class FileAnalysisService {
     private final File selectedFile;
-    private final ParsingProfileDo parsingProfile;
-    private final MetricsProfileDo metricsProfile;
-    Calendar calendar = Calendar.getInstance();
-    Date initDate = calendar.getTime();
+    private final ParsingProfile parsingProfile;
+    private final MetricsProfile metricsProfile;
+    private final LogFileReader logFileReader;
+    private boolean hasLoadedData;
+    private Calendar calendar = Calendar.getInstance();
+    private Date initDate = calendar.getTime();
+    private LogLine[] data;
 
-    public FileAnalysisService(File selectedFile, ParsingProfileDo parsingProfile, MetricsProfileDo metricsProfile) {
+    public FileAnalysisService(File selectedFile, ParsingProfile parsingProfile, MetricsProfile metricsProfile) {
         this.selectedFile = selectedFile;
         this.parsingProfile = parsingProfile;
         this.metricsProfile = metricsProfile;
-
+        this.logFileReader = new LogFileReader(selectedFile, parsingProfile);
+        hasLoadedData = false;
     }
 
     public LogLine[] getData() {
-        LogLine line = new LogLine(initDate, "Error", "Origin", "MEsages as dasdasd asd asd");
-        return new LogLine[] { line };
+        if(hasLoadedData) {
+            return data;
+        }
+        hasLoadedData = true;
+        data = logFileReader.read();
+        return data;
+//        LogLine line = new LogLine(initDate, "Error", "Origin", "MEsages as dasdasd asd asd");
+//        return new LogLine[] { line };
     }
 }

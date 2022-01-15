@@ -3,23 +3,25 @@ package domain.entities.common;
 public class ParsingProfilePortion {
     public static final String NO_SPECIFIC_FORMAT = "NoFormat";
 
-    private String portion;
+    private String portionName;
+    private String portionSymbol;
     private boolean ignore;
     private boolean isSeparator;
     private String specificFormat;
     private boolean isSpecificFormat;
     private boolean isLast = false;
 
-    public ParsingProfilePortion(String portion, boolean ignore, boolean isSeparator) {
-        this(portion, ignore, isSeparator, false);
+    public ParsingProfilePortion(String portionName, String portionSymbol, boolean ignore, boolean isSeparator) {
+        this(portionName, portionSymbol, ignore, isSeparator, false);
     }
 
-    public ParsingProfilePortion(String portion, boolean ignore, boolean isSeparator, boolean specificFormat) {
-        this(portion, ignore, isSeparator, specificFormat, NO_SPECIFIC_FORMAT);
+    public ParsingProfilePortion(String portionName, String portionSymbol, boolean ignore, boolean isSeparator, boolean specificFormat) {
+        this(portionName, portionSymbol, ignore, isSeparator, specificFormat, NO_SPECIFIC_FORMAT);
     }
 
-    public ParsingProfilePortion(String portion, boolean isIgnore, boolean isSeparator, boolean isSpecificFormat, String specificFormat) {
-        this.portion = portion;
+    public ParsingProfilePortion(String portionName, String portionSymbol, boolean isIgnore, boolean isSeparator, boolean isSpecificFormat, String specificFormat) {
+        this.portionName = portionName;
+        this.portionSymbol = portionSymbol;
         this.ignore = isIgnore;
         this.isSeparator = isSeparator;
         this.isSpecificFormat = isSpecificFormat;
@@ -27,15 +29,23 @@ public class ParsingProfilePortion {
     }
 
     public String getPortionRepresentation() {
-        return isSpecificFormat ? portion + " " + specificFormat : portion;
+        return isSpecificFormat ? portionName + " " + specificFormat : portionName;
     }
 
-    public void setPortion(String portion) {
-        this.portion = portion;
+    public void setPortionName(String portionName) {
+        this.portionName = portionName;
     }
 
-    public String getPortion() {
-        return portion;
+    public String getPortionName() {
+        return portionName;
+    }
+
+    public String getPortionSymbol() {
+        return portionSymbol;
+    }
+
+    public void setPortionSymbol(String portionSymbol) {
+        this.portionSymbol = portionSymbol;
     }
 
     public boolean isIgnore() {

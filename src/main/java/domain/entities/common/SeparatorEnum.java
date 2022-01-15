@@ -11,22 +11,22 @@ public enum SeparatorEnum {
     CLOSE_BRACKET("]", "]", "CLOSE_BRACKET");
 
 
-    public static String getParsingStringByName(String portion) {
-        if(SPACE.getName().equalsIgnoreCase(portion)) {
+    public static String getParsingStringBySymbol(String portion) {
+        if(SPACE.getSymbol().equalsIgnoreCase(portion)) {
             return SPACE.parsingString;
-        } else if(HIFEN.getName().equalsIgnoreCase(portion)){
+        } else if(HIFEN.getSymbol().equalsIgnoreCase(portion)){
             return HIFEN.parsingString;
-        } else if(COLON.getName().equalsIgnoreCase(portion)){
+        } else if(COLON.getSymbol().equalsIgnoreCase(portion)){
             return COLON.parsingString;
-        } else if(SEMI_COLON.getName().equalsIgnoreCase(portion)){
+        } else if(SEMI_COLON.getSymbol().equalsIgnoreCase(portion)){
             return SEMI_COLON.parsingString;
-        } else if(TAB.getName().equalsIgnoreCase(portion)){
+        } else if(TAB.getSymbol().equalsIgnoreCase(portion)){
             return TAB.parsingString;
-        } else if(COMMA.getName().equalsIgnoreCase(portion)){
+        } else if(COMMA.getSymbol().equalsIgnoreCase(portion)){
             return COMMA.parsingString;
-        } else if(OPEN_BRACKET.getName().equalsIgnoreCase(portion)){
+        } else if(OPEN_BRACKET.getSymbol().equalsIgnoreCase(portion)){
             return OPEN_BRACKET.parsingString;
-        } else if(CLOSE_BRACKET.getName().equalsIgnoreCase(portion)){
+        } else if(CLOSE_BRACKET.getSymbol().equalsIgnoreCase(portion)){
             return CLOSE_BRACKET.parsingString;
         }
         return "";

@@ -41,13 +41,13 @@ public class ParsingProfileFunction implements Function<ParsingProfile, String> 
 
     private String generatePortionLine(ParsingProfilePortion portion) {
         if(portion.isIgnore()){
-            return createIgnoreString(portion.getPortion());
+            return createIgnoreString(portion.getPortionName());
         } else if(portion.isSeparator()) {
-            return createSeparatorString(portion.getPortion());
+            return createSeparatorString(portion.getPortionSymbol());
         } else if(portion.isSpecificFormat()) {
-            return createKeepSpecificFormatString(portion.getPortion(), portion.getSpecificFormat());
+            return createKeepSpecificFormatString(portion.getPortionName(), portion.getSpecificFormat());
         } else {
-            return createKeepString(portion.getPortion());
+            return createKeepString(portion.getPortionName());
         }
     }
 
@@ -56,7 +56,7 @@ public class ParsingProfileFunction implements Function<ParsingProfile, String> 
     }
 
     private String createSeparatorString(String portion) {
-        return SeparatorEnum.getParsingStringByName(portion);
+        return SeparatorEnum.getParsingStringBySymbol(portion);
     }
 
     private String createKeepSpecificFormatString(String portion, String specificFormat) {
