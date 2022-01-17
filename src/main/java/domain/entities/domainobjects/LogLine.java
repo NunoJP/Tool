@@ -4,22 +4,26 @@ import java.util.Date;
 
 public class LogLine {
     private Date date;
+    private Date time;
+    private Date timestamp;
     private String level;
     private String origin;
     private String message;
+    private String identifier;
 
     public LogLine() {
     }
 
-    public LogLine(Date date, String level, String origin, String message) {
-        this.date = date;
-        this.level = level;
-        this.origin = origin;
-        this.message = message;
-    }
-
     public Date getDate() {
         return date;
+    }
+
+    public Date getTime() {
+        return time;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
     }
 
     public String getLevel() {
@@ -38,6 +42,14 @@ public class LogLine {
         this.date = date;
     }
 
+    public void setTime(Date time) {
+        this.time = time;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
+    }
+
     public void setLevel(String level) {
         this.level = level;
     }
@@ -48,5 +60,13 @@ public class LogLine {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 }

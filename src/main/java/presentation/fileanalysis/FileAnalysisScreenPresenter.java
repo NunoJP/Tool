@@ -41,23 +41,40 @@ public class FileAnalysisScreenPresenter implements IViewPresenter {
     }
 
     private Object[][] convertDataForTable(LogLine[] data) {
-        DateFormat dateFormat = new SimpleDateFormat(GuiConstants.DATE_FORMATTER);
-        DateFormat timeFormat = new SimpleDateFormat(GuiConstants.TIME_FORMATTER);
+
+
         Object[][] objects = new Object[data.length][];
         for (int i = 0; i <data.length; i++) {
             objects[i] = new Object[] {
-                    getDate(dateFormat, data[i]), getDate(timeFormat, data[i]), data[i].getOrigin(),
+                    getDate(data[i]), getTime(data[i]), data[i].getOrigin(),
                     data[i].getLevel(), data[i].getMessage()
             };
         }
         return objects;
     }
 
-    private String getDate(DateFormat dateFormat, LogLine datum) {
-        if(datum.getDate() == null) {
-            return "";
+    private String getTime(LogLine datum) {
+        DateFormat timeFormat = new SimpleDateFormat(GuiConstants.TIME_FORMATTER);
+        if(datum.getTimestamp() == null) {
+            if(datum.getTime() == null) {
+                return "";
+            } else {
+                return timeFormat.format(datum.getTime());
+            }
         }
-        return dateFormat.format(datum.getDate());
+        return timeFormat.format(datum.getTimestamp());
+    }
+
+    private String getDate(LogLine datum) {
+        DateFormat dateFormat = new SimpleDateFormat(GuiConstants.DATE_FORMATTER);
+        if(datum.getTimestamp() == null) {
+            if (datum.getDate() == null) {
+                return "";
+            } else {
+                return dateFormat.format(datum.getDate());
+            }
+        }
+        return dateFormat.format(datum.getTimestamp());
     }
 
 
