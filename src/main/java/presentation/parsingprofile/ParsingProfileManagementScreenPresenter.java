@@ -52,15 +52,9 @@ public class ParsingProfileManagementScreenPresenter implements IViewPresenter {
             if(userConfirmedOperation()) {
                 boolean success = service.deleteProfile(parsingProfiles[selectedItem]);
                 if(success) {
-                    JOptionPane.showMessageDialog(view,
-                            GuiMessages.DELETE_SUCCESSFUL,
-                            GuiMessages.SUCCESS_TITLE,
-                            JOptionPane.INFORMATION_MESSAGE);
+                    showMessageDialog(GuiMessages.DELETE_SUCCESSFUL, GuiMessages.SUCCESS_TITLE);
                 } else {
-                    JOptionPane.showMessageDialog(view,
-                            GuiMessages.DELETE_FAILED,
-                            GuiMessages.FAILURE_TITLE,
-                            JOptionPane.INFORMATION_MESSAGE);
+                    showMessageDialog(GuiMessages.DELETE_FAILED, GuiMessages.FAILURE_TITLE);
                 }
                 updateViewTable();
             }
@@ -75,6 +69,12 @@ public class ParsingProfileManagementScreenPresenter implements IViewPresenter {
         }));
     }
 
+    private void showMessageDialog(String deleteSuccessful, String successTitle) {
+        JOptionPane.showMessageDialog(view,
+                deleteSuccessful,
+                successTitle,
+                JOptionPane.INFORMATION_MESSAGE);
+    }
 
 
     @Override

@@ -69,25 +69,14 @@ public class ParsingProfileEditorScreenPresenter implements IViewPresenter {
             if(dialogView.getSpecificFormatButton().isSelected()){
                 TextClassesEnum selectedItem = (TextClassesEnum) dialogView.getTextClassComboBox().getSelectedItem();
                 if(selectedItem != null) {
-                    dialogView.setResultPanelText(parsingProfileDo.addPortionAndGetProfile(
-                            selectedItem.getName(),
-                            selectedItem.getName(),
-                            dialogView.getIgnoreButton().isSelected(),
-                            false,
-                            dialogView.getSpecificFormatButton().isSelected(),
-                            dialogView.getSpecificFormatText()
-                    ));
+                    updateDoAndResultPanel(selectedItem.getName(), selectedItem.getName(), dialogView.getIgnoreButton().isSelected(),
+                            false, dialogView.getSpecificFormatButton().isSelected(), dialogView.getSpecificFormatText());
                 }
             } else {
                 TextClassesEnum selectedItem = (TextClassesEnum) dialogView.getTextClassComboBox().getSelectedItem();
                 if(selectedItem != null) {
-                    dialogView.setResultPanelText(parsingProfileDo.addPortionAndGetProfile(
-                            selectedItem.getName(),
-                            selectedItem.getName(),
-                            dialogView.getIgnoreButton().isSelected(),
-                            false,
-                            false
-                    ));
+                    updateDoAndResultPanel(selectedItem.getName(), selectedItem.getName(), dialogView.getIgnoreButton().isSelected(),
+                            false, false, "");
                 }
             }
             // Added a Text Class so now it's a Separator
@@ -98,13 +87,8 @@ public class ParsingProfileEditorScreenPresenter implements IViewPresenter {
         dialogView.getSeparatorAddButton().addActionListener(actionEvent -> {
             SeparatorEnum selectedItem = (SeparatorEnum) dialogView.getSeparatorClassComboBox().getSelectedItem();
             if(selectedItem != null) {
-                dialogView.setResultPanelText(parsingProfileDo.addPortionAndGetProfile(
-                        selectedItem.getName(),
-                        selectedItem.getSymbol(),
-                        false,
-                        true,
-                        false
-                ));
+                updateDoAndResultPanel(selectedItem.getName(), selectedItem.getSymbol(), false, true,
+                        false, "");
             }
             // Added a Separator so now it's a Text Class
             changeTextClassSeparatorStates(false);
@@ -127,10 +111,7 @@ public class ParsingProfileEditorScreenPresenter implements IViewPresenter {
         dialogView.getSaveProfileButton().addActionListener(actionEvent -> {
             String profileName = dialogView.getProfileNameText();
             if(!Validator.validateProfileName(profileName)){
-                JOptionPane.showMessageDialog(dialogView,
-                        GuiMessages.PROFILE_NAME_INVALID_OR_EMPTY,
-                        GuiMessages.PROFILE_NAME_INVALID_OR_EMPTY_TITLE,
-                        JOptionPane.WARNING_MESSAGE);
+                showMessageDialog(GuiMessages.PROFILE_NAME_INVALID_OR_EMPTY, GuiMessages.PROFILE_NAME_INVALID_OR_EMPTY_TITLE, JOptionPane.WARNING_MESSAGE);
             } else {
                 parsingProfileDo.setName(profileName);
                 parsingProfileDo.finishProfile();
@@ -142,15 +123,9 @@ public class ParsingProfileEditorScreenPresenter implements IViewPresenter {
                     if(confirmation == JOptionPane.YES_OPTION) {
                         boolean updateSuccess = service.updateProfile(parsingProfileDo);
                         if(updateSuccess) {
-                            JOptionPane.showMessageDialog(dialogView,
-                                    GuiMessages.UPDATE_SUCCESSFUL,
-                                    GuiMessages.SUCCESS_TITLE,
-                                    JOptionPane.INFORMATION_MESSAGE);
+                            showMessageDialog(GuiMessages.UPDATE_SUCCESSFUL, GuiMessages.SUCCESS_TITLE, JOptionPane.INFORMATION_MESSAGE);
                         } else {
-                            JOptionPane.showMessageDialog(dialogView,
-                                    GuiMessages.UPDATE_FAILED,
-                                    GuiMessages.FAILURE_TITLE,
-                                    JOptionPane.INFORMATION_MESSAGE);
+                            showMessageDialog(GuiMessages.UPDATE_FAILED, GuiMessages.FAILURE_TITLE, JOptionPane.INFORMATION_MESSAGE);
                         }
                     }
                     // Stop the save procedure
@@ -177,6 +152,27 @@ public class ParsingProfileEditorScreenPresenter implements IViewPresenter {
                 dialogView.getSpecificFormatButton().setSelected(false);
             }
         });
+
+    }
+
+    private void showMessageDialog(String profileNameInvalidOrEmpty, String profileNameInvalidOrEmptyTitle, int warningMessage) {
+        JOptionPane.showMessageDialog(dialogView,
+                profileNameInvalidOrEmpty,
+                profileNameInvalidOrEmptyTitle,
+                warningMessage);
+    }
+
+    private void updateDoAndResultPanel(String name, String symbol, boolean isIgnore,
+                                        boolean isSeparator, boolean isSpecificFormat, String specificFormatText) {
+        if(isSpecificFormat) {
+            dialogView.setResultPanelText(parsingProfileDo.addPortionAndGetProfile(
+                    name, symbol, isIgnore, isSeparator, true, specificFormatText
+            ));
+        } else {
+            dialogView.setResultPanelText(parsingProfileDo.addPortionAndGetProfile(
+                    name, symbol, isIgnore, isSeparator, false
+            ));
+        }
 
     }
 

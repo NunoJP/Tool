@@ -166,8 +166,6 @@ public class ParsingProfileEditorScreen extends JDialog {
         namePanel.getVariableTextField().setText(text);
     }
 
-
-
     // Getters
 
     public JComboBox<TextClassesEnum> getTextClassComboBox() {

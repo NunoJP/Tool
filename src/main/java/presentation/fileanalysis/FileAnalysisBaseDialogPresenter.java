@@ -30,6 +30,10 @@ public class FileAnalysisBaseDialogPresenter {
         setupComponents();
     }
 
+    /**
+     * Create the presenters for the Analysis Metrics screen and for the Analysis screen
+     * Creates a FileAnalysisService which is passed to both presenters
+     */
     private void setupPresenters() {
         fileAnalysisService = new FileAnalysisService(selectedFile, Converter.toDomainObject(parsingProfile),
                 Converter.toDomainObject(metricsProfile));
