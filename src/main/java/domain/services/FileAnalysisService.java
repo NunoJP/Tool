@@ -8,6 +8,7 @@ import domain.entities.domainobjects.ParsingProfile;
 import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.function.Consumer;
 
 public class FileAnalysisService {
     private final File selectedFile;
@@ -18,6 +19,7 @@ public class FileAnalysisService {
     private Calendar calendar = Calendar.getInstance();
     private Date initDate = calendar.getTime();
     private LogLine[] data;
+    private Consumer<String> logMessageConsumer = s -> {};
 
     public FileAnalysisService(File selectedFile, ParsingProfile parsingProfile, MetricsProfile metricsProfile) {
         this.selectedFile = selectedFile;
@@ -32,9 +34,13 @@ public class FileAnalysisService {
             return data;
         }
         hasLoadedData = true;
-        data = logFileReader.read();
+        data = logFileReader.read(logMessageConsumer);
         return data;
 //        LogLine line = new LogLine(initDate, "Error", "Origin", "MEsages as dasdasd asd asd");
 //        return new LogLine[] { line };
+    }
+
+    public void setLogMessageConsumer(Consumer<String> logMessageConsumer) {
+        this.logMessageConsumer = logMessageConsumer;
     }
 }

@@ -5,8 +5,10 @@ import domain.entities.displayobjects.ParsingProfileDo;
 import domain.entities.domainobjects.LogLine;
 import domain.services.FileAnalysisService;
 import presentation.common.GuiConstants;
+import presentation.common.GuiMessages;
 import presentation.common.IViewPresenter;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.io.File;
 import java.text.DateFormat;
@@ -24,6 +26,7 @@ public class FileAnalysisScreenPresenter implements IViewPresenter {
                                        FileAnalysisService fileAnalysisService) {
         view = new FileAnalysisScreen();
         this.fileAnalysisService = fileAnalysisService;
+        fileAnalysisService.setLogMessageConsumer(this::messagePopup);
         this.selectedFile = selectedFile;
         this.parsingProfile = parsingProfile;
         this.metricsProfile = metricsProfile;
@@ -75,6 +78,13 @@ public class FileAnalysisScreenPresenter implements IViewPresenter {
             }
         }
         return dateFormat.format(datum.getTimestamp());
+    }
+
+    private void messagePopup(String message) {
+        JOptionPane.showMessageDialog(view,
+                message,
+                GuiMessages.MESSAGE_TITLE,
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
 

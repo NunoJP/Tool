@@ -30,5 +30,5 @@ public class GuiMessages {
     public static final String DELETE_FAILED = "Delete failed";
     public static final String SUCCESS_TITLE = "Success";
     public static final String FAILURE_TITLE = "Failed";
-
+    public static final String MESSAGE_TITLE = "Message";
 }

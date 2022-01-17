@@ -6,8 +6,10 @@ import domain.entities.domainobjects.MetricsReport;
 import domain.services.FileAnalysisMetricsService;
 import domain.services.FileAnalysisService;
 import general.util.Pair;
+import presentation.common.GuiMessages;
 import presentation.common.IViewPresenter;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.io.File;
@@ -30,6 +32,7 @@ public class FileAnalysisMetricsScreenPresenter implements IViewPresenter {
                                               FileAnalysisService fileAnalysisService) {
         view = new FileAnalysisMetricsScreen();
         this.fileAnalysisService = fileAnalysisService;
+        fileAnalysisService.setLogMessageConsumer(this::messagePopup);
         this.fileAnalysisMetricsService = new FileAnalysisMetricsService(fileAnalysisService);
         this.selectedFile = selectedFile;
         this.parsingProfile = parsingProfile;
@@ -68,6 +71,13 @@ public class FileAnalysisMetricsScreenPresenter implements IViewPresenter {
         colorMap.put("Error", Pair.of(new Color(255, 102, 102), Color.BLACK));
         colorMap.put("Warning", Pair.of(new Color(255, 255, 179), Color.BLACK));
         return colorMap;
+    }
+
+    private void messagePopup(String message) {
+        JOptionPane.showMessageDialog(view,
+                message,
+                GuiMessages.MESSAGE_TITLE,
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
 }

@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,7 +29,7 @@ public class LogFileReader {
         this.consumer = new LogFileReaderConsumer(parsingProfile);
     }
 
-    public LogLine[] read() {
+    public LogLine[] read(Consumer<String> logMessageConsumer) {
         try (BufferedReader br = new BufferedReader(new FileReader(selectedFile))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -38,8 +39,10 @@ public class LogFileReader {
             return consumer.getLines();
         } catch (FileNotFoundException e) {
             LOGGER.log(Level.SEVERE, LOG_ERROR_ERROR_OPENING_FILE + selectedFile.getName(), e);
+            logMessageConsumer.accept(LOG_ERROR_ERROR_OPENING_FILE + selectedFile.getName());
         } catch (IOException | IndexOutOfBoundsException e) {
             LOGGER.log(Level.SEVERE, LOG_ERROR_ERROR_READING_FILE + selectedFile.getName(), e);
+            logMessageConsumer.accept(LOG_ERROR_ERROR_READING_FILE + selectedFile.getName());
         }
         return new LogLine[0];
     }
