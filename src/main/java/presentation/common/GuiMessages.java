@@ -31,4 +31,5 @@ public class GuiMessages {
     public static final String SUCCESS_TITLE = "Success";
     public static final String FAILURE_TITLE = "Failed";
     public static final String MESSAGE_TITLE = "Message";
+    public static final String CONFIRM_DELETE_METRIC_PROFILE = "You will delete the existing profile, are you sure?";
 }

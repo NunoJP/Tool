@@ -20,4 +20,8 @@ public class MetricsProfileManagementService {
         MetricsProfile[] profiles = reader.getProfiles();
         return Arrays.stream(profiles).map(Converter::toDisplayObject).collect(Collectors.toList()).toArray(MetricsProfileDo[]::new);
     }
+
+    public boolean deleteProfile(MetricsProfileDo metricsProfile) {
+        return false;
+    }
 }

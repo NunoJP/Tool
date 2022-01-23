@@ -19,9 +19,9 @@ import java.awt.Frame;
 import java.awt.GridLayout;
 
 import static presentation.common.GuiConstants.H_GAP;
-import static presentation.common.GuiConstants.H_PROFILES_EDITOR_SCREEN_SIZE;
+import static presentation.common.GuiConstants.H_PARSING_PROFILES_EDITOR_SCREEN_SIZE;
 import static presentation.common.GuiConstants.V_GAP;
-import static presentation.common.GuiConstants.V_PROFILES_EDITOR_SCREEN_SIZE;
+import static presentation.common.GuiConstants.V_PARSING_PROFILES_EDITOR_SCREEN_SIZE;
 
 public class ParsingProfileEditorScreen extends JDialog {
 
@@ -42,14 +42,14 @@ public class ParsingProfileEditorScreen extends JDialog {
     public ParsingProfileEditorScreen(Frame owner) {
         super(owner, GuiConstants.PARSING_PROFILE_EDITOR_SCREEN_TITLE);
         setWindowClosingBehavior();
-        createTabbedPane();
+        createMainPanel();
         this.pack();
     }
 
-    private void createTabbedPane() {
+    private void createMainPanel() {
         this.rootPane.setLayout(new BorderLayout(H_GAP, V_GAP));
         basePanel = new JPanel(new GridLayout(6, 1, H_GAP, V_GAP));
-        this.setPreferredSize(new Dimension(H_PROFILES_EDITOR_SCREEN_SIZE, V_PROFILES_EDITOR_SCREEN_SIZE));
+        this.setPreferredSize(new Dimension(H_PARSING_PROFILES_EDITOR_SCREEN_SIZE, V_PARSING_PROFILES_EDITOR_SCREEN_SIZE));
         this.rootPane.add(basePanel, BorderLayout.CENTER);
         basePanel.add(createNamePanel());
         basePanel.add(createResultPanel());

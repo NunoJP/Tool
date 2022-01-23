@@ -155,11 +155,8 @@ public class ParsingProfileEditorScreenPresenter implements IViewPresenter {
 
     }
 
-    private void showMessageDialog(String profileNameInvalidOrEmpty, String profileNameInvalidOrEmptyTitle, int warningMessage) {
-        JOptionPane.showMessageDialog(dialogView,
-                profileNameInvalidOrEmpty,
-                profileNameInvalidOrEmptyTitle,
-                warningMessage);
+    private void showMessageDialog(String message, String title, int warningMessage) {
+        JOptionPane.showMessageDialog(dialogView, message, title, warningMessage);
     }
 
     private void updateDoAndResultPanel(String name, String symbol, boolean isIgnore,

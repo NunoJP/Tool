@@ -8,11 +8,13 @@ public class GuiConstants {
     public static final int MAIN_FRAME_HEIGHT = 500;
     public static final int H_FILE_ANALYSIS_SCREEN_SIZE = 1200;
     public static final int V_FILE_ANALYSIS_SCREEN_SIZE = 700;
-    public static final int H_PROFILES_EDITOR_SCREEN_SIZE = 650;
-    public static final int V_PROFILES_EDITOR_SCREEN_SIZE = 250;
+    public static final int H_PARSING_PROFILES_EDITOR_SCREEN_SIZE = 650;
+    public static final int V_PARSING_PROFILES_EDITOR_SCREEN_SIZE = 250;
+    public static final int H_METRIC_PROFILES_EDITOR_SCREEN_SIZE = 650;
+    public static final int V_METRIC_PROFILES_EDITOR_SCREEN_SIZE = 650;
     public static final int FILE_NAME_FIELD_SIZE = 100/3;
     public static final int RESULT_FIELD_SIZE = 100/2;
-    public static final int KEYWORD_FIELD_SIZE = 50;
+    public static final int KEYWORD_FIELD_SIZE = 50/2;
     public static final int SPECIFIC_FORMAT_FIELD_SIZE = 20;
     public static final int METHOD_FIELD_SIZE = 100/10;
     public static final int LEVEL_FIELD_SIZE = 10;
@@ -122,6 +124,8 @@ public class GuiConstants {
     public static final String ORIGIN_COLUMN = "Origin";
     public static final String DESCRIPTION_COLUMN = "Description";
     public static final String NAME_COLUMN = "Name";
+    public static final String CASE_SENSITIVE_COLUMN = "Case sensitive";
+    public static final String THRESHOLD_COLUMN = "Threshold";
 
 
     public static final String NO_NAME_PROVIDED = "No name provided";
