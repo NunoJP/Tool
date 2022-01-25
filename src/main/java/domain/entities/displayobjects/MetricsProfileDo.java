@@ -1,5 +1,7 @@
 package domain.entities.displayobjects;
 
+import domain.entities.common.Keyword;
+
 import java.util.ArrayList;
 
 public class MetricsProfileDo {
@@ -11,9 +13,10 @@ public class MetricsProfileDo {
     private boolean hasKeywordHistogram;
     private boolean hasKeywordOverTime;
     private boolean hasKeywordThreshold;
-    private ArrayList<KeywordDo> keywords;
+    private ArrayList<Keyword> keywords;
 
     public MetricsProfileDo() {
+        this.keywords = new ArrayList<>();
     }
 
     public MetricsProfileDo(int id, String name) {
@@ -86,19 +89,19 @@ public class MetricsProfileDo {
         this.hasKeywordThreshold = hasKeywordThreshold;
     }
 
-    public ArrayList<KeywordDo> getKeywords() {
+    public ArrayList<Keyword> getKeywords() {
         return keywords;
     }
 
-    public void setKeywords(ArrayList<KeywordDo> keywords) {
+    public void setKeywords(ArrayList<Keyword> keywords) {
         this.keywords = keywords;
     }
 
-    public void addKeyword(KeywordDo keywordDo) {
-        this.keywords.add(keywordDo);
+    public void addKeyword(Keyword keyword) {
+        this.keywords.add(keyword);
     }
 
-    public void removeKeyword(KeywordDo keywordDo) {
-        this.keywords.remove(keywordDo);
+    public void removeKeyword(Keyword keyword) {
+        this.keywords.remove(keyword);
     }
 }

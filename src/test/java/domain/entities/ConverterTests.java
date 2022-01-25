@@ -1,5 +1,6 @@
 package domain.entities;
 
+import domain.entities.common.Keyword;
 import domain.entities.common.ParsingProfilePortion;
 import domain.entities.common.SeparatorEnum;
 import domain.entities.common.TextClassesEnum;
@@ -103,17 +104,47 @@ public class ConverterTests {
     @Test
     public void testMetricsProfileToDomainObject(){
         MetricsProfileDo displayObject = new MetricsProfileDo(1, "Name");
+        displayObject.setHasMostCommonWords(true);
+        displayObject.setHasFileSize(true);
+        displayObject.setHasKeywordHistogram(true);
+        displayObject.setHasKeywordOverTime(true);
+        displayObject.setHasKeywordThreshold(true);
         MetricsProfile domainObject = Converter.toDomainObject(displayObject);
         assertEquals(displayObject.getId(), domainObject.getId());
         assertEquals(displayObject.getName(), domainObject.getName());
+        assertEquals(displayObject.isHasMostCommonWords(), domainObject.isHasMostCommonWords());
+        assertEquals(displayObject.isHasFileSize(), domainObject.isHasFileSize());
+        assertEquals(displayObject.isHasKeywordHistogram(), domainObject.isHasKeywordHistogram());
+        assertEquals(displayObject.isHasKeywordOverTime(), domainObject.isHasKeywordOverTime());
+        assertEquals(displayObject.isHasKeywordThreshold(), domainObject.isHasKeywordThreshold());
     }
 
     @Test
     public void testMetricsProfileToDisplayObject(){
         MetricsProfile domainObject = new MetricsProfile(1, "Name");
+        domainObject.setHasMostCommonWords(true);
+        domainObject.setHasFileSize(true);
+        domainObject.setHasKeywordHistogram(true);
+        domainObject.setHasKeywordOverTime(true);
+        domainObject.setHasKeywordThreshold(true);
+        domainObject.addKeyword(new Keyword("KWD", false));
+        domainObject.addKeyword(new Keyword("KWD1", true));
+
         MetricsProfileDo displayObject = Converter.toDisplayObject(domainObject);
         assertEquals(domainObject.getId(), displayObject.getId());
         assertEquals(domainObject.getName(), displayObject.getName());
+        assertEquals(domainObject.isHasMostCommonWords(), displayObject.isHasMostCommonWords());
+        assertEquals(domainObject.isHasFileSize(), displayObject.isHasFileSize());
+        assertEquals(domainObject.isHasKeywordHistogram(), displayObject.isHasKeywordHistogram());
+        assertEquals(domainObject.isHasKeywordOverTime(), displayObject.isHasKeywordOverTime());
+        assertEquals(domainObject.isHasKeywordThreshold(), displayObject.isHasKeywordThreshold());
+
+
+        assertEquals(2, domainObject.getKeywords().size());
+
+        for (int i = 0; i < domainObject.getKeywords().size(); i++) {
+            assertEquals(domainObject.getKeywords().get(i), displayObject.getKeywords().get(i));
+        }
     }
 
 

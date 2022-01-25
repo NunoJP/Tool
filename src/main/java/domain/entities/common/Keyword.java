@@ -1,27 +1,26 @@
-package domain.entities.displayobjects;
-
-import domain.entities.common.ThresholdTypeEnum;
-import domain.entities.common.ThresholdUnitEnum;
+package domain.entities.common;
 
 import java.math.BigDecimal;
 
-public class KeywordDo {
+public class Keyword {
 
     private String keywordText;
     private boolean isCaseSensitive;
     private ThresholdTypeEnum threshold;
-    private ThresholdUnitEnum unit;
     private BigDecimal thresholdValue;
     private ThresholdUnitEnum thresholdUnit;
 
-    public KeywordDo(String keywordText, boolean isCaseSensitive) {
+    public Keyword(String keywordText, boolean isCaseSensitive) {
         this.keywordText = keywordText;
         this.isCaseSensitive = isCaseSensitive;
+        this.threshold = ThresholdTypeEnum.NOT_APPLICABLE;
+        this.thresholdValue = new BigDecimal(0);
+        this.thresholdUnit = ThresholdUnitEnum.NONE;
     }
 
-    public KeywordDo setThreshold(ThresholdTypeEnum threshold, ThresholdUnitEnum unit, BigDecimal thresholdValue) {
+    public Keyword setThresholdTrio(ThresholdTypeEnum threshold, ThresholdUnitEnum unit, BigDecimal thresholdValue) {
         this.threshold = threshold;
-        this.unit = unit;
+        this.thresholdUnit = unit;
         this.thresholdValue = thresholdValue;
         return this;
     }
@@ -47,7 +46,7 @@ public class KeywordDo {
         return threshold;
     }
 
-    public void setThreshold(ThresholdTypeEnum threshold) {
+    public void setThresholdType(ThresholdTypeEnum threshold) {
         this.threshold = threshold;
     }
 

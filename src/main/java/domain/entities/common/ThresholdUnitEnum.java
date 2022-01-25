@@ -2,8 +2,9 @@ package domain.entities.common;
 
 public enum ThresholdUnitEnum {
 
+    NONE("None", "None", "NONE"),
     OCCURRENCES("Occ", "occurrences", "OCCURRENCES"),
-    PERCENTAGE("%", "percentage", "PERCENTAGE")
+    PERCENTAGE("%", "percentage", "PERCENTAGE"),
     ;
 
     private final String name;
@@ -18,7 +19,9 @@ public enum ThresholdUnitEnum {
 
 
     public static String getParsingStringByName(String portion) {
-        if(OCCURRENCES.getName().equalsIgnoreCase(portion)) {
+        if(NONE.getName().equalsIgnoreCase(portion)) {
+            return NONE.parsingString;
+        } else if(OCCURRENCES.getName().equalsIgnoreCase(portion)) {
             return OCCURRENCES.parsingString;
         } else if(PERCENTAGE.getName().equalsIgnoreCase(portion)){
             return PERCENTAGE.parsingString;

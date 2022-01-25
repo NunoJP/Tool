@@ -16,10 +16,24 @@ public class Converter {
     }
 
     public static MetricsProfile toDomainObject(MetricsProfileDo metricsProfileDo){
-        return new MetricsProfile(metricsProfileDo.getId(), metricsProfileDo.getName());
+        MetricsProfile metricsProfile = new MetricsProfile(metricsProfileDo.getId(), metricsProfileDo.getName());
+        metricsProfile.setHasMostCommonWords(metricsProfileDo.isHasMostCommonWords());
+        metricsProfile.setHasFileSize(metricsProfileDo.isHasFileSize());
+        metricsProfile.setHasKeywordHistogram(metricsProfileDo.isHasKeywordHistogram());
+        metricsProfile.setHasKeywordOverTime(metricsProfileDo.isHasKeywordOverTime());
+        metricsProfile.setHasKeywordThreshold(metricsProfileDo.isHasKeywordThreshold());
+        metricsProfile.setKeywords(metricsProfileDo.getKeywords());
+        return metricsProfile;
     }
 
     public static MetricsProfileDo toDisplayObject(MetricsProfile metricsProfile) {
-        return new MetricsProfileDo(metricsProfile.getId(), metricsProfile.getName());
+        MetricsProfileDo profileDo = new MetricsProfileDo(metricsProfile.getId(), metricsProfile.getName());
+        profileDo.setHasMostCommonWords(metricsProfile.isHasMostCommonWords());
+        profileDo.setHasFileSize(metricsProfile.isHasFileSize());
+        profileDo.setHasKeywordHistogram(metricsProfile.isHasKeywordHistogram());
+        profileDo.setHasKeywordOverTime(metricsProfile.isHasKeywordOverTime());
+        profileDo.setHasKeywordThreshold(metricsProfile.isHasKeywordThreshold());
+        profileDo.setKeywords(metricsProfile.getKeywords());
+        return profileDo;
     }
 }
