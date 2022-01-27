@@ -5,6 +5,8 @@ public class GuiMessages {
 
     public static final String PROFILE_NAME_INVALID_OR_EMPTY = "The profile name is either invalid or empty, please resolve.";
     public static final String PROFILE_NAME_INVALID_OR_EMPTY_TITLE = "Profile name invalid or empty";
+    public static final String KEYWORD_TEXT_INVALID_OR_EMPTY = "The keyword is either invalid or empty, please resolve.";
+    public static final String KEYWORD_TEXT_INVALID_OR_EMPTY_TITLE = "Keyword name invalid or empty";
 
     // Error messages
     public static final String ERROR_FOLDER_DOES_NOT_EXIST = "Folder does not exist";

@@ -16,4 +16,13 @@ public class Validator {
         }
         return true;
     }
+
+    public static boolean validateKeyword(String keyword) {
+        if(keyword == null || keyword.isEmpty() || keyword.length() > KEYWORD_SIZE) {
+            return false;
+        }
+        return true;
+    }
+
+
 }

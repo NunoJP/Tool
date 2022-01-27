@@ -3,8 +3,8 @@ package domain.entities.common;
 public enum ThresholdUnitEnum {
 
     NONE("None", "None", "NONE"),
-    OCCURRENCES("Occ", "occurrences", "OCCURRENCES"),
-    PERCENTAGE("%", "percentage", "PERCENTAGE"),
+    OCCURRENCES("occurrences", "Occ", "OCCURRENCES"),
+    PERCENTAGE("percentage", "%", "PERCENTAGE"),
     ;
 
     private final String name;

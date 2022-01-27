@@ -16,7 +16,7 @@ public class KeywordTests {
         Keyword keyword = new Keyword(KWD, false);
         assertEquals(KWD, keyword.getKeywordText());
         assertFalse(keyword.isCaseSensitive());
-        assertEquals(ThresholdTypeEnum.NOT_APPLICABLE, keyword.getThreshold());
+        assertEquals(ThresholdTypeEnum.NOT_APPLICABLE, keyword.getThresholdType());
         assertEquals(ThresholdUnitEnum.NONE, keyword.getThresholdUnit());
         assertEquals(0, keyword.getThresholdValue().intValue());
     }
@@ -26,12 +26,12 @@ public class KeywordTests {
         Keyword keyword = new Keyword(KWD, false);
         assertEquals(KWD, keyword.getKeywordText());
         assertFalse(keyword.isCaseSensitive());
-        assertEquals(ThresholdTypeEnum.NOT_APPLICABLE, keyword.getThreshold());
+        assertEquals(ThresholdTypeEnum.NOT_APPLICABLE, keyword.getThresholdType());
         assertEquals(ThresholdUnitEnum.NONE, keyword.getThresholdUnit());
         assertEquals(0, keyword.getThresholdValue().intValue());
 
         keyword.setThresholdTrio(ThresholdTypeEnum.BIGGER_OR_EQUAL_THAN, ThresholdUnitEnum.OCCURRENCES, new BigDecimal(1));
-        assertEquals(ThresholdTypeEnum.BIGGER_OR_EQUAL_THAN, keyword.getThreshold());
+        assertEquals(ThresholdTypeEnum.BIGGER_OR_EQUAL_THAN, keyword.getThresholdType());
         assertEquals(ThresholdUnitEnum.OCCURRENCES, keyword.getThresholdUnit());
         assertEquals(1, keyword.getThresholdValue().intValue());
     }

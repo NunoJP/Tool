@@ -42,11 +42,12 @@ public class MetricsProfileEditorScreen extends JDialog {
     private JButton updateKwdButton;
     private JButton deleteKwdButton;
     private JComboBox<ThresholdTypeEnum> thresholdComboBox;
-    private JComboBox<ThresholdUnitEnum> unitComboBox;
+    private JComboBox<ThresholdUnitEnum> thresholdUnitComboBox;
     private JSpinner valueInput;
     private GeneralTablePanel keywordTable;
     private JButton saveProfileButton;
     private JButton clearButton;
+    private LabelTextFieldPanel keywordPanel;
 
     public MetricsProfileEditorScreen(Frame owner) {
         super(owner, GuiConstants.METRICS_PROFILE_EDITOR_SCREEN_TITLE);
@@ -111,7 +112,7 @@ public class MetricsProfileEditorScreen extends JDialog {
 
         JPanel northPanel = new JPanel();
         northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.Y_AXIS));
-        LabelTextFieldPanel keywordPanel = new LabelTextFieldPanel(GuiConstants.KEYWORD_LABEL);
+        keywordPanel = new LabelTextFieldPanel(GuiConstants.KEYWORD_LABEL);
         keywordPanel.setTextFieldWidth(GuiConstants.KEYWORD_FIELD_SIZE);
         JPanel spacer = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, 0));
         spacer.add(keywordPanel);
@@ -129,11 +130,11 @@ public class MetricsProfileEditorScreen extends JDialog {
         thresholdPanel.add(thresholdComboBox);
         valueInput = new JSpinner();
         thresholdPanel.add(valueInput);
-        unitComboBox = new JComboBox<>(ThresholdUnitEnum.values());
-        unitComboBox.setRenderer(new CellRenderer());
-        unitComboBox.setSelectedIndex(0);
-        unitComboBox.setLightWeightPopupEnabled(false);
-        thresholdPanel.add(unitComboBox);
+        thresholdUnitComboBox = new JComboBox<>(ThresholdUnitEnum.values());
+        thresholdUnitComboBox.setRenderer(new CellRenderer());
+        thresholdUnitComboBox.setSelectedIndex(0);
+        thresholdUnitComboBox.setLightWeightPopupEnabled(false);
+        thresholdPanel.add(thresholdUnitComboBox);
         northPanel.add(thresholdPanel);
 
         JPanel buttonHolder = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, V_GAP));
@@ -231,11 +232,11 @@ public class MetricsProfileEditorScreen extends JDialog {
         return thresholdComboBox;
     }
 
-    public JComboBox<ThresholdUnitEnum> getUnitComboBox() {
-        return unitComboBox;
+    public JComboBox<ThresholdUnitEnum> getThresholdUnitComboBox() {
+        return thresholdUnitComboBox;
     }
 
-    public JSpinner getValueInput() {
+    public JSpinner getThresholdValueInput() {
         return valueInput;
     }
 
@@ -249,6 +250,14 @@ public class MetricsProfileEditorScreen extends JDialog {
 
     public JButton getClearButton() {
         return clearButton;
+    }
+
+    public LabelTextFieldPanel getKeywordPanel() {
+        return keywordPanel;
+    }
+
+    public void setKeywordPanel(LabelTextFieldPanel keywordPanel) {
+        this.keywordPanel = keywordPanel;
     }
 
     public void resetKwdTable() {

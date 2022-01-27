@@ -147,23 +147,23 @@ public class ParsingProfileEditorScreen extends JDialog {
     }
 
     public void setResultPanelText(String text) {
-        resultPanel.getVariableTextField().setText(text);
+        resultPanel.setVariableLabelText(text);
     }
 
     public String getSpecificFormatText() {
-        return specificFormat.getVariableTextField().getText();
+        return specificFormat.getVariableLabelText();
     }
 
     public void setSpecificFormatText(String text) {
-        specificFormat.getVariableTextField().setText(text);
+        specificFormat.setVariableLabelText(text);
     }
 
     public String getProfileNameText() {
-        return namePanel.getVariableTextField().getText();
+        return namePanel.getVariableLabelText();
     }
 
     public void setProfileNameText(String text) {
-        namePanel.getVariableTextField().setText(text);
+        namePanel.setVariableLabelText(text);
     }
 
     // Getters

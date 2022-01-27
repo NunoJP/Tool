@@ -29,6 +29,10 @@ public class LabelTextFieldPanel extends JPanel {
         this.variableTextField.setText(text);
     }
 
+    public String getVariableLabelText(){
+        return this.variableTextField.getText();
+    }
+
     public void setMaxSizeAsPreferredSize(){
         variableTextField.setMaximumSize( variableTextField.getPreferredSize() );
     }

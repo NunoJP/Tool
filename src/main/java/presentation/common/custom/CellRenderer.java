@@ -28,9 +28,9 @@ public class CellRenderer extends DefaultListCellRenderer {
         } else if(value instanceof SeparatorEnum) {
             value = ((SeparatorEnum) value).getName();
         } else if(value instanceof ThresholdTypeEnum) {
-            value = ((ThresholdTypeEnum) value).getName();
+            value = ((ThresholdTypeEnum) value).getSymbol();
         } else if(value instanceof ThresholdUnitEnum) {
-            value = ((ThresholdUnitEnum) value).getName();
+            value = ((ThresholdUnitEnum) value).getSymbol();
         }
         super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
         return this;

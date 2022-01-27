@@ -42,7 +42,7 @@ public class Keyword {
         isCaseSensitive = caseSensitive;
     }
 
-    public ThresholdTypeEnum getThreshold() {
+    public ThresholdTypeEnum getThresholdType() {
         return threshold;
     }
 

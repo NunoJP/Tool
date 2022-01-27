@@ -1,12 +1,12 @@
 package domain.entities.common;
 
 public enum ThresholdTypeEnum {
-    NOT_APPLICABLE("NA", "none", "NOT_APPLICABLE"),
-    EQUAL_TO("=", "equalTo", "EQUAL_TO"),
-    BIGGER_THAN(">", "biggerThan", "BIGGER_THAN"),
-    BIGGER_OR_EQUAL_THAN(">=", "biggerOrEqualThan", "BIGGER_OR_EQUAL_THAN"),
-    SMALLER_THAN("<", "smallerThan", "SMALLER_THAN"),
-    SMALLER_OR_EQUAL_THAN("<=", "smallerOrEqualThan", "SMALLER_OR_EQUAL_THAN"),
+    NOT_APPLICABLE("none", "NA", "NOT_APPLICABLE"),
+    EQUAL_TO("equalTo", "=", "EQUAL_TO"),
+    BIGGER_THAN("biggerThan", ">", "BIGGER_THAN"),
+    BIGGER_OR_EQUAL_THAN("biggerOrEqualThan", ">=", "BIGGER_OR_EQUAL_THAN"),
+    SMALLER_THAN("smallerThan", "<", "SMALLER_THAN"),
+    SMALLER_OR_EQUAL_THAN("smallerOrEqualThan", "<=", "SMALLER_OR_EQUAL_THAN"),
     ;
 
     private final String name;
