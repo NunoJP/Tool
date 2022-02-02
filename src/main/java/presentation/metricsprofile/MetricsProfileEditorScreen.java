@@ -31,7 +31,6 @@ public class MetricsProfileEditorScreen extends JDialog {
 
     private JPanel basePanel;
     private LabelTextFieldPanel namePanel;
-    private LabelTextFieldPanel resultPanel;
     private JRadioButton mcwButton;
     private JRadioButton fileSizeButton;
     private JRadioButton kwdHistButton;
@@ -62,9 +61,8 @@ public class MetricsProfileEditorScreen extends JDialog {
         this.setPreferredSize(new Dimension(H_METRIC_PROFILES_EDITOR_SCREEN_SIZE, V_METRIC_PROFILES_EDITOR_SCREEN_SIZE));
         this.rootPane.add(basePanel, BorderLayout.CENTER);
 
-        JPanel northPanel = new JPanel(new GridLayout(2, 1));
+        JPanel northPanel = new JPanel(new GridLayout(1, 1));
         northPanel.add(createNamePanel());
-        northPanel.add(createResultPanel());
         basePanel.add(northPanel, BorderLayout.NORTH);
         basePanel.add(createWestOptionsPanel(), BorderLayout.WEST);
         basePanel.add(createEastOptionsPanel(), BorderLayout.CENTER);
@@ -76,15 +74,6 @@ public class MetricsProfileEditorScreen extends JDialog {
         namePanel = new LabelTextFieldPanel(GuiConstants.NAME_LABEL);
         namePanel.setTextFieldWidth(GuiConstants.FILE_NAME_FIELD_SIZE);
         holder.add(namePanel);
-        return holder;
-    }
-
-    private JPanel createResultPanel() {
-        JPanel holder = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, V_GAP));
-        resultPanel = new LabelTextFieldPanel(GuiConstants.RESULT_LABEL);
-        resultPanel.setTextFieldWidth(GuiConstants.RESULT_FIELD_SIZE);
-        resultPanel.getVariableTextField().setEditable(false);
-        holder.add(resultPanel);
         return holder;
     }
 
@@ -188,10 +177,6 @@ public class MetricsProfileEditorScreen extends JDialog {
         return namePanel;
     }
 
-    public LabelTextFieldPanel getResultPanel() {
-        return resultPanel;
-    }
-
     public JRadioButton getMcwButton() {
         return mcwButton;
     }
@@ -264,5 +249,9 @@ public class MetricsProfileEditorScreen extends JDialog {
         keywordTable = new GeneralTablePanel(
                 new String[]{GuiConstants.KEYWORD_COLUMN, GuiConstants.CASE_SENSITIVE_COLUMN, GuiConstants.THRESHOLD_COLUMN}, false
         );
+    }
+
+    public String getProfileNameText() {
+        return namePanel.getVariableTextField().getText();
     }
 }

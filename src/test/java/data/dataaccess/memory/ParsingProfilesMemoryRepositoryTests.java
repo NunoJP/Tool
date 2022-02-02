@@ -12,17 +12,17 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-public class MemoryRepositoryTests {
+public class ParsingProfilesMemoryRepositoryTests {
 
     @Before
     public void setup() {
-        MemoryRepository repository = MemoryRepository.getInstance();
+        ParsingProfilesMemoryRepository repository = ParsingProfilesMemoryRepository.getInstance();
         repository.fullReset();
     }
 
     @Test
     public void testCreateProfileSimple(){
-        MemoryRepository repository = MemoryRepository.getInstance();
+        ParsingProfilesMemoryRepository repository = ParsingProfilesMemoryRepository.getInstance();
         ParsingProfile profile = new ParsingProfile("Name");
         assertTrue(repository.createProfile(profile, profile.getOriginFile()));
         ParsingProfile mapProfile = repository.getProfile(0);
@@ -31,7 +31,7 @@ public class MemoryRepositoryTests {
 
     @Test
     public void testCreateProfileCollision(){
-        MemoryRepository repository = MemoryRepository.getInstance();
+        ParsingProfilesMemoryRepository repository = ParsingProfilesMemoryRepository.getInstance();
         ArrayList<ParsingProfilePortion> parsingProfilePortions = new ArrayList<>();
         parsingProfilePortions.add(new ParsingProfilePortion("Test", "Test", true, true));
 
@@ -50,11 +50,11 @@ public class MemoryRepositoryTests {
 
     @Test
     public void testCreateMultipleProfiles(){
-        MemoryRepository repository = MemoryRepository.getInstance();
+        ParsingProfilesMemoryRepository repository = ParsingProfilesMemoryRepository.getInstance();
         ArrayList<ParsingProfilePortion> parsingProfilePortions = new ArrayList<>();
         parsingProfilePortions.add(new ParsingProfilePortion("Test", "Test", true, true));
 
-        // create two profiles with the same name but one has Portions, there should be two profiles in the end
+        // create two profiles with different names but one has Portions, there should be two profiles in the end
         ParsingProfile profile = new ParsingProfile( "Name", parsingProfilePortions);
         ParsingProfile profile2 = new ParsingProfile( "Name2");
 
@@ -72,7 +72,7 @@ public class MemoryRepositoryTests {
     @Test
     public void testUpdateProfileSimple(){
         // Basic create for setup
-        MemoryRepository repository = MemoryRepository.getInstance();
+        ParsingProfilesMemoryRepository repository = ParsingProfilesMemoryRepository.getInstance();
         ParsingProfile profile = new ParsingProfile("Name");
         assertTrue(repository.createProfile(profile, profile.getOriginFile()));
         ParsingProfile mapProfile = repository.getProfile(0);
@@ -92,7 +92,7 @@ public class MemoryRepositoryTests {
 
     @Test
     public void testUpdateProfileWithoutExistingProfile(){
-        MemoryRepository repository = MemoryRepository.getInstance();
+        ParsingProfilesMemoryRepository repository = ParsingProfilesMemoryRepository.getInstance();
         ParsingProfile profileUp = new ParsingProfile("Name");
         assertFalse(repository.updateProfile(profileUp));
     }
@@ -100,7 +100,7 @@ public class MemoryRepositoryTests {
     @Test
     public void removeProfileSimple() {
         // Basic create for setup
-        MemoryRepository repository = MemoryRepository.getInstance();
+        ParsingProfilesMemoryRepository repository = ParsingProfilesMemoryRepository.getInstance();
         ParsingProfile profile = new ParsingProfile("Name");
         assertTrue(repository.createProfile(profile, profile.getOriginFile()));
         ParsingProfile mapProfile = repository.getProfile(0);
@@ -113,7 +113,7 @@ public class MemoryRepositoryTests {
     @Test
     public void removeProfileWithoutExistingProfile() {
         // Basic create for setup
-        MemoryRepository repository = MemoryRepository.getInstance();
+        ParsingProfilesMemoryRepository repository = ParsingProfilesMemoryRepository.getInstance();
         ParsingProfile profile = new ParsingProfile("Name");
         // empty repository
         assertNull(repository.getProfile(0));

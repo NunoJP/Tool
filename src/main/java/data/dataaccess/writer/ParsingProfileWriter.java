@@ -1,6 +1,6 @@
 package data.dataaccess.writer;
 
-import data.dataaccess.memory.MemoryRepository;
+import data.dataaccess.memory.ParsingProfilesMemoryRepository;
 import domain.entities.domainobjects.ParsingProfile;
 import presentation.common.GuiMessages;
 
@@ -22,7 +22,7 @@ import static presentation.common.GuiMessages.LOG_ERROR_ERROR_OPENING_FILE;
 import static presentation.common.GuiMessages.LOG_ERROR_ERROR_READING_FILE;
 
 public class ParsingProfileWriter {
-    private final MemoryRepository instance;
+    private final ParsingProfilesMemoryRepository instance;
     private final String parsingProfileFolderName;
     private ParsingProfileFunction function;
 
@@ -30,12 +30,12 @@ public class ParsingProfileWriter {
 
     public ParsingProfileWriter(String parsingProfileFolderName) {
         this.parsingProfileFolderName = parsingProfileFolderName;
-        instance = MemoryRepository.getInstance();
+        instance = ParsingProfilesMemoryRepository.getInstance();
     }
 
     public ParsingProfileWriter() {
         this.parsingProfileFolderName = DEFAULT_PARSING_PROFILE_FOLDER_NAME;
-        instance = MemoryRepository.getInstance();
+        instance = ParsingProfilesMemoryRepository.getInstance();
     }
 
     public boolean createProfile(ParsingProfile parsingProfile) {

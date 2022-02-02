@@ -5,6 +5,7 @@ import domain.entities.common.Keyword;
 import domain.entities.common.ThresholdTypeEnum;
 import domain.entities.common.ThresholdUnitEnum;
 import domain.entities.displayobjects.MetricsProfileDo;
+import domain.services.MetricsProfileManagementService;
 import presentation.common.GuiMessages;
 
 import javax.swing.JFrame;
@@ -22,14 +23,18 @@ public class MetricsProfileEditorScreenPresenter {
     private final MetricsProfileDo existingProfile;
     private final MetricsProfileManagementScreenPresenter callerPresenter;
     private final MetricsProfileEditorScreen dialogView;
+    private final MetricsProfileDo metricsProfile;
+    private final MetricsProfileManagementService service;
     private int selectedKwdTableItemIndex = -1;
 
     public MetricsProfileEditorScreenPresenter(JFrame motherFrame, MetricsProfileDo existingProfile,
                                                MetricsProfileManagementScreenPresenter metricsProfileManagementScreenPresenter) {
         this.motherFrame = motherFrame;
-        this.existingProfile = existingProfile == null ? new MetricsProfileDo() : existingProfile;
+        this.existingProfile = existingProfile;
+        this.metricsProfile = existingProfile == null ? new MetricsProfileDo() : existingProfile;
         this.callerPresenter = metricsProfileManagementScreenPresenter;
         this.dialogView = new MetricsProfileEditorScreen(motherFrame);
+        this.service = new MetricsProfileManagementService();
         populateViewWithExistingProfile();
         defineViewBehavior();
     }
@@ -72,7 +77,34 @@ public class MetricsProfileEditorScreenPresenter {
 
         // A.1.13.1
         dialogView.getSaveProfileButton().addActionListener( actionEvent -> {
+            String profileName = dialogView.getProfileNameText();
+            if(!Validator.validateProfileName(profileName)){
+                showMessageDialog(GuiMessages.PROFILE_NAME_INVALID_OR_EMPTY, GuiMessages.PROFILE_NAME_INVALID_OR_EMPTY_TITLE, JOptionPane.WARNING_MESSAGE);
+            } else {
+                setValuesInDo(metricsProfile);
+                metricsProfile.setName(profileName);
+                if(existingProfile != null) {
+                    int confirmation = JOptionPane.showConfirmDialog(dialogView,
+                            GuiMessages.CONFIRM_OVERWRITE_PARSING_PROFILE,
+                            GuiMessages.PLEASE_CONFIRM_DIALOG_TITLE,
+                            JOptionPane.YES_NO_OPTION);
+                    if(confirmation == JOptionPane.YES_OPTION) {
+                        boolean updateSuccess = service.updateProfile(metricsProfile);
+                        if(updateSuccess) {
+                            showMessageDialog(GuiMessages.UPDATE_SUCCESSFUL, GuiMessages.SUCCESS_TITLE, JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            showMessageDialog(GuiMessages.UPDATE_FAILED, GuiMessages.FAILURE_TITLE, JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    }
+                    // Stop the save procedure
+                    return;
+                } else {
+                    service.createProfile(metricsProfile);
+                }
 
+                callerPresenter.updateViewTable();
+                fullReset();
+            }
         });
 
         dialogView.getKeywordTable().addRowSelectionEvent( event -> {
@@ -177,5 +209,14 @@ public class MetricsProfileEditorScreenPresenter {
                             + " " + data.get(i).getThresholdUnit().getSymbol() };
         }
         return objects;
+    }
+
+    private void setValuesInDo(MetricsProfileDo metricsProfile) {
+        metricsProfile.setHasMostCommonWords(dialogView.getMcwButton().isSelected());
+        metricsProfile.setHasFileSize(dialogView.getFileSizeButton().isSelected());
+        metricsProfile.setHasKeywordHistogram(dialogView.getKwdHistButton().isSelected());
+        metricsProfile.setHasKeywordOverTime(dialogView.getKwdOverTimeButton().isSelected());
+        metricsProfile.setHasKeywordThreshold(dialogView.getKwdThresholdButton().isSelected());
+        metricsProfile.setKeywords(keywords);
     }
 }

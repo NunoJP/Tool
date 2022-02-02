@@ -4,6 +4,8 @@ import domain.entities.common.Keyword;
 
 import java.util.ArrayList;
 
+import static data.dataaccess.common.MetricsProfileReadWriteConstants.DEFAULT_METRICS_PROFILE_FILE_NAME;
+
 public class MetricsProfileDo {
     private Integer id;
     private String name;
@@ -16,7 +18,7 @@ public class MetricsProfileDo {
     private ArrayList<Keyword> keywords;
 
     public MetricsProfileDo() {
-        this.keywords = new ArrayList<>();
+        this(-1, DEFAULT_METRICS_PROFILE_FILE_NAME);
     }
 
     public MetricsProfileDo(int id, String name) {

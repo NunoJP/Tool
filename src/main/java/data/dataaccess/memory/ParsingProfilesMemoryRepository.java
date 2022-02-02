@@ -6,21 +6,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class MemoryRepository {
+public class ParsingProfilesMemoryRepository {
 
-    public static MemoryRepository instance;
+    public static ParsingProfilesMemoryRepository instance;
     private AtomicInteger idx = new AtomicInteger(0);
 
-    public static MemoryRepository getInstance(){
+    public static ParsingProfilesMemoryRepository getInstance(){
         if(instance == null) {
-            instance = new MemoryRepository();
+            instance = new ParsingProfilesMemoryRepository();
         }
         return instance;
     }
 
     private HashMap<Integer, ParsingProfile> parsingProfiles;
     private HashMap<String, ArrayList<ParsingProfile>> parsingProfileByFile;
-    private MemoryRepository() {
+    private ParsingProfilesMemoryRepository() {
         parsingProfiles = new HashMap<>();
         parsingProfileByFile = new HashMap<>();
     }

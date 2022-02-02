@@ -23,6 +23,7 @@ public class MetricsProfileManagementScreenPresenter implements IViewPresenter {
         view = new MetricsProfileManagementScreen();
         service = new MetricsProfileManagementService();
         defineViewBehavior();
+        view.getMetricProfilesPanel().setData(new Object[0][]);
     }
 
     private void defineViewBehavior() {

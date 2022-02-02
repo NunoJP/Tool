@@ -16,6 +16,7 @@ public class MetricsProfileManagementService {
 
     public MetricsProfileManagementService() {
         reader = new MetricsProfileReader();
+        writer = new MetricsProfileWriter();
     }
 
     public MetricsProfileDo[] getMetricsProfiles() {

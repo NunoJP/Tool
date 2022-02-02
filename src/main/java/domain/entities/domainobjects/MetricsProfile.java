@@ -4,6 +4,8 @@ import domain.entities.common.Keyword;
 
 import java.util.ArrayList;
 
+import static data.dataaccess.common.MetricsProfileReadWriteConstants.DEFAULT_METRICS_PROFILE_FILE_NAME;
+
 public class MetricsProfile {
     private Integer id;
     private String name;
@@ -13,8 +15,16 @@ public class MetricsProfile {
     private boolean hasKeywordOverTime;
     private boolean hasKeywordThreshold;
     private ArrayList<Keyword> keywords = new ArrayList<>();
+    private String originFile;
 
     public MetricsProfile() {
+        this.id = -1;
+        this.name = DEFAULT_METRICS_PROFILE_FILE_NAME;
+    }
+
+    public MetricsProfile(String name) {
+        this.id = -1;
+        this.name = name;
     }
 
     public MetricsProfile(int id, String name) {
@@ -92,5 +102,13 @@ public class MetricsProfile {
 
     public void removeKeyword(Keyword keywordDo) {
         this.keywords.remove(keywordDo);
+    }
+
+    public String getOriginFile() {
+        return this.originFile;
+    }
+
+    public void setOriginFile(String originFile) {
+        this.originFile = originFile;
     }
 }
