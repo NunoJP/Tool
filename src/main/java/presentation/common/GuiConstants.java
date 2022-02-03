@@ -73,6 +73,7 @@ public class GuiConstants {
     public static final String COPY_BUTTON = "Copy";
     public static final String MOVE_BUTTON = "Move";
     public static final String CHOOSE_BUTTON = "Choose";
+    public static final String CLEAR_KEYWORDS_TABLE_BUTTON = "Clear table";
 
     // Labels
     public static final String FILE_INDICATION_LABEL = "File: ";
@@ -129,4 +130,5 @@ public class GuiConstants {
 
 
     public static final String NO_NAME_PROVIDED = "No name provided";
+
 }

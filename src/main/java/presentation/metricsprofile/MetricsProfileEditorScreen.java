@@ -40,6 +40,7 @@ public class MetricsProfileEditorScreen extends JDialog {
     private JButton addKwdButton;
     private JButton updateKwdButton;
     private JButton deleteKwdButton;
+    private JButton clearKwdsButton;
     private JComboBox<ThresholdTypeEnum> thresholdComboBox;
     private JComboBox<ThresholdUnitEnum> thresholdUnitComboBox;
     private JSpinner valueInput;
@@ -130,9 +131,11 @@ public class MetricsProfileEditorScreen extends JDialog {
         addKwdButton = new JButton(GuiConstants.ADD_BUTTON);
         updateKwdButton = new JButton(GuiConstants.UPDATE_SELECTED_BUTTON);
         deleteKwdButton = new JButton(GuiConstants.DELETE_SELECTED_BUTTON);
+        clearKwdsButton = new JButton(GuiConstants.CLEAR_KEYWORDS_TABLE_BUTTON);
         buttonHolder.add(addKwdButton);
         buttonHolder.add(updateKwdButton);
         buttonHolder.add(deleteKwdButton);
+        buttonHolder.add(clearKwdsButton);
 
         northPanel.add(buttonHolder);
 
@@ -213,6 +216,10 @@ public class MetricsProfileEditorScreen extends JDialog {
         return deleteKwdButton;
     }
 
+    public JButton getClearKwdsButton() {
+        return clearKwdsButton;
+    }
+
     public JComboBox<ThresholdTypeEnum> getThresholdComboBox() {
         return thresholdComboBox;
     }
@@ -246,9 +253,7 @@ public class MetricsProfileEditorScreen extends JDialog {
     }
 
     public void resetKwdTable() {
-        keywordTable = new GeneralTablePanel(
-                new String[]{GuiConstants.KEYWORD_COLUMN, GuiConstants.CASE_SENSITIVE_COLUMN, GuiConstants.THRESHOLD_COLUMN}, false
-        );
+        keywordTable.setData(new Object[0][]);
     }
 
     public String getProfileNameText() {

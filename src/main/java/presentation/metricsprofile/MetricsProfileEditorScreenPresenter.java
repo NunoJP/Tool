@@ -45,6 +45,10 @@ public class MetricsProfileEditorScreenPresenter {
 
 
     private void defineViewBehavior() {
+        dialogView.resetKwdTable();
+        dialogView.getUpdateKwdButton().setEnabled(false);
+        dialogView.getDeleteKwdButton().setEnabled(false);
+
         dialogView.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
@@ -66,16 +70,20 @@ public class MetricsProfileEditorScreenPresenter {
             addOrUpdateKeyword(false);
         });
 
-        // A.1.14.1
         dialogView.getDeleteKwdButton().addActionListener( actionEvent -> {
             if(selectedKwdTableItemIndex != -1) {
                 // Not adding a confirmation dialog, if the user mistakenly deletes it, it is simple enough to add again
                 keywords.remove(selectedKwdTableItemIndex);
                 selectedKwdTableItemIndex = -1;
+                dialogView.getKeywordTable().setData(convertDataForTable(keywords));
             }
         });
 
-        // A.1.13.1
+        dialogView.getClearKwdsButton().addActionListener( actionEvent -> {
+            keywords = new ArrayList<>();
+            dialogView.getKeywordTable().setData(convertDataForTable(keywords));
+        });
+
         dialogView.getSaveProfileButton().addActionListener( actionEvent -> {
             String profileName = dialogView.getProfileNameText();
             if(!Validator.validateProfileName(profileName)){
@@ -192,12 +200,16 @@ public class MetricsProfileEditorScreenPresenter {
         dialogView.getFileSizeButton().setSelected(false);
         dialogView.getKwdHistButton().setSelected(false);
         dialogView.getKwdOverTimeButton().setSelected(false);
+        dialogView.getKwdThresholdButton().setSelected(false);
         dialogView.getCaseSensitiveButton().setSelected(false);
         dialogView.getUpdateKwdButton().setEnabled(false);
         dialogView.getDeleteKwdButton().setEnabled(false);
         dialogView.getThresholdComboBox().setSelectedIndex(0);
         dialogView.getThresholdUnitComboBox().setSelectedIndex(0);
         dialogView.getThresholdValueInput().setValue(0);
+        dialogView.getNamePanel().setVariableLabelText("");
+        dialogView.getKeywordPanel().setVariableLabelText("");
+        keywords = new ArrayList<>();
         dialogView.resetKwdTable();
     }
 
