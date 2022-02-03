@@ -1,5 +1,6 @@
 package data.dataaccess.reader;
 
+import data.dataaccess.ParsingProfilesCommon;
 import data.dataaccess.common.ParsingProfileReadWriteConstants;
 import domain.entities.common.ParsingProfilePortion;
 import domain.entities.common.SeparatorEnum;
@@ -17,11 +18,7 @@ import static data.dataaccess.common.ParsingProfileReadWriteConstants.NO_NAME_PR
 import static data.dataaccess.common.ParsingProfileReadWriteConstants.PORTION_SEPARATOR;
 import static org.junit.Assert.assertEquals;
 
-public class ParsingProfileConsumerTests {
-
-    public static final String VALUE = "Value";
-    private static final String GARBAGE = "assfsadaskh bdakbdkajsbdv";
-    private final String EXPECTED_FIRST_LINE = "Parsing Profile";
+public class ParsingProfileConsumerTests extends ParsingProfilesCommon {
 
     @Test
     public void simpleTest() {
@@ -467,19 +464,4 @@ public class ParsingProfileConsumerTests {
         assertEquals(0, portions.size());
     }
 
-    private ParsingProfileConsumer getConsumer() {
-        ParsingProfileConsumer consumer = new ParsingProfileConsumer();
-        // baseline
-        ParsingProfile[] profiles = consumer.getProfiles();
-        assertEquals(0, profiles.length);
-        return consumer;
-    }
-
-
-    private void validatePortion(ParsingProfilePortion portion, boolean isSeparator, boolean isIgnore, boolean isSpecificFormat, String name) {
-        assertEquals(isSeparator, portion.isSeparator());
-        assertEquals(isIgnore, portion.isIgnore());
-        assertEquals(isSpecificFormat, portion.isSpecificFormat());
-        assertEquals(name, portion.getPortionRepresentation());
-    }
 }

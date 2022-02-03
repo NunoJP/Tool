@@ -1,8 +1,7 @@
 package data.dataaccess.reader;
 
+import data.dataaccess.MetricsProfilesCommon;
 import domain.entities.common.Keyword;
-import domain.entities.common.ThresholdTypeEnum;
-import domain.entities.common.ThresholdUnitEnum;
 import domain.entities.domainobjects.MetricsProfile;
 import org.junit.Test;
 
@@ -28,10 +27,7 @@ import static domain.entities.common.ThresholdUnitEnum.NONE;
 import static domain.entities.common.ThresholdUnitEnum.OCCURRENCES;
 import static org.junit.Assert.assertEquals;
 
-public class MetricsProfileConsumerTests {
-
-    public static final String VALUE = "Value";
-    private static final String GARBAGE = "assfsadaskh bdakbdkajsbdv";
+public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
 
     @Test
     public void simpleTest() {
@@ -717,31 +713,6 @@ public class MetricsProfileConsumerTests {
     }
 
 
-    private MetricsProfileConsumer getConsumer() {
-        MetricsProfileConsumer consumer = new MetricsProfileConsumer();
-
-        // Test baseline
-        MetricsProfile[] profiles = consumer.getProfiles();
-        assertEquals(0, profiles.length);
-        return consumer;
-    }
-
-    private void validateKeyword(Keyword keyword, String kwd, boolean caseSensitive,
-                                 ThresholdTypeEnum typeEnum, BigDecimal value, ThresholdUnitEnum unitEnum) {
-        assertEquals(kwd, keyword.getKeywordText());
-        assertEquals(caseSensitive, keyword.isCaseSensitive());
-        assertEquals(typeEnum, keyword.getThresholdType());
-        assertEquals(value, keyword.getThresholdValue());
-        assertEquals(unitEnum, keyword.getThresholdUnit());
-    }
-
-    private void validateEnabledProfiles(MetricsProfile profile, boolean mCw, boolean fs, boolean kwdH, boolean kwdOt, boolean kwdTh) {
-        assertEquals(mCw, profile.isHasMostCommonWords());
-        assertEquals(fs, profile.isHasFileSize());
-        assertEquals(kwdH, profile.isHasKeywordHistogram());
-        assertEquals(kwdOt, profile.isHasKeywordOverTime());
-        assertEquals(kwdTh, profile.isHasKeywordThreshold());
-    }
 
 
 }

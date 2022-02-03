@@ -1,5 +1,6 @@
 package data.dataaccess.writer;
 
+import data.dataaccess.ParsingProfilesCommon;
 import data.dataaccess.reader.ParsingProfileConsumer;
 import domain.entities.common.ParsingProfilePortion;
 import domain.entities.common.SeparatorEnum;
@@ -13,10 +14,8 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 
-public class ParsingProfileFunctionTests {
+public class ParsingProfileFunctionTests  extends ParsingProfilesCommon {
 
-
-    public static final String VALUE = "Value";
     private ParsingProfileFunction function;
     private ParsingProfileConsumer consumer;
     private ParsingProfile[] profiles;
@@ -322,29 +321,4 @@ public class ParsingProfileFunctionTests {
         validatePortion(portions.get(1), true, false, false, SeparatorEnum.COLON.getName());
     }
 
-
-    private ParsingProfileConsumer getConsumer() {
-        ParsingProfileConsumer consumer = new ParsingProfileConsumer();
-        // baseline
-        ParsingProfile[] profiles = consumer.getProfiles();
-        assertEquals(0, profiles.length);
-        return consumer;
-    }
-
-
-    private void simulateWriteAndRead(ParsingProfileFunction function, ParsingProfileConsumer consumer, ParsingProfile profile) {
-        String apply = function.apply(profile);
-        String[] split = apply.split(System.lineSeparator());
-
-        for (String s : split) {
-            consumer.accept(s);
-        }
-    }
-
-    private void validatePortion(ParsingProfilePortion portion, boolean isSeparator, boolean isIgnore, boolean isSpecificFormat, String name) {
-        assertEquals(isSeparator, portion.isSeparator());
-        assertEquals(isIgnore, portion.isIgnore());
-        assertEquals(isSpecificFormat, portion.isSpecificFormat());
-        assertEquals(name, portion.getPortionRepresentation());
-    }
 }
