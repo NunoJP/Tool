@@ -35,20 +35,31 @@ public class MetricsProfileEditorScreenPresenter {
         this.callerPresenter = metricsProfileManagementScreenPresenter;
         this.dialogView = new MetricsProfileEditorScreen(motherFrame);
         this.service = new MetricsProfileManagementService();
+        fullReset();
         populateViewWithExistingProfile();
         defineViewBehavior();
     }
 
     private void populateViewWithExistingProfile() {
-        // A.1.15
+        dialogView.getMcwButton().setSelected(existingProfile.isHasMostCommonWords());
+        dialogView.getFileSizeButton().setSelected(existingProfile.isHasFileSize());
+        dialogView.getKwdHistButton().setSelected(existingProfile.isHasKeywordHistogram());
+        dialogView.getKwdOverTimeButton().setSelected(existingProfile.isHasKeywordOverTime());
+        dialogView.getKwdThresholdButton().setSelected(existingProfile.isHasKeywordThreshold());
+        dialogView.getCaseSensitiveButton().setSelected(false);
+        dialogView.getUpdateKwdButton().setEnabled(false);
+        dialogView.getDeleteKwdButton().setEnabled(false);
+        dialogView.getThresholdComboBox().setSelectedIndex(0);
+        dialogView.getThresholdUnitComboBox().setSelectedIndex(0);
+        dialogView.getThresholdValueInput().setValue(0);
+        dialogView.getNamePanel().setVariableLabelText(existingProfile.getName());
+        dialogView.getKeywordPanel().setVariableLabelText("");
+        keywords = existingProfile.getKeywords();
+        dialogView.getKeywordTable().setData(convertDataForTable(keywords));
     }
 
 
     private void defineViewBehavior() {
-        dialogView.resetKwdTable();
-        dialogView.getUpdateKwdButton().setEnabled(false);
-        dialogView.getDeleteKwdButton().setEnabled(false);
-
         dialogView.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {

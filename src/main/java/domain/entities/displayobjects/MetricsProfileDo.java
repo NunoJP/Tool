@@ -15,6 +15,7 @@ public class MetricsProfileDo {
     private boolean hasKeywordHistogram;
     private boolean hasKeywordOverTime;
     private boolean hasKeywordThreshold;
+    private String originFile;
     private ArrayList<Keyword> keywords;
 
     public MetricsProfileDo() {
@@ -105,5 +106,13 @@ public class MetricsProfileDo {
 
     public void removeKeyword(Keyword keyword) {
         this.keywords.remove(keyword);
+    }
+
+    public String getOriginFile() {
+        return this.originFile;
+    }
+
+    public void setOriginFile(String originFile) {
+        this.originFile = originFile;
     }
 }

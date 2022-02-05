@@ -109,6 +109,8 @@ public class ConverterTests {
         displayObject.setHasKeywordHistogram(true);
         displayObject.setHasKeywordOverTime(true);
         displayObject.setHasKeywordThreshold(true);
+        displayObject.setOriginFile("Origin");
+
         MetricsProfile domainObject = Converter.toDomainObject(displayObject);
         assertEquals(displayObject.getId(), domainObject.getId());
         assertEquals(displayObject.getName(), domainObject.getName());
@@ -117,6 +119,7 @@ public class ConverterTests {
         assertEquals(displayObject.isHasKeywordHistogram(), domainObject.isHasKeywordHistogram());
         assertEquals(displayObject.isHasKeywordOverTime(), domainObject.isHasKeywordOverTime());
         assertEquals(displayObject.isHasKeywordThreshold(), domainObject.isHasKeywordThreshold());
+        assertEquals(displayObject.getOriginFile(), domainObject.getOriginFile());
     }
 
     @Test
@@ -129,6 +132,7 @@ public class ConverterTests {
         domainObject.setHasKeywordThreshold(true);
         domainObject.addKeyword(new Keyword("KWD", false));
         domainObject.addKeyword(new Keyword("KWD1", true));
+        domainObject.setOriginFile("Origin");
 
         MetricsProfileDo displayObject = Converter.toDisplayObject(domainObject);
         assertEquals(domainObject.getId(), displayObject.getId());
@@ -138,6 +142,7 @@ public class ConverterTests {
         assertEquals(domainObject.isHasKeywordHistogram(), displayObject.isHasKeywordHistogram());
         assertEquals(domainObject.isHasKeywordOverTime(), displayObject.isHasKeywordOverTime());
         assertEquals(domainObject.isHasKeywordThreshold(), displayObject.isHasKeywordThreshold());
+        assertEquals(domainObject.getOriginFile(), displayObject.getOriginFile());
 
 
         assertEquals(2, domainObject.getKeywords().size());

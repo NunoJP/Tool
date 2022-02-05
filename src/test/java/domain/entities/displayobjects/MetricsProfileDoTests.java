@@ -17,6 +17,7 @@ public class MetricsProfileDoTests {
         profileDo.setHasKeywordHistogram(true);
         profileDo.setHasKeywordOverTime(true);
         profileDo.setHasKeywordThreshold(true);
+        profileDo.setOriginFile("Origin");
 
         assertEquals("Name", profileDo.getName());
         assertTrue(profileDo.isHasMostCommonWords());
@@ -24,6 +25,7 @@ public class MetricsProfileDoTests {
         assertTrue(profileDo.isHasKeywordHistogram());
         assertTrue(profileDo.isHasKeywordOverTime());
         assertTrue(profileDo.isHasKeywordThreshold());
+        assertEquals("Origin", profileDo.getOriginFile());
     }
 
     @Test

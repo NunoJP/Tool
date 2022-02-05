@@ -23,6 +23,7 @@ public class Converter {
         metricsProfile.setHasKeywordOverTime(metricsProfileDo.isHasKeywordOverTime());
         metricsProfile.setHasKeywordThreshold(metricsProfileDo.isHasKeywordThreshold());
         metricsProfile.setKeywords(metricsProfileDo.getKeywords());
+        metricsProfile.setOriginFile(metricsProfileDo.getOriginFile());
         return metricsProfile;
     }
 
@@ -34,6 +35,7 @@ public class Converter {
         profileDo.setHasKeywordOverTime(metricsProfile.isHasKeywordOverTime());
         profileDo.setHasKeywordThreshold(metricsProfile.isHasKeywordThreshold());
         profileDo.setKeywords(metricsProfile.getKeywords());
+        profileDo.setOriginFile(metricsProfile.getOriginFile());
         return profileDo;
     }
 }
