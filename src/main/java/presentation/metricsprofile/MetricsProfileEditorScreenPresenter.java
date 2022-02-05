@@ -140,12 +140,6 @@ public class MetricsProfileEditorScreenPresenter {
                     selectedKwdTableItemIndex = selectedIndex;
                     fillKeywordElementsForUpdate();
                 }
-//                else { // selected the same row twice
-//                    listSelectionModel.clearSelection();
-//                    dialogView.getUpdateKwdButton().setEnabled(false);
-//                    dialogView.getDeleteKwdButton().setEnabled(false);
-//                    selectedKwdTableItemIndex = -1;
-//                }
             }
         });
     }
