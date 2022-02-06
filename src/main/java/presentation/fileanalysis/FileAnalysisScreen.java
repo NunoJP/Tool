@@ -4,6 +4,7 @@ import presentation.common.GuiConstants;
 import presentation.common.custom.DateComponent;
 import presentation.common.custom.GeneralTablePanel;
 import presentation.common.custom.LabelTextFieldPanel;
+import presentation.common.custom.ScrollableTextArea;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -26,6 +27,7 @@ public class FileAnalysisScreen extends JPanel {
     private JButton filterButton;
     private JButton clearButton;
     private JButton exportButton;
+    private ScrollableTextArea messageDetailsTextArea;
 
     public FileAnalysisScreen() {
         this.setLayout(new BorderLayout(H_GAP, V_GAP));
@@ -33,13 +35,21 @@ public class FileAnalysisScreen extends JPanel {
     }
 
     private void createComponents() {
-        JPanel filterPanel = createFilterPanel();
-        this.add(filterPanel, BorderLayout.NORTH);
+        this.add(createNorthPanel(), BorderLayout.NORTH);
         fileContentsTable = new GeneralTablePanel(
                 new String[]{GuiConstants.DATE_COLUMN, GuiConstants.TIME_COLUMN,
                         GuiConstants.ORIGIN_COLUMN, GuiConstants.LEVEL_COLUMN, GuiConstants.MESSAGE_COLUMN}, false
         );
         this.add(fileContentsTable, BorderLayout.CENTER);
+    }
+
+    private JPanel createNorthPanel() {
+        JPanel holder = new JPanel(new BorderLayout());
+        JPanel filterPanel = createFilterPanel();
+        messageDetailsTextArea = new ScrollableTextArea();
+        holder.add(filterPanel, BorderLayout.NORTH);
+        holder.add(messageDetailsTextArea, BorderLayout.CENTER);
+        return holder;
     }
 
     private JPanel createFilterPanel() {
@@ -118,5 +128,9 @@ public class FileAnalysisScreen extends JPanel {
 
     public JButton getExportButton() {
         return exportButton;
+    }
+
+    public ScrollableTextArea getMessageDetailsTextArea() {
+        return messageDetailsTextArea;
     }
 }

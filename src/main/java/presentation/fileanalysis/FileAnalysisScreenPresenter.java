@@ -10,6 +10,7 @@ import presentation.common.IViewPresenter;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.ListSelectionModel;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -20,6 +21,7 @@ public class FileAnalysisScreenPresenter implements IViewPresenter {
     private final MetricsProfileDo metricsProfile;
     private final FileAnalysisScreen view;
     private final FileAnalysisService fileAnalysisService;
+    private LogLine[] data;
 
     public FileAnalysisScreenPresenter(File selectedFile, ParsingProfileDo parsingProfile,
                                        MetricsProfileDo metricsProfile,
@@ -39,13 +41,12 @@ public class FileAnalysisScreenPresenter implements IViewPresenter {
 
     @Override
     public void execute() {
-        LogLine[] data = fileAnalysisService.getData();
+        data = fileAnalysisService.getData();
         view.getFileContentsTable().setData(convertDataForTable(data));
+        addMessageCellSelectionEvent();
     }
 
     private Object[][] convertDataForTable(LogLine[] data) {
-
-
         Object[][] objects = new Object[data.length][];
         for (int i = 0; i <data.length; i++) {
             objects[i] = new Object[] {
@@ -87,5 +88,16 @@ public class FileAnalysisScreenPresenter implements IViewPresenter {
                 JOptionPane.INFORMATION_MESSAGE);
     }
 
-
+    private void addMessageCellSelectionEvent() {
+        view.getFileContentsTable().setLineSelectionOnly();
+        view.getFileContentsTable().addRowSelectionEvent( (event) -> {
+            ListSelectionModel listSelectionModel = (ListSelectionModel) event.getSource();
+            if(listSelectionModel.isSelectionEmpty()) {
+                view.getMessageDetailsTextArea().clearTextAreaText();
+            } else {
+                int selectedIndex = listSelectionModel.getSelectedIndices()[0];
+                view.getMessageDetailsTextArea().setTextAreaText(data[selectedIndex].getMessage());
+            }
+        });
+    }
 }

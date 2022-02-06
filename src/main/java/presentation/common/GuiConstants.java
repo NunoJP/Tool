@@ -19,6 +19,8 @@ public class GuiConstants {
     public static final int METHOD_FIELD_SIZE = 100/10;
     public static final int LEVEL_FIELD_SIZE = 10;
     public static final int MESSAGE_FIELD_SIZE = 255/10;
+    public static final int MESSAGE_DETAILS_TEXT_AREA_ROWS = 100;
+    public static final int MESSAGE_DETAILS_TEXT_AREA_COLS = 6;
 
 
     // Formatters
