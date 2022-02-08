@@ -13,7 +13,7 @@ public class MetricsProfileReadWriteConstants {
     public static final String MOST_COMMON_WORDS_TOKEN = "MOST-COMMON-WORDS-TOKEN";
     public static final String FILE_SIZE_TOKEN = "FILE-SIZE-TOKEN";
     public static final String KEYWORD_HISTOGRAM_TOKEN = "KEYWORD-HISTOGRAM-TOKEN";
-    public static final String KEYWORD_OVER_TIME_TOKEN = "KEYWORD-OVER_TIME-TOKEN";
+    public static final String KEYWORD_OVER_TIME_TOKEN = "KEYWORD-OVER-TIME-TOKEN";
     public static final String KEYWORD_THRESHOLD_TOKEN = "KEYWORD-THRESHOLD-TOKEN";
 
 

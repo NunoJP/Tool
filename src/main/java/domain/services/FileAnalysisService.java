@@ -36,8 +36,6 @@ public class FileAnalysisService {
         hasLoadedData = true;
         data = logFileReader.read(logMessageConsumer);
         return data;
-//        LogLine line = new LogLine(initDate, "Error", "Origin", "MEsages as dasdasd asd asd");
-//        return new LogLine[] { line };
     }
 
     public void setLogMessageConsumer(Consumer<String> logMessageConsumer) {
