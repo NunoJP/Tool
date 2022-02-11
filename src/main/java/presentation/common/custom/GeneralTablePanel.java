@@ -1,6 +1,7 @@
 package presentation.common.custom;
 
 import general.util.Pair;
+import presentation.common.GuiConstants;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -11,7 +12,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -84,6 +87,38 @@ public class GeneralTablePanel extends JPanel {
             column.setMinWidth(columnSizes[i]);
         }
         table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+    }
+
+    public void resizeToMatchContents() {
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+        final TableColumnModel columnModel = table.getColumnModel();
+        for (int col = 0; col < table.getColumnCount(); col++) {
+            int width = GuiConstants.MIN_COLUMN_WIDTH;
+
+            // for each row calculate the width necessary for the contents, if it is larger that the largest one
+            // replace the current largest one.
+            for (int row = 0; row < table.getRowCount(); row++) {
+                TableCellRenderer cellRenderer = table.getCellRenderer(row, col);
+                Component comp = table.prepareRenderer(cellRenderer, row, col);
+                width = Math.max(comp.getPreferredSize().width + 1, width);
+            }
+
+            // check if the header is larger that the smallest of the column's contents
+            width = Math.max(width, table.getColumnModel().getColumn(col).getPreferredWidth());
+
+            // if the width is too large, cap it at a max value
+            if(width > GuiConstants.MAX_COLUMN_WIDTH) {
+                width = GuiConstants.MAX_COLUMN_WIDTH;
+            }
+            columnModel.getColumn(col).setPreferredWidth(width);
+            columnModel.getColumn(col).setMinWidth(width);
+            if(col != table.getColumnCount() - 1) {
+                columnModel.getColumn(col).setMaxWidth(width);
+            }
+
+        }
+
+
     }
 
     public void setStringColorRenderMap(HashMap<String, Pair<Color,Color>> colorRenderMap){

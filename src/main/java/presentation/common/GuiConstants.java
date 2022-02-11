@@ -21,7 +21,9 @@ public class GuiConstants {
     public static final int MESSAGE_FIELD_SIZE = 255/10;
     public static final int MESSAGE_DETAILS_TEXT_AREA_ROWS = 100;
     public static final int MESSAGE_DETAILS_TEXT_AREA_COLS = 6;
-
+    public static final int MIN_COLUMN_WIDTH = 20;
+    public static final int MAX_COLUMN_WIDTH = 400;
+    public static final int MIN_TEXT_AREA_HEIGHT = 20;
 
     // Formatters
     public static final String DATE_TIME_FORMATTER = "yyyy-MM-dd HH:mm:ss.SSS";
@@ -132,5 +134,6 @@ public class GuiConstants {
 
 
     public static final String NO_NAME_PROVIDED = "No name provided";
+
 
 }

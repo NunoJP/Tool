@@ -1,5 +1,6 @@
 package presentation.fileanalysis;
 
+import domain.entities.displayobjects.FileAnalysisFilterDo;
 import domain.entities.displayobjects.MetricsProfileDo;
 import domain.entities.displayobjects.ParsingProfileDo;
 import domain.entities.domainobjects.LogLine;
@@ -14,6 +15,7 @@ import javax.swing.ListSelectionModel;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class FileAnalysisScreenPresenter implements IViewPresenter {
     private final File selectedFile;
@@ -22,6 +24,11 @@ public class FileAnalysisScreenPresenter implements IViewPresenter {
     private final FileAnalysisScreen view;
     private final FileAnalysisService fileAnalysisService;
     private LogLine[] data;
+    private Date fileStartDate;
+    private Date fileStartTime;
+    private Date fileEndDate;
+    private Date fileEndTime;
+    private LogLine[] filteredData;
 
     public FileAnalysisScreenPresenter(File selectedFile, ParsingProfileDo parsingProfile,
                                        MetricsProfileDo metricsProfile,
@@ -32,6 +39,7 @@ public class FileAnalysisScreenPresenter implements IViewPresenter {
         this.selectedFile = selectedFile;
         this.parsingProfile = parsingProfile;
         this.metricsProfile = metricsProfile;
+        defineViewBehavior();
     }
 
     @Override
@@ -42,8 +50,72 @@ public class FileAnalysisScreenPresenter implements IViewPresenter {
     @Override
     public void execute() {
         data = fileAnalysisService.getData();
-        view.getFileContentsTable().setData(convertDataForTable(data));
+        updateFileContentsTableData(data);
+        calculateFirstAndLastDateTime();
+        setDefaultDateTimeFilters();
+    }
+
+
+    private void defineViewBehavior() {
         addMessageCellSelectionEvent();
+
+        view.getSearchButton().addActionListener(actionEvent ->  {
+            FileAnalysisFilterDo filterDo = new FileAnalysisFilterDo();
+            filterDo.setLevel(view.getLevel().getVariableLabelText());
+            filterDo.setOrigin(view.getOrigin().getVariableLabelText());
+            filterDo.setMessage(view.getMessage().getVariableLabelText());
+            filterDo.setStartDate(view.getFromDateComponent().getDate());
+            filterDo.setStartTime(view.getFromDateComponent().getTime());
+            filterDo.setEndDate(view.getToDateComponent().getDate());
+            filterDo.setEndTime(view.getToDateComponent().getTime());
+            filteredData = fileAnalysisService.getFilteredData(filterDo);
+            updateFileContentsTableData(filteredData);
+        });
+
+        view.getClearButton().addActionListener(actionEvent ->  {
+            view.getLevel().setVariableLabelText("");
+            view.getOrigin().setVariableLabelText("");
+            view.getMessage().setVariableLabelText("");
+            setDefaultDateTimeFilters();
+            updateFileContentsTableData(data);
+            calculateFirstAndLastDateTime();
+        });
+
+        view.getFilterButton().addActionListener(actionEvent ->  {
+
+        });
+
+        view.getExportButton().addActionListener(actionEvent ->  {
+
+        });
+    }
+
+    private void setDefaultDateTimeFilters() {
+        if(fileStartDate != null) {
+            view.getFromDateComponent().setDate(fileStartDate);
+        }
+        if(fileStartTime != null) {
+            view.getFromDateComponent().setTime(fileStartTime);
+        }
+        if(fileEndDate != null) {
+            view.getToDateComponent().setDate(fileEndDate);
+        }
+        if(fileEndTime != null) {
+            view.getToDateComponent().setTime(fileEndTime);
+        }
+    }
+
+    private void calculateFirstAndLastDateTime() {
+        fileStartDate = data[0].getDate();
+        fileStartTime = data[0].getTime();
+        fileEndDate = data[data.length-1].getDate();
+        fileEndTime = data[data.length-1].getTime();
+    }
+
+
+    private void updateFileContentsTableData(LogLine[] data) {
+        view.getFileContentsTable().setData(convertDataForTable(data));
+        view.resizeTableToFitContents();
     }
 
     private Object[][] convertDataForTable(LogLine[] data) {

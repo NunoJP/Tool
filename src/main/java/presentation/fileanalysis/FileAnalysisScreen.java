@@ -8,6 +8,7 @@ import presentation.common.custom.ScrollableTextArea;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -36,21 +37,27 @@ public class FileAnalysisScreen extends JPanel {
 
     private void createComponents() {
         this.add(createNorthPanel(), BorderLayout.NORTH);
+        this.add(createCenterPanel(), BorderLayout.CENTER);
+    }
+
+    private JPanel createNorthPanel() {
+        return createFilterPanel();
+    }
+
+    private JPanel createCenterPanel() {
+        JPanel holder = new JPanel(new BorderLayout());
+        messageDetailsTextArea = new ScrollableTextArea();
         fileContentsTable = new GeneralTablePanel(
                 new String[]{GuiConstants.DATE_COLUMN, GuiConstants.TIME_COLUMN,
                         GuiConstants.ORIGIN_COLUMN, GuiConstants.LEVEL_COLUMN, GuiConstants.MESSAGE_COLUMN}, false
         );
-        this.add(fileContentsTable, BorderLayout.CENTER);
-    }
+        resizeTableToFitContents();
 
-    private JPanel createNorthPanel() {
-        JPanel holder = new JPanel(new BorderLayout());
-        JPanel filterPanel = createFilterPanel();
-        messageDetailsTextArea = new ScrollableTextArea();
-        holder.add(filterPanel, BorderLayout.NORTH);
-        holder.add(messageDetailsTextArea, BorderLayout.CENTER);
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, messageDetailsTextArea, fileContentsTable);
+        holder.add(splitPane, BorderLayout.NORTH);
         return holder;
     }
+
 
     private JPanel createFilterPanel() {
         JPanel filterPanel = new JPanel(new GridLayout(3, 1, H_GAP, 0));
@@ -88,6 +95,11 @@ public class FileAnalysisScreen extends JPanel {
         filterPanel.add(secondRow);
         filterPanel.add(thirdRow);
         return filterPanel;
+    }
+
+
+    public void resizeTableToFitContents() {
+        fileContentsTable.resizeToMatchContents();
     }
 
     public GeneralTablePanel getFileContentsTable() {

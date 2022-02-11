@@ -41,4 +41,22 @@ public class DateComponent extends JPanel {
         time.setEditor(new JSpinner.DateEditor(time, GuiConstants.TIME_FORMATTER));
         this.add(time);
     }
+
+    public Date getDate() {
+        return (Date) date.getValue();
+    }
+
+    public Date getTime() {
+        return (Date) time.getValue();
+    }
+
+    public void setDate(Date newDate) {
+        SpinnerDateModel dateModel = new SpinnerDateModel(newDate, null, null, Calendar.DAY_OF_MONTH);
+        date.setValue(newDate);
+    }
+
+    public void setTime(Date newTime) {
+        SpinnerDateModel timeModel = new SpinnerDateModel(newTime, null, null, Calendar.MILLISECOND);
+        time.setValue(newTime);
+    }
 }

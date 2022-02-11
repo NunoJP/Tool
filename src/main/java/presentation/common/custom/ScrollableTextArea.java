@@ -12,6 +12,7 @@ public class ScrollableTextArea extends JPanel {
     private final JTextArea textArea;
 
     public ScrollableTextArea() {
+        this.setLayout(new BorderLayout());
         this.textArea = new JTextArea();
         textArea.setColumns(GuiConstants.MESSAGE_DETAILS_TEXT_AREA_ROWS);
         textArea.setRows(GuiConstants.MESSAGE_DETAILS_TEXT_AREA_COLS);
