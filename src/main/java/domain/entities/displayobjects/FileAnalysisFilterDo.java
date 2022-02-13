@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class FileAnalysisFilterDo {
 
+    private String identifier;
     private String origin;
     private String level;
     private String message;
@@ -11,6 +12,14 @@ public class FileAnalysisFilterDo {
     private Date startTime;
     private Date endDate;
     private Date endTime;
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
 
     public String getOrigin() {
         return origin;

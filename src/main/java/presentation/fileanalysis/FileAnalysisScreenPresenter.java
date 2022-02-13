@@ -60,16 +60,7 @@ public class FileAnalysisScreenPresenter implements IViewPresenter {
         addMessageCellSelectionEvent();
 
         view.getSearchButton().addActionListener(actionEvent ->  {
-            FileAnalysisFilterDo filterDo = new FileAnalysisFilterDo();
-            filterDo.setLevel(view.getLevel().getVariableLabelText());
-            filterDo.setOrigin(view.getOrigin().getVariableLabelText());
-            filterDo.setMessage(view.getMessage().getVariableLabelText());
-            filterDo.setStartDate(view.getFromDateComponent().getDate());
-            filterDo.setStartTime(view.getFromDateComponent().getTime());
-            filterDo.setEndDate(view.getToDateComponent().getDate());
-            filterDo.setEndTime(view.getToDateComponent().getTime());
-            filteredData = fileAnalysisService.getFilteredData(filterDo);
-            updateFileContentsTableData(filteredData);
+
         });
 
         view.getClearButton().addActionListener(actionEvent ->  {
@@ -82,7 +73,17 @@ public class FileAnalysisScreenPresenter implements IViewPresenter {
         });
 
         view.getFilterButton().addActionListener(actionEvent ->  {
-
+            FileAnalysisFilterDo filterDo = new FileAnalysisFilterDo();
+            filterDo.setLevel(view.getLevel().getVariableLabelText());
+            filterDo.setIdentifier(view.getIdentifier().getVariableLabelText());
+            filterDo.setOrigin(view.getOrigin().getVariableLabelText());
+            filterDo.setMessage(view.getMessage().getVariableLabelText());
+            filterDo.setStartDate(view.getFromDateComponent().getDate());
+            filterDo.setStartTime(view.getFromDateComponent().getTime());
+            filterDo.setEndDate(view.getToDateComponent().getDate());
+            filterDo.setEndTime(view.getToDateComponent().getTime());
+            filteredData = fileAnalysisService.getFilteredData(filterDo);
+            updateFileContentsTableData(filteredData);
         });
 
         view.getExportButton().addActionListener(actionEvent ->  {
@@ -122,8 +123,8 @@ public class FileAnalysisScreenPresenter implements IViewPresenter {
         Object[][] objects = new Object[data.length][];
         for (int i = 0; i <data.length; i++) {
             objects[i] = new Object[] {
-                    getDate(data[i]), getTime(data[i]), data[i].getOrigin(),
-                    data[i].getLevel(), data[i].getMessage()
+                    getDate(data[i]), getTime(data[i]), data[i].getIdentifier(),
+                    data[i].getOrigin(), data[i].getLevel(), data[i].getMessage()
             };
         }
         return objects;

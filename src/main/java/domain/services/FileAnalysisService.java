@@ -12,10 +12,10 @@ import java.util.Date;
 import java.util.function.Consumer;
 
 public class FileAnalysisService {
-    private final File selectedFile;
-    private final ParsingProfile parsingProfile;
-    private final MetricsProfile metricsProfile;
-    private final LogFileReader logFileReader;
+    protected final File selectedFile;
+    protected final ParsingProfile parsingProfile;
+    protected final MetricsProfile metricsProfile;
+    protected LogFileReader logFileReader;
     private boolean hasLoadedData;
     private LogLine[] data;
     private Consumer<String> logMessageConsumer = s -> {};
@@ -39,6 +39,9 @@ public class FileAnalysisService {
 
     public LogLine[] getFilteredData(FileAnalysisFilterDo filterDo) {
         ArrayList<LogLine> filteredLines = new ArrayList<>();
+        if(!hasLoadedData) {
+            data = getData();
+        }
         for (LogLine logLine : data) {
             if (lineMatchesFilter(logLine, filterDo)) {
                 filteredLines.add(logLine);
@@ -51,7 +54,10 @@ public class FileAnalysisService {
         this.logMessageConsumer = logMessageConsumer;
     }
 
-    private boolean lineMatchesFilter(LogLine line, FileAnalysisFilterDo filterDo) {
+    protected boolean lineMatchesFilter(LogLine line, FileAnalysisFilterDo filterDo) {
+        if(!checkStringMatches(filterDo.getIdentifier(), line.getIdentifier())) {
+            return false;
+        }
         if(!checkStringMatches(filterDo.getLevel(), line.getLevel())) {
             return false;
         }
@@ -76,21 +82,21 @@ public class FileAnalysisService {
         return true;
     }
 
-    private boolean checkStringMatches(String filter, String value) {
+    protected boolean checkStringMatches(String filter, String value) {
         if(filter != null && !filter.isEmpty() && value != null && !value.isEmpty()) {
             return value.contains(filter);
         }
         return true;
     }
 
-    private boolean checkDateTimeIsBefore(Date filter, Date value) {
+    protected boolean checkDateTimeIsBefore(Date filter, Date value) {
         if(filter != null && value != null) {
             return filter.toInstant().isBefore(value.toInstant()) || filter.toInstant().equals(value.toInstant());
         }
         return true;
     }
 
-    private boolean checkDateTimeIsAfter(Date filter, Date value) {
+    protected boolean checkDateTimeIsAfter(Date filter, Date value) {
         if(filter != null && value != null) {
             return filter.toInstant().isAfter(value.toInstant()) || filter.toInstant().equals(value.toInstant());
         }

@@ -114,6 +114,7 @@ public class GuiConstants {
     public static final String DESCRIPTION_LABEL = "Description";
     public static final String WORD_LABEL = "Word";
     public static final String SIZE_LABEL = "Size";
+    public static final String IDENTIFIER_LABEL = "Id:";
 
     // Columns
     public static final String LEVEL_COLUMN = "Level";
@@ -131,9 +132,8 @@ public class GuiConstants {
     public static final String NAME_COLUMN = "Name";
     public static final String CASE_SENSITIVE_COLUMN = "Case sensitive";
     public static final String THRESHOLD_COLUMN = "Threshold";
-
+    public static final String IDENTIFIER_COLUMN = "Id";
 
     public static final String NO_NAME_PROVIDED = "No name provided";
-
 
 }

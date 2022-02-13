@@ -19,6 +19,7 @@ import static presentation.common.GuiConstants.V_GAP;
 public class FileAnalysisScreen extends JPanel {
 
     private GeneralTablePanel fileContentsTable;
+    private LabelTextFieldPanel identifier;
     private LabelTextFieldPanel origin;
     private LabelTextFieldPanel level;
     private DateComponent fromDateComponent;
@@ -48,7 +49,7 @@ public class FileAnalysisScreen extends JPanel {
         JPanel holder = new JPanel(new BorderLayout());
         messageDetailsTextArea = new ScrollableTextArea();
         fileContentsTable = new GeneralTablePanel(
-                new String[]{GuiConstants.DATE_COLUMN, GuiConstants.TIME_COLUMN,
+                new String[]{GuiConstants.DATE_COLUMN, GuiConstants.TIME_COLUMN, GuiConstants.IDENTIFIER_COLUMN,
                         GuiConstants.ORIGIN_COLUMN, GuiConstants.LEVEL_COLUMN, GuiConstants.MESSAGE_COLUMN}, false
         );
         resizeTableToFitContents();
@@ -64,9 +65,11 @@ public class FileAnalysisScreen extends JPanel {
         // From Date/Time, Origin, Level
         JPanel firstRow = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, 0));
         fromDateComponent = new DateComponent(GuiConstants.FROM_LABEL);
+        identifier = new LabelTextFieldPanel(GuiConstants.IDENTIFIER_LABEL, GuiConstants.METHOD_FIELD_SIZE);
         origin = new LabelTextFieldPanel(GuiConstants.ORIGIN_LABEL, GuiConstants.METHOD_FIELD_SIZE);
         level = new LabelTextFieldPanel(GuiConstants.LEVEL_LABEL, GuiConstants.LEVEL_FIELD_SIZE);
         firstRow.add(fromDateComponent);
+        firstRow.add(identifier);
         firstRow.add(origin);
         firstRow.add(level);
 
@@ -104,6 +107,10 @@ public class FileAnalysisScreen extends JPanel {
 
     public GeneralTablePanel getFileContentsTable() {
         return fileContentsTable;
+    }
+
+    public LabelTextFieldPanel getIdentifier() {
+        return identifier;
     }
 
     public LabelTextFieldPanel getOrigin() {
