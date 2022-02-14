@@ -1,6 +1,7 @@
 package domain.services;
 
 import data.dataaccess.reader.LogFileReader;
+import data.dataaccess.writer.LogFileWriter;
 import domain.entities.displayobjects.FileAnalysisFilterDo;
 import domain.entities.domainobjects.LogLine;
 import domain.entities.domainobjects.MetricsProfile;
@@ -103,4 +104,8 @@ public class FileAnalysisService {
         return true;
     }
 
+    public boolean exportData(LogLine[] data, File exportFile) {
+        LogFileWriter writer = new LogFileWriter();
+        return writer.write(data, exportFile);
+    }
 }

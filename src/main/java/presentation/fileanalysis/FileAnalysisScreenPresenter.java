@@ -9,13 +9,18 @@ import presentation.common.GuiConstants;
 import presentation.common.GuiMessages;
 import presentation.common.IViewPresenter;
 
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import java.io.File;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import static javax.swing.JFileChooser.APPROVE_OPTION;
+import static javax.swing.JFileChooser.FILES_ONLY;
 
 public class FileAnalysisScreenPresenter implements IViewPresenter {
     private final File selectedFile;
@@ -87,7 +92,23 @@ public class FileAnalysisScreenPresenter implements IViewPresenter {
         });
 
         view.getExportButton().addActionListener(actionEvent ->  {
+            final JFileChooser fc = new JFileChooser();
+            // set Fc to open for the current directory
+            fc.setCurrentDirectory(Paths.get("").toAbsolutePath().toFile());
+            // allow for file or directory selection
+            fc.setFileSelectionMode(FILES_ONLY);
 
+            int returnVal = fc.showOpenDialog(view);
+            if (APPROVE_OPTION == returnVal) {
+                File exportFile = fc.getSelectedFile();
+                if (!selectedFile.isDirectory()) {
+                    if(filteredData == null || filteredData.length == 0) {
+                        exportMessagePopup(fileAnalysisService.exportData(data, exportFile));
+                    } else {
+                        exportMessagePopup(fileAnalysisService.exportData(filteredData, exportFile));
+                    }
+                }
+            }
         });
     }
 
@@ -159,6 +180,14 @@ public class FileAnalysisScreenPresenter implements IViewPresenter {
                 message,
                 GuiMessages.MESSAGE_TITLE,
                 JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void exportMessagePopup(boolean success) {
+        if (success) {
+            JOptionPane.showMessageDialog(view, GuiMessages.EXPORT_SUCCESSFUL, GuiMessages.MESSAGE_TITLE, JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(view, GuiMessages.EXPORT_FAILED, GuiMessages.MESSAGE_TITLE, JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void addMessageCellSelectionEvent() {
