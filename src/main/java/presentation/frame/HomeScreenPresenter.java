@@ -27,9 +27,9 @@ public class HomeScreenPresenter implements IPresenter {
         view.getBasePanel().addTab(GuiConstants.ANALYSIS_TAB, fileAnalysisSetupScreenPresenter.getView());
         monitoringSetupScreenPresenter = new MonitoringSetupScreenPresenter();
         view.getBasePanel().addTab(GuiConstants.MONITORING_TAB, monitoringSetupScreenPresenter.getView());
-        parsingProfileManagementScreenPresenter = new ParsingProfileManagementScreenPresenter();
+        parsingProfileManagementScreenPresenter = new ParsingProfileManagementScreenPresenter(this::applyCrossScreenChanges);
         view.getBasePanel().addTab(GuiConstants.PARSING_PROFILES_TAB, parsingProfileManagementScreenPresenter.getView());
-        metricsProfileManagementScreenPresenter = new MetricsProfileManagementScreenPresenter();
+        metricsProfileManagementScreenPresenter = new MetricsProfileManagementScreenPresenter(this::applyCrossScreenChanges);
         view.getBasePanel().addTab(GuiConstants.METRICS_PROFILES_TAB, metricsProfileManagementScreenPresenter.getView());
         organizationScreenPresenter = new OrganizationScreenPresenter();
         view.getBasePanel().addTab(GuiConstants.ORGANIZATION_TAB, organizationScreenPresenter.getView());
@@ -44,5 +44,9 @@ public class HomeScreenPresenter implements IPresenter {
         parsingProfileManagementScreenPresenter.execute();
         metricsProfileManagementScreenPresenter.execute();
         organizationScreenPresenter.execute();
+    }
+
+    private void applyCrossScreenChanges() {
+        fileAnalysisSetupScreenPresenter.refreshComboBoxes();
     }
 }

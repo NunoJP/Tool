@@ -18,8 +18,10 @@ public class MetricsProfileManagementScreenPresenter implements IViewPresenter {
     private final MetricsProfileManagementService service;
     private int selectedItem = -1;
     private MetricsProfileDo[] metricsProfiles;
+    private final Runnable parentNotification;
 
-    public MetricsProfileManagementScreenPresenter() {
+    public MetricsProfileManagementScreenPresenter(Runnable parentNotification) {
+        this.parentNotification = parentNotification;
         view = new MetricsProfileManagementScreen();
         service = new MetricsProfileManagementService();
         defineViewBehavior();
@@ -95,7 +97,7 @@ public class MetricsProfileManagementScreenPresenter implements IViewPresenter {
 
     @Override
     public void execute() {
-        updateViewTable();
+        fillTableData();
     }
 
     private Object[][] convertDataForTable(MetricsProfileDo[] data) {
@@ -106,9 +108,17 @@ public class MetricsProfileManagementScreenPresenter implements IViewPresenter {
         return objects;
     }
 
-    public void updateViewTable() {
+    private void fillTableData() {
         metricsProfiles = service.getMetricsProfiles();
         view.getMetricProfilesPanel().setData(convertDataForTable(metricsProfiles));
+    }
+
+
+    public void updateViewTable() {
+        fillTableData();
+
+        // notify the parent that there have been changes to the data model
+        parentNotification.run();
     }
 
     public void dialogWindowClosed() {

@@ -36,15 +36,7 @@ public class FileAnalysisSetupScreenPresenter implements IViewPresenter {
     }
 
     private void defineViewBehavior() {
-        view.getParsingProfileDropdown().setRenderer(new CellRenderer());
-        parsingProfiles = parsingService.getParsingProfiles();
-        DefaultComboBoxModel<ParsingProfileDo> parsingProfileModel = new DefaultComboBoxModel<>(parsingProfiles);
-        view.getParsingProfileDropdown().setModel(parsingProfileModel);
-
-        view.getMetricsProfileDropdown().setRenderer(new CellRenderer());
-        metricsProfiles = metricsService.getMetricsProfiles();
-        DefaultComboBoxModel<MetricsProfileDo> metricsProfileModel = new DefaultComboBoxModel<>(metricsProfiles);
-        view.getMetricsProfileDropdown().setModel(metricsProfileModel);
+        refreshComboBoxes();
 
         view.getChooseFileButton().addActionListener(actionEvent -> {
             final JFileChooser fc = new JFileChooser();
@@ -87,5 +79,17 @@ public class FileAnalysisSetupScreenPresenter implements IViewPresenter {
     @Override
     public JPanel getView() {
         return view;
+    }
+
+    public void refreshComboBoxes() {
+        view.getParsingProfileDropdown().setRenderer(new CellRenderer());
+        parsingProfiles = parsingService.getParsingProfiles();
+        DefaultComboBoxModel<ParsingProfileDo> parsingProfileModel = new DefaultComboBoxModel<>(parsingProfiles);
+        view.getParsingProfileDropdown().setModel(parsingProfileModel);
+
+        view.getMetricsProfileDropdown().setRenderer(new CellRenderer());
+        metricsProfiles = metricsService.getMetricsProfiles();
+        DefaultComboBoxModel<MetricsProfileDo> metricsProfileModel = new DefaultComboBoxModel<>(metricsProfiles);
+        view.getMetricsProfileDropdown().setModel(metricsProfileModel);
     }
 }

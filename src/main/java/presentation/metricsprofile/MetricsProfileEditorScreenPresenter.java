@@ -41,21 +41,23 @@ public class MetricsProfileEditorScreenPresenter {
     }
 
     private void populateViewWithExistingProfile() {
-        dialogView.getMcwButton().setSelected(existingProfile.isHasMostCommonWords());
-        dialogView.getFileSizeButton().setSelected(existingProfile.isHasFileSize());
-        dialogView.getKwdHistButton().setSelected(existingProfile.isHasKeywordHistogram());
-        dialogView.getKwdOverTimeButton().setSelected(existingProfile.isHasKeywordOverTime());
-        dialogView.getKwdThresholdButton().setSelected(existingProfile.isHasKeywordThreshold());
-        dialogView.getCaseSensitiveButton().setSelected(false);
-        dialogView.getUpdateKwdButton().setEnabled(false);
-        dialogView.getDeleteKwdButton().setEnabled(false);
-        dialogView.getThresholdComboBox().setSelectedIndex(0);
-        dialogView.getThresholdUnitComboBox().setSelectedIndex(0);
-        dialogView.getThresholdValueInput().setValue(0);
-        dialogView.getNamePanel().setVariableLabelText(existingProfile.getName());
-        dialogView.getKeywordPanel().setVariableLabelText("");
-        keywords = existingProfile.getKeywords();
-        dialogView.getKeywordTable().setData(convertDataForTable(keywords));
+        if(existingProfile != null) {
+            dialogView.getMcwButton().setSelected(existingProfile.isHasMostCommonWords());
+            dialogView.getFileSizeButton().setSelected(existingProfile.isHasFileSize());
+            dialogView.getKwdHistButton().setSelected(existingProfile.isHasKeywordHistogram());
+            dialogView.getKwdOverTimeButton().setSelected(existingProfile.isHasKeywordOverTime());
+            dialogView.getKwdThresholdButton().setSelected(existingProfile.isHasKeywordThreshold());
+            dialogView.getCaseSensitiveButton().setSelected(false);
+            dialogView.getUpdateKwdButton().setEnabled(false);
+            dialogView.getDeleteKwdButton().setEnabled(false);
+            dialogView.getThresholdComboBox().setSelectedIndex(0);
+            dialogView.getThresholdUnitComboBox().setSelectedIndex(0);
+            dialogView.getThresholdValueInput().setValue(0);
+            dialogView.getNamePanel().setVariableLabelText(existingProfile.getName());
+            dialogView.getKeywordPanel().setVariableLabelText("");
+            keywords = existingProfile.getKeywords();
+            dialogView.getKeywordTable().setData(convertDataForTable(keywords));
+        }
     }
 
 

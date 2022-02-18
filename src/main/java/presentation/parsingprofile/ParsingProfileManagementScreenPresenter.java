@@ -17,8 +17,10 @@ public class ParsingProfileManagementScreenPresenter implements IViewPresenter {
     private final ParsingProfileManagementService service;
     private int selectedItem = -1;
     private ParsingProfileDo[] parsingProfiles;
+    private final Runnable parentNotification;
 
-    public ParsingProfileManagementScreenPresenter() {
+    public ParsingProfileManagementScreenPresenter(Runnable parentNotification) {
+        this.parentNotification = parentNotification;
         view = new ParsingProfileManagementScreen();
         service = new ParsingProfileManagementService();
         defineViewBehavior();
@@ -79,7 +81,7 @@ public class ParsingProfileManagementScreenPresenter implements IViewPresenter {
 
     @Override
     public void execute() {
-        updateViewTable();
+        fillTableData();
     }
 
     @Override
@@ -105,6 +107,13 @@ public class ParsingProfileManagementScreenPresenter implements IViewPresenter {
     }
 
     public void updateViewTable() {
+        fillTableData();
+
+        // notify the parent that there have been changes to the data model
+        parentNotification.run();
+    }
+
+    private void fillTableData() {
         parsingProfiles = service.getParsingProfiles();
         view.getParsingProfilesPanel().setData(convertDataForTable(parsingProfiles));
     }
