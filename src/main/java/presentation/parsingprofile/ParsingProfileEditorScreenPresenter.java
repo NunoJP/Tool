@@ -124,6 +124,7 @@ public class ParsingProfileEditorScreenPresenter implements IViewPresenter {
                         boolean updateSuccess = service.updateProfile(parsingProfileDo);
                         if(updateSuccess) {
                             showMessageDialog(GuiMessages.UPDATE_SUCCESSFUL, GuiMessages.SUCCESS_TITLE, JOptionPane.INFORMATION_MESSAGE);
+                            callerPresenter.updateViewTable();
                         } else {
                             showMessageDialog(GuiMessages.UPDATE_FAILED, GuiMessages.FAILURE_TITLE, JOptionPane.INFORMATION_MESSAGE);
                         }

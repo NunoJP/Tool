@@ -111,6 +111,7 @@ public class MetricsProfileEditorScreenPresenter {
                         boolean updateSuccess = service.updateProfile(metricsProfile);
                         if(updateSuccess) {
                             showMessageDialog(GuiMessages.UPDATE_SUCCESSFUL, GuiMessages.SUCCESS_TITLE, JOptionPane.INFORMATION_MESSAGE);
+                            callerPresenter.updateViewTable();
                         } else {
                             showMessageDialog(GuiMessages.UPDATE_FAILED, GuiMessages.FAILURE_TITLE, JOptionPane.INFORMATION_MESSAGE);
                         }
