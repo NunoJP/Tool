@@ -1,5 +1,6 @@
 package presentation.fileanalysis;
 
+import domain.entities.Converter;
 import domain.entities.displayobjects.FileAnalysisFilterDo;
 import domain.entities.displayobjects.MetricsProfileDo;
 import domain.entities.displayobjects.ParsingProfileDo;
@@ -103,9 +104,9 @@ public class FileAnalysisScreenPresenter implements IViewPresenter {
                 File exportFile = fc.getSelectedFile();
                 if (!selectedFile.isDirectory()) {
                     if(filteredData == null || filteredData.length == 0) {
-                        exportMessagePopup(fileAnalysisService.exportData(data, exportFile));
+                        exportMessagePopup(fileAnalysisService.exportData(data, exportFile, Converter.toDomainObject(parsingProfile)));
                     } else {
-                        exportMessagePopup(fileAnalysisService.exportData(filteredData, exportFile));
+                        exportMessagePopup(fileAnalysisService.exportData(filteredData, exportFile, Converter.toDomainObject(parsingProfile)));
                     }
                 }
             }

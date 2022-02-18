@@ -17,9 +17,9 @@ import static org.junit.Assert.assertNull;
 
 public class LogFileReaderConsumerTests {
     public static final String VALUE = "Value";
-    private DateFormat dateFormat = new SimpleDateFormat(GuiConstants.DATE_FORMATTER);
-    private DateFormat timeFormat = new SimpleDateFormat(GuiConstants.TIME_FORMATTER);
-    private DateFormat timeStampFormat = new SimpleDateFormat(GuiConstants.DATE_TIME_FORMATTER);
+    private final DateFormat dateFormat = new SimpleDateFormat(GuiConstants.DATE_FORMATTER);
+    private final DateFormat timeFormat = new SimpleDateFormat(GuiConstants.TIME_FORMATTER);
+    private final DateFormat timeStampFormat = new SimpleDateFormat(GuiConstants.DATE_TIME_FORMATTER);
 
     @Test
     public void simpleTestWithDateTime() {

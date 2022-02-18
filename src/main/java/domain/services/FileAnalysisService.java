@@ -104,8 +104,8 @@ public class FileAnalysisService {
         return true;
     }
 
-    public boolean exportData(LogLine[] data, File exportFile) {
+    public boolean exportData(LogLine[] data, File exportFile, ParsingProfile parsingProfile) {
         LogFileWriter writer = new LogFileWriter();
-        return writer.write(data, exportFile);
+        return writer.write(data, exportFile, parsingProfile);
     }
 }
