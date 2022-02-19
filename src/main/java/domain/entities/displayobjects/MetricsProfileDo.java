@@ -9,7 +9,6 @@ import static data.dataaccess.common.MetricsProfileReadWriteConstants.DEFAULT_ME
 public class MetricsProfileDo {
     private Integer id;
     private String name;
-    private String description;
     private boolean hasMostCommonWords;
     private boolean hasFileSize;
     private boolean hasKeywordHistogram;
@@ -31,7 +30,6 @@ public class MetricsProfileDo {
     public MetricsProfileDo(MetricsProfileDo existingProfile) {
         this.id = existingProfile.getId();
         this.name = existingProfile.getName();
-        this.description = existingProfile.getDescription();
         this.keywords = new ArrayList<>(existingProfile.getKeywords());
         this.hasMostCommonWords = existingProfile.isHasMostCommonWords();
         this.hasFileSize = existingProfile.isHasFileSize();
@@ -55,14 +53,6 @@ public class MetricsProfileDo {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public boolean isHasMostCommonWords() {
@@ -127,5 +117,30 @@ public class MetricsProfileDo {
 
     public void setOriginFile(String originFile) {
         this.originFile = originFile;
+    }
+
+    public String getGuiRepresentation() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("MCW < ").append(getBooleanRepresentation(hasMostCommonWords)).append(" >; ");
+        builder.append("FS < ").append(getBooleanRepresentation(hasFileSize)).append(" >; ");
+        builder.append("KwdH < ").append(getBooleanRepresentation(hasKeywordHistogram)).append(" >; ");
+        builder.append("KwdOt < ").append(getBooleanRepresentation(hasKeywordOverTime)).append(" >; ");
+        builder.append("KwdTh < ").append(getBooleanRepresentation(hasKeywordThreshold)).append(" >; ");
+
+        int maxNumbKwdToShow = 3;
+        int i = 0;
+        for (Keyword keyword : keywords) {
+            builder.append(keyword.getKeywordText()).append("; ");
+            if (i >= maxNumbKwdToShow) {
+                return builder.toString();
+            }
+            i++;
+        }
+
+        return builder.toString();
+    }
+
+    private char getBooleanRepresentation(boolean value) {
+        return value ? 'Y' : 'N';
     }
 }

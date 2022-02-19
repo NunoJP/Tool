@@ -103,7 +103,7 @@ public class MetricsProfileManagementScreenPresenter implements IViewPresenter {
     private Object[][] convertDataForTable(MetricsProfileDo[] data) {
         Object[][] objects = new Object[data.length][];
         for (int i = 0; i <data.length; i++) {
-            objects[i] = new Object[] { data[i].getName(), data[i].getDescription() };
+            objects[i] = new Object[] { data[i].getName(), data[i].getGuiRepresentation() };
         }
         return objects;
     }
