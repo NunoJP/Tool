@@ -28,6 +28,19 @@ public class MetricsProfileDo {
         this.keywords = new ArrayList<>();
     }
 
+    public MetricsProfileDo(MetricsProfileDo existingProfile) {
+        this.id = existingProfile.getId();
+        this.name = existingProfile.getName();
+        this.description = existingProfile.getDescription();
+        this.keywords = new ArrayList<>(existingProfile.getKeywords());
+        this.hasMostCommonWords = existingProfile.isHasMostCommonWords();
+        this.hasFileSize = existingProfile.isHasFileSize();
+        this.hasKeywordHistogram = existingProfile.isHasKeywordHistogram();
+        this.hasKeywordOverTime = existingProfile.isHasKeywordOverTime();
+        this.hasKeywordThreshold = existingProfile.isHasKeywordThreshold();
+        this.originFile = existingProfile.getOriginFile();
+    }
+
     public Integer getId() {
         return id;
     }

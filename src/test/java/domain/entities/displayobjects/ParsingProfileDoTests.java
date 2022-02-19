@@ -112,6 +112,37 @@ public class ParsingProfileDoTests {
     }
 
 
+    @Test
+    public void testCopyByConstructor() {
+        ParsingProfileDo setup = setup();
+        setup.setId(1);
+        setup.setName("name");
+        setup.setOriginFile("origin");
+
+        ParsingProfileDo copy = new ParsingProfileDo(setup);
+        // check copy of profileDo
+        String sProfile = copy.getGuiRepresentation();
+        assertEquals(" Ignore<Date>  \" \"  Keep<Timestamp> ", sProfile);
+        assertEquals(1, copy.getId().intValue());
+        assertEquals("name", copy.getName());
+        assertEquals("origin", copy.getOriginFile());
+
+
+        // make changes to copy
+        copy.addPortionAndGetProfile(TextClassesEnum.DATE.getName(), TextClassesEnum.DATE.getName(), true, false, false);
+        copy.setId(2);
+        copy.setName("name2");
+        copy.setOriginFile("origin2");
+
+        // check original profileDo
+        sProfile = setup.getGuiRepresentation();
+        assertEquals(" Ignore<Date>  \" \"  Keep<Timestamp> ", sProfile);
+        assertEquals(1, setup.getId().intValue());
+        assertEquals("name", setup.getName());
+        assertEquals("origin", setup.getOriginFile());
+    }
+
+
     private ParsingProfileDo setup() {
         ParsingProfileDo profile = new ParsingProfileDo();
         profile.addPortionAndGetProfile(TextClassesEnum.DATE.getName(), TextClassesEnum.DATE.getName(), true, false, false);

@@ -34,6 +34,13 @@ public class ParsingProfileDo {
         this(-1, null);
     }
 
+    public ParsingProfileDo(ParsingProfileDo existingProfile) {
+        this.id = existingProfile.getId();
+        this.name = existingProfile.getName();
+        this.portions = new ArrayList<>(existingProfile.getPortions());
+        this.originFile = existingProfile.getOriginFile();
+    }
+
     public Integer getId() {
         return id;
     }

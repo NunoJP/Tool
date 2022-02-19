@@ -23,7 +23,7 @@ public class MetricsProfileEditorScreenPresenter {
     private final MetricsProfileDo existingProfile;
     private final MetricsProfileManagementScreenPresenter callerPresenter;
     private final MetricsProfileEditorScreen dialogView;
-    private final MetricsProfileDo metricsProfile;
+    private MetricsProfileDo metricsProfileDo;
     private final MetricsProfileManagementService service;
     private int selectedKwdTableItemIndex = -1;
 
@@ -31,7 +31,7 @@ public class MetricsProfileEditorScreenPresenter {
                                                MetricsProfileManagementScreenPresenter metricsProfileManagementScreenPresenter) {
         this.motherFrame = motherFrame;
         this.existingProfile = existingProfile;
-        this.metricsProfile = existingProfile == null ? new MetricsProfileDo() : existingProfile;
+        this.metricsProfileDo = existingProfile == null ? new MetricsProfileDo() : new MetricsProfileDo(existingProfile);
         this.callerPresenter = metricsProfileManagementScreenPresenter;
         this.dialogView = new MetricsProfileEditorScreen(motherFrame);
         this.service = new MetricsProfileManagementService();
@@ -42,20 +42,20 @@ public class MetricsProfileEditorScreenPresenter {
 
     private void populateViewWithExistingProfile() {
         if(existingProfile != null) {
-            dialogView.getMcwButton().setSelected(existingProfile.isHasMostCommonWords());
-            dialogView.getFileSizeButton().setSelected(existingProfile.isHasFileSize());
-            dialogView.getKwdHistButton().setSelected(existingProfile.isHasKeywordHistogram());
-            dialogView.getKwdOverTimeButton().setSelected(existingProfile.isHasKeywordOverTime());
-            dialogView.getKwdThresholdButton().setSelected(existingProfile.isHasKeywordThreshold());
+            dialogView.getMcwButton().setSelected(metricsProfileDo.isHasMostCommonWords());
+            dialogView.getFileSizeButton().setSelected(metricsProfileDo.isHasFileSize());
+            dialogView.getKwdHistButton().setSelected(metricsProfileDo.isHasKeywordHistogram());
+            dialogView.getKwdOverTimeButton().setSelected(metricsProfileDo.isHasKeywordOverTime());
+            dialogView.getKwdThresholdButton().setSelected(metricsProfileDo.isHasKeywordThreshold());
             dialogView.getCaseSensitiveButton().setSelected(false);
             dialogView.getUpdateKwdButton().setEnabled(false);
             dialogView.getDeleteKwdButton().setEnabled(false);
             dialogView.getThresholdComboBox().setSelectedIndex(0);
             dialogView.getThresholdUnitComboBox().setSelectedIndex(0);
             dialogView.getThresholdValueInput().setValue(0);
-            dialogView.getNamePanel().setVariableLabelText(existingProfile.getName());
+            dialogView.getNamePanel().setVariableLabelText(metricsProfileDo.getName());
             dialogView.getKeywordPanel().setVariableLabelText("");
-            keywords = existingProfile.getKeywords();
+            keywords = metricsProfileDo.getKeywords();
             dialogView.getKeywordTable().setData(convertDataForTable(keywords));
         }
     }
@@ -66,8 +66,13 @@ public class MetricsProfileEditorScreenPresenter {
             @Override
             public void windowClosed(WindowEvent e) {
                 super.windowClosed(e);
-                callerPresenter.dialogWindowClosed();
+                windowClosedOperations();
             }
+        });
+
+        dialogView.getCancelButton().addActionListener(actionEvent -> {
+            windowClosedOperations();
+            dialogView.dispose();
         });
 
         // Clear button behavior
@@ -102,15 +107,15 @@ public class MetricsProfileEditorScreenPresenter {
             if(!Validator.validateProfileName(profileName)){
                 showMessageDialog(GuiMessages.PROFILE_NAME_INVALID_OR_EMPTY, GuiMessages.PROFILE_NAME_INVALID_OR_EMPTY_TITLE, JOptionPane.WARNING_MESSAGE);
             } else {
-                setValuesInDo(metricsProfile);
-                metricsProfile.setName(profileName);
+                setValuesInDo(metricsProfileDo);
+                metricsProfileDo.setName(profileName);
                 if(existingProfile != null) {
                     int confirmation = JOptionPane.showConfirmDialog(dialogView,
                             GuiMessages.CONFIRM_OVERWRITE_PARSING_PROFILE,
                             GuiMessages.PLEASE_CONFIRM_DIALOG_TITLE,
                             JOptionPane.YES_NO_OPTION);
                     if(confirmation == JOptionPane.YES_OPTION) {
-                        boolean updateSuccess = service.updateProfile(metricsProfile);
+                        boolean updateSuccess = service.updateProfile(metricsProfileDo);
                         if(updateSuccess) {
                             showMessageDialog(GuiMessages.UPDATE_SUCCESSFUL, GuiMessages.SUCCESS_TITLE, JOptionPane.INFORMATION_MESSAGE);
                             callerPresenter.updateViewTable();
@@ -121,7 +126,7 @@ public class MetricsProfileEditorScreenPresenter {
                     // Stop the save procedure
                     return;
                 } else {
-                    service.createProfile(metricsProfile);
+                    service.createProfile(metricsProfileDo);
                 }
 
                 callerPresenter.updateViewTable();
@@ -238,5 +243,13 @@ public class MetricsProfileEditorScreenPresenter {
         metricsProfile.setHasKeywordOverTime(dialogView.getKwdOverTimeButton().isSelected());
         metricsProfile.setHasKeywordThreshold(dialogView.getKwdThresholdButton().isSelected());
         metricsProfile.setKeywords(keywords);
+    }
+
+
+    private void windowClosedOperations() {
+        callerPresenter.dialogWindowClosed();
+
+        // if the window was closed, we need to reset the status of the object
+        metricsProfileDo = existingProfile == null ? new MetricsProfileDo() : new MetricsProfileDo(existingProfile);
     }
 }

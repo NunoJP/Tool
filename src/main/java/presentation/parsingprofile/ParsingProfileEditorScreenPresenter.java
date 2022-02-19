@@ -21,7 +21,7 @@ public class ParsingProfileEditorScreenPresenter implements IViewPresenter {
     private final JFrame motherFrame;
     private final ParsingProfileEditorScreen dialogView;
     private final ParsingProfileManagementService service;
-    private final ParsingProfileDo parsingProfileDo;
+    private ParsingProfileDo parsingProfileDo;
     private final ParsingProfileDo existingProfile;
     private final ParsingProfileManagementScreenPresenter callerPresenter;
     private boolean wasLastPortionTextClass;
@@ -32,16 +32,16 @@ public class ParsingProfileEditorScreenPresenter implements IViewPresenter {
         this.callerPresenter = parsingProfileManagementScreenPresenter;
         dialogView = new ParsingProfileEditorScreen(motherFrame);
         service = new ParsingProfileManagementService();
-        parsingProfileDo = existingProfile == null ? new ParsingProfileDo() : existingProfile;
+        parsingProfileDo = existingProfile == null ? new ParsingProfileDo() : new ParsingProfileDo(existingProfile);
         populateViewWithExistingProfile();
         defineViewBehavior();
     }
 
     private void populateViewWithExistingProfile() {
         if(existingProfile != null) {
-            dialogView.setProfileNameText(existingProfile.getName());
-            dialogView.setResultPanelText(existingProfile.getGuiRepresentation());
-            ArrayList<ParsingProfilePortion> portions = existingProfile.getPortions();
+            dialogView.setProfileNameText(parsingProfileDo.getName());
+            dialogView.setResultPanelText(parsingProfileDo.getGuiRepresentation());
+            ArrayList<ParsingProfilePortion> portions = parsingProfileDo.getPortions();
             if(!portions.isEmpty()) {
                 changeTextClassSeparatorStates(!portions.get(portions.size() - 1).isSeparator());
             }
@@ -53,9 +53,14 @@ public class ParsingProfileEditorScreenPresenter implements IViewPresenter {
         dialogView.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
-                super.windowClosed(e);
-                callerPresenter.dialogWindowClosed();
+            super.windowClosed(e);
+            windowClosedOperations();
             }
+        });
+
+        dialogView.getCancelButton().addActionListener(actionEvent -> {
+            windowClosedOperations();
+            dialogView.dispose();
         });
 
         // Clear button behavior
@@ -189,6 +194,13 @@ public class ParsingProfileEditorScreenPresenter implements IViewPresenter {
         dialogView.getIgnoreButton().setSelected(false);
         dialogView.getSpecificFormatButton().setSelected(false);
         wasLastPortionTextClass = false;
+    }
+
+    private void windowClosedOperations() {
+        callerPresenter.dialogWindowClosed();
+
+        // if the window was closed, we need to reset the status of the object
+        parsingProfileDo = existingProfile == null ? new ParsingProfileDo() : new ParsingProfileDo(existingProfile);
     }
 
     @Override

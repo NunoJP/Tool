@@ -41,5 +41,57 @@ public class MetricsProfileDoTests {
         assertTrue(profileDo.getKeywords().get(1).isCaseSensitive());
     }
 
+    @Test
+    public void testCopyByConstructor() {
+        MetricsProfileDo profileDo = new MetricsProfileDo();
+        assertTrue(profileDo.getKeywords().isEmpty());
+        profileDo.setName("Name");
+        profileDo.setHasMostCommonWords(true);
+        profileDo.setHasFileSize(true);
+        profileDo.setHasKeywordHistogram(true);
+        profileDo.setHasKeywordOverTime(true);
+        profileDo.setHasKeywordThreshold(true);
+        profileDo.setOriginFile("Origin");
+        profileDo.addKeyword(new Keyword("KWD", false));
+        profileDo.addKeyword(new Keyword("KWD1", true));
+
+        // Validate first object
+        validateOriginalObject(profileDo);
+
+
+        MetricsProfileDo copyProfileDo = new MetricsProfileDo(profileDo);
+        // should be equal
+        validateOriginalObject(copyProfileDo);
+
+        // make changes to new object
+        copyProfileDo.setName("Name1");
+        copyProfileDo.setHasMostCommonWords(false);
+        copyProfileDo.setHasFileSize(false);
+        copyProfileDo.setHasKeywordHistogram(false);
+        copyProfileDo.setHasKeywordOverTime(false);
+        copyProfileDo.setHasKeywordThreshold(false);
+        copyProfileDo.setOriginFile("Origin1");
+        copyProfileDo.addKeyword(new Keyword("KWD2", false));
+        copyProfileDo.addKeyword(new Keyword("KWD3", true));
+
+        // old object should not have changed
+        validateOriginalObject(profileDo);
+    }
+
+    private void validateOriginalObject(MetricsProfileDo profileDo) {
+        assertEquals("Name", profileDo.getName());
+        assertTrue(profileDo.isHasMostCommonWords());
+        assertTrue(profileDo.isHasFileSize());
+        assertTrue(profileDo.isHasKeywordHistogram());
+        assertTrue(profileDo.isHasKeywordOverTime());
+        assertTrue(profileDo.isHasKeywordThreshold());
+        assertEquals("Origin", profileDo.getOriginFile());
+        assertEquals(2, profileDo.getKeywords().size());
+        assertEquals("KWD", profileDo.getKeywords().get(0).getKeywordText());
+        assertFalse(profileDo.getKeywords().get(0).isCaseSensitive());
+        assertEquals("KWD1", profileDo.getKeywords().get(1).getKeywordText());
+        assertTrue(profileDo.getKeywords().get(1).isCaseSensitive());
+    }
+
 
 }

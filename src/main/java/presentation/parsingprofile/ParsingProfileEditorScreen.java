@@ -38,6 +38,7 @@ public class ParsingProfileEditorScreen extends JDialog {
     private JButton removeLastButton;
     private JButton clearButton;
     private JButton saveProfileButton;
+    private JButton cancelButton;
 
     public ParsingProfileEditorScreen(Frame owner) {
         super(owner, GuiConstants.PARSING_PROFILE_EDITOR_SCREEN_TITLE);
@@ -120,9 +121,11 @@ public class ParsingProfileEditorScreen extends JDialog {
         removeLastButton = new JButton(GuiConstants.REMOVE_LAST_BUTTON);
         clearButton = new JButton(GuiConstants.CLEAR_BUTTON);
         saveProfileButton = new JButton(GuiConstants.SAVE_PROFILE_BUTTON);
+        cancelButton = new JButton(GuiConstants.CANCEL_BUTTON);
         buttonPanel.add(removeLastButton);
         buttonPanel.add(clearButton);
         buttonPanel.add(saveProfileButton);
+        buttonPanel.add(cancelButton);
         return buttonPanel;
     }
 
@@ -204,5 +207,7 @@ public class ParsingProfileEditorScreen extends JDialog {
         return saveProfileButton;
     }
 
-
+    public JButton getCancelButton() {
+        return cancelButton;
+    }
 }

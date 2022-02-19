@@ -47,6 +47,7 @@ public class MetricsProfileEditorScreen extends JDialog {
     private GeneralTablePanel keywordTable;
     private JButton saveProfileButton;
     private JButton clearButton;
+    private JButton cancelButton;
     private LabelTextFieldPanel keywordPanel;
 
     public MetricsProfileEditorScreen(Frame owner) {
@@ -154,8 +155,10 @@ public class MetricsProfileEditorScreen extends JDialog {
         JPanel buttonHolder = new JPanel(new FlowLayout(FlowLayout.CENTER, H_GAP, V_GAP));
         saveProfileButton = new JButton(GuiConstants.SAVE_PROFILE_BUTTON);
         clearButton = new JButton(GuiConstants.CLEAR_BUTTON);
+        cancelButton = new JButton(GuiConstants.CANCEL_BUTTON);
         buttonHolder.add(saveProfileButton);
         buttonHolder.add(clearButton);
+        buttonHolder.add(cancelButton);
         return buttonHolder;
     }
 
@@ -242,6 +245,10 @@ public class MetricsProfileEditorScreen extends JDialog {
 
     public JButton getClearButton() {
         return clearButton;
+    }
+
+    public JButton getCancelButton() {
+        return cancelButton;
     }
 
     public LabelTextFieldPanel getKeywordPanel() {
