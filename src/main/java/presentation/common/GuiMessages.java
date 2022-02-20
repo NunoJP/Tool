@@ -10,7 +10,8 @@ public class GuiMessages {
 
     // Error messages
     public static final String ERROR_FOLDER_DOES_NOT_EXIST = "Folder does not exist";
-
+    public static final String ERROR_PARSING_DATE = "Error parsing date";
+    public static final String ERROR_TIMESTAMP_DATE_TIME_MISSING = "Timestamp or Date+Time were not available";
 
     // Log Messages
     // Info
@@ -21,6 +22,7 @@ public class GuiMessages {
     public static final String LOG_ERROR_ERROR_OPENING_FILE = "Error opening file: ";
     public static final String LOG_ERROR_ERROR_READING_FILE = "Error reading file: ";
     public static final String LOG_ERROR_ERROR_CREATING_FILE = "Error creating file: ";
+    public static final String TIMESTAMP_DATE_TIME_MISSING = "Neither Timestamp or Date+Time were available";
 
 
     public static final String CONFIRM_OVERWRITE_PARSING_PROFILE = "You will overwrite the existing profile, are you sure?";
@@ -34,6 +36,8 @@ public class GuiMessages {
     public static final String FAILURE_TITLE = "Failed";
     public static final String MESSAGE_TITLE = "Message";
     public static final String CONFIRM_DELETE_METRIC_PROFILE = "You will delete the existing profile, are you sure?";
-    public static final Object EXPORT_SUCCESSFUL = "Export done successfully";
-    public static final Object EXPORT_FAILED = "Export failed";
+    public static final String EXPORT_SUCCESSFUL = "Export done successfully";
+    public static final String EXPORT_FAILED = "Export failed";
+
+
 }

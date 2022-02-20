@@ -6,6 +6,7 @@ import domain.entities.displayobjects.MetricsProfileDo;
 import domain.entities.displayobjects.ParsingProfileDo;
 import domain.entities.domainobjects.LogLine;
 import domain.services.FileAnalysisService;
+import general.util.DateTimeUtils;
 import presentation.common.GuiConstants;
 import presentation.common.GuiMessages;
 import presentation.common.IViewPresenter;
@@ -17,8 +18,11 @@ import javax.swing.ListSelectionModel;
 import java.io.File;
 import java.nio.file.Paths;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static javax.swing.JFileChooser.APPROVE_OPTION;
 import static javax.swing.JFileChooser.FILES_ONLY;
@@ -35,6 +39,8 @@ public class FileAnalysisScreenPresenter implements IViewPresenter {
     private Date fileEndDate;
     private Date fileEndTime;
     private LogLine[] filteredData;
+
+    private static final Logger LOGGER = Logger.getLogger(FileAnalysisScreenPresenter.class.getName());
 
     public FileAnalysisScreenPresenter(File selectedFile, ParsingProfileDo parsingProfile,
                                        MetricsProfileDo metricsProfile,
@@ -57,7 +63,12 @@ public class FileAnalysisScreenPresenter implements IViewPresenter {
     public void execute() {
         data = fileAnalysisService.getData();
         updateFileContentsTableData(data);
-        calculateFirstAndLastDateTime();
+        try {
+            calculateFirstAndLastDateTime();
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, GuiMessages.ERROR_PARSING_DATE, e);
+        }
+
         setDefaultDateTimeFilters();
     }
 
@@ -75,7 +86,11 @@ public class FileAnalysisScreenPresenter implements IViewPresenter {
             view.getMessage().setVariableLabelText("");
             setDefaultDateTimeFilters();
             updateFileContentsTableData(data);
-            calculateFirstAndLastDateTime();
+            try {
+                calculateFirstAndLastDateTime();
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, GuiMessages.ERROR_PARSING_DATE, e);
+            }
         });
 
         view.getFilterButton().addActionListener(actionEvent ->  {
@@ -128,11 +143,11 @@ public class FileAnalysisScreenPresenter implements IViewPresenter {
         }
     }
 
-    private void calculateFirstAndLastDateTime() {
-        fileStartDate = data[0].getDate();
-        fileStartTime = data[0].getTime();
-        fileEndDate = data[data.length-1].getDate();
-        fileEndTime = data[data.length-1].getTime();
+    private void calculateFirstAndLastDateTime() throws ParseException {
+        fileStartDate = DateTimeUtils.getDateFromLogLine(data[0]);
+        fileStartTime = DateTimeUtils.getTimeFromLogLine(data[0]);
+        fileEndDate = DateTimeUtils.getDateFromLogLine(data[data.length-1]);
+        fileEndTime = DateTimeUtils.getTimeFromLogLine(data[data.length-1]);
     }
 
 

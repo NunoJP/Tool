@@ -1,5 +1,6 @@
 package data.dataaccess.writer;
 
+import common.LogLineTests;
 import domain.entities.common.ParsingProfilePortion;
 import domain.entities.common.SeparatorEnum;
 import domain.entities.common.TextClassesEnum;
@@ -7,42 +8,17 @@ import domain.entities.domainobjects.LogLine;
 import domain.entities.domainobjects.ParsingProfile;
 import org.junit.Before;
 import org.junit.Test;
-import presentation.common.GuiConstants;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import static org.junit.Assert.assertEquals;
 
 
-public class LogFileWriterFunctionTests {
-    private final DateFormat dateFormat = new SimpleDateFormat(GuiConstants.DATE_FORMATTER);
-    private final DateFormat timeFormat = new SimpleDateFormat(GuiConstants.TIME_FORMATTER);
-    private final DateFormat timestampFormat = new SimpleDateFormat(GuiConstants.DATE_TIME_FORMATTER);
-    private LogLine [] data;
-    private static final String LEVEL_BASE = "Level";
-    private static final String ORIGIN_BASE = "Origin";
-    private static final String MESSAGE_BASE = "Message";
-    private static final String IDENTIFIER_BASE = "Identifier";
-    private static final String DATE_BASE = "2021-01-0"; // missing the day
-    private static final String TIME_BASE = "12:10:10.00"; // missing the last millisecond
-
+public class LogFileWriterFunctionTests extends LogLineTests {
 
     @Before
     public void setup() throws ParseException {
-        data = new LogLine[5];
-        for (int i = 0; i < data.length; i++) {
-            LogLine line = new LogLine();
-            line.setLevel(LEVEL_BASE + i);
-            line.setOrigin(ORIGIN_BASE + i);
-            line.setMessage(MESSAGE_BASE + i);
-            line.setIdentifier(IDENTIFIER_BASE + i);
-            line.setDate(dateFormat.parse(DATE_BASE + (i + 1)));
-            line.setTime(timeFormat.parse(TIME_BASE + (i + 1)));
-            line.setTimestamp(timestampFormat.parse(DATE_BASE + (i + 1) + " "+ TIME_BASE + (i + 1)));
-            data[i] = line;
-        }
+        super.setupLogLineData();
     }
 
     @Test

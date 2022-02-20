@@ -1,15 +1,37 @@
 package domain.entities.domainobjects;
 
+import general.util.DateTimeUtils;
+import presentation.common.GuiConstants;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MetricsReport {
+
+    private DateFormat dateFormat = new SimpleDateFormat(GuiConstants.DATE_FORMATTER);
+    private DateFormat timeFormat = new SimpleDateFormat(GuiConstants.TIME_FORMATTER);
+    private DateFormat timeStampFormat = new SimpleDateFormat(GuiConstants.DATE_TIME_FORMATTER);
+    private MetricsProfile metricsProfile;
+    private LogLine[] data;
+
+    public MetricsReport(MetricsProfile metricsProfile, LogLine[] data) {
+        this.metricsProfile = metricsProfile;
+        this.data = data;
+    }
+
     public String[][] getKwdThresholdData() {
-        return new String [][] {
-                {"Error", "1"},
-                {"Warning", "2"},
-                {"Info", "3"},
-                {"Debug", "12"},
-        };
+        if(metricsProfile.isHasKeywordThreshold()){
+            return new String [][] {
+                    {"Error", "1"},
+                    {"Warning", "2"},
+                    {"Info", "3"},
+                    {"Debug", "12"},
+            };
+        } else {
+            return new String [][] {};
+        }
     }
 
     public String[][] getLogLevelData() {
@@ -63,12 +85,17 @@ public class MetricsReport {
         };
     }
 
-    public Date getStartDate(){
-        return new Date();
+    public Date getStartDate() throws ParseException {
+
+        // As the log lines come ordered the first element is the most recent one
+        return DateTimeUtils.getDateTimeFromLogLine(data[0]);
     }
 
-    public Date getEndDate(){
-        return new Date();
+
+    public Date getEndDate() throws ParseException {
+
+        // As the log lines come ordered the last element is the most recent one
+        return DateTimeUtils.getDateTimeFromLogLine(data[data.length - 1]);
     }
 
     public String getFileName(){

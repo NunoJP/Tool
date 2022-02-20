@@ -1,5 +1,6 @@
 package presentation.fileanalysis;
 
+import domain.entities.Converter;
 import domain.entities.displayobjects.MetricsProfileDo;
 import domain.entities.displayobjects.ParsingProfileDo;
 import domain.entities.domainobjects.MetricsReport;
@@ -13,8 +14,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.io.File;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static presentation.common.GuiConstants.DATE_TIME_FORMATTER;
 
@@ -26,6 +30,7 @@ public class FileAnalysisMetricsScreenPresenter implements IViewPresenter {
     private final FileAnalysisMetricsScreen view;
     private final FileAnalysisMetricsService fileAnalysisMetricsService;
     private FileAnalysisService fileAnalysisService;
+    private static final Logger LOGGER = Logger.getLogger(FileAnalysisMetricsScreenPresenter.class.getName());
 
     public FileAnalysisMetricsScreenPresenter(File selectedFile, ParsingProfileDo parsingProfile,
                                               MetricsProfileDo metricsProfile,
@@ -33,7 +38,7 @@ public class FileAnalysisMetricsScreenPresenter implements IViewPresenter {
         view = new FileAnalysisMetricsScreen();
         this.fileAnalysisService = fileAnalysisService;
         fileAnalysisService.setLogMessageConsumer(this::messagePopup);
-        this.fileAnalysisMetricsService = new FileAnalysisMetricsService(fileAnalysisService);
+        this.fileAnalysisMetricsService = new FileAnalysisMetricsService(fileAnalysisService, Converter.toDomainObject(metricsProfile));
         this.selectedFile = selectedFile;
         this.parsingProfile = parsingProfile;
         this.metricsProfile = metricsProfile;
@@ -62,8 +67,26 @@ public class FileAnalysisMetricsScreenPresenter implements IViewPresenter {
         // File name and dates
         view.getFileNamePanel().setVariableLabelText(metricsReport.getFileName());
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_TIME_FORMATTER);
-        view.getStartDatePanel().setVariableLabelText(sdf.format(metricsReport.getStartDate()));
-        view.getEndDatePanel().setVariableLabelText(sdf.format(metricsReport.getEndDate()));
+        try {
+            view.getStartDatePanel().setVariableLabelText(sdf.format(metricsReport.getStartDate()));
+        } catch (ParseException pe) {
+            LOGGER.log(Level.WARNING, pe.getMessage());
+            view.getStartDatePanel().setVariableLabelText(GuiMessages.ERROR_PARSING_DATE);
+        } catch (RuntimeException re) {
+            LOGGER.log(Level.SEVERE, re.getMessage());
+            view.getStartDatePanel().setVariableLabelText(GuiMessages.ERROR_TIMESTAMP_DATE_TIME_MISSING);
+        }
+        try {
+            view.getEndDatePanel().setVariableLabelText(sdf.format(metricsReport.getEndDate()));
+        } catch (ParseException pe) {
+            LOGGER.log(Level.WARNING, pe.getMessage());
+            view.getEndDatePanel().setVariableLabelText(GuiMessages.ERROR_PARSING_DATE);
+        } catch (RuntimeException re) {
+            LOGGER.log(Level.SEVERE, re.getMessage());
+            view.getEndDatePanel().setVariableLabelText(GuiMessages.ERROR_TIMESTAMP_DATE_TIME_MISSING);
+        }
+
+
     }
 
     private HashMap<String, Pair<Color, Color>> generateDefaultColorMap() {
