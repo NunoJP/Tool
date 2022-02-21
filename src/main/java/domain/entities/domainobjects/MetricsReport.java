@@ -3,10 +3,14 @@ package domain.entities.domainobjects;
 import general.util.DateTimeUtils;
 import presentation.common.GuiConstants;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 public class MetricsReport {
 
@@ -35,12 +39,26 @@ public class MetricsReport {
     }
 
     public String[][] getLogLevelData() {
-        return new String [][] {
-                {"Error", "10%"},
-                {"Warning", "20%"},
-                {"Info", "30%"},
-                {"Debug", "10%"},
-        };
+
+        HashMap<String, Integer> occs = new HashMap<>();
+
+        for (LogLine datum : data) {
+            if (datum.getLevel() != null) {
+                int count = occs.getOrDefault(datum.getLevel(), 0);
+                occs.put(datum.getLevel(), count + 1);
+            }
+        }
+
+        BigDecimal size = new BigDecimal(data.length);
+        String [][] res = new String [occs.size()][2];
+        int idx = 0;
+        for (String s : occs.keySet()) {
+            res[idx][0] = s;
+            BigDecimal val = new BigDecimal(occs.get(s));
+            res[idx][1] = new DecimalFormat("#,##0.00 %").format(val.divide(size, 4, RoundingMode.HALF_EVEN).doubleValue());
+            idx++;
+        }
+        return res;
     }
 
     public String[][] getMostCommonWordsData() {
