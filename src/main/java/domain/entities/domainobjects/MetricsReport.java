@@ -9,6 +9,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -19,10 +20,16 @@ public class MetricsReport {
     private DateFormat timeStampFormat = new SimpleDateFormat(GuiConstants.DATE_TIME_FORMATTER);
     private MetricsProfile metricsProfile;
     private LogLine[] data;
+    private String[] stopWords;
 
-    public MetricsReport(MetricsProfile metricsProfile, LogLine[] data) {
+    public MetricsReport(MetricsProfile metricsProfile, LogLine[] data, String [] stopWords) {
         this.metricsProfile = metricsProfile;
         this.data = data;
+        this.stopWords = stopWords;
+    }
+
+    public MetricsReport(MetricsProfile metricsProfile, LogLine[] data) {
+        this(metricsProfile, data, new String[0]);
     }
 
     public String[][] getKwdThresholdData() {
@@ -39,11 +46,10 @@ public class MetricsReport {
     }
 
     public String[][] getLogLevelData() {
-
         HashMap<String, Integer> occs = new HashMap<>();
 
         for (LogLine datum : data) {
-            if (datum.getLevel() != null) {
+            if (datum != null && datum.getLevel() != null) {
                 int count = occs.getOrDefault(datum.getLevel(), 0);
                 occs.put(datum.getLevel(), count + 1);
             }
@@ -62,12 +68,43 @@ public class MetricsReport {
     }
 
     public String[][] getMostCommonWordsData() {
-        return new String [][] {
-                {"Error", "1"},
-                {"Warning", "2"},
-                {"Info", "3"},
-                {"Debug", "12"},
-        };
+        HashMap<String, Integer> occs = new HashMap<>();
+
+        for (LogLine datum : data) {
+            if (datum != null && datum.getMessage() != null) {
+                String[] split = datum.getMessage().split("\\s+");
+                for (String s : split) {
+                    if(isNotStopWord(s)) {
+                        int count = occs.getOrDefault(s, 0);
+                        occs.put(s, count + 1);
+                    }
+                }
+            }
+        }
+
+        String [][] res = new String [occs.size()][2];
+        int idx = 0;
+        for (String s : occs.keySet()) {
+            res[idx][0] = s;
+            res[idx][1] = String.valueOf(occs.get(s));
+            idx++;
+        }
+
+        // sort by descending order
+        return Arrays.stream(res).sorted((arr1, arr2) -> {
+            int i2 = Integer.parseInt(arr2[1]);
+            int i1 = Integer.parseInt(arr1[1]);
+            return i2 - i1;
+        }).toArray(String[][]::new);
+    }
+
+    private boolean isNotStopWord(String s) {
+        for (String stopWord : stopWords) {
+            if(stopWord.equalsIgnoreCase(s)){
+                return false;
+            }
+        }
+        return true;
     }
 
     public String[][] getWarningsData() {
@@ -117,7 +154,7 @@ public class MetricsReport {
     }
 
     public String getFileName(){
-        return "LogFile";
+        return metricsProfile.getOriginFile();
     }
 
 }

@@ -129,4 +129,118 @@ public class MetricsReportTests extends LogLineTests {
             }
         }
     }
+
+    @Test
+    public void testMostCommonWords() {
+        MetricsProfile profile = new MetricsProfile();
+        int [] amounts = new int[] { 100, 20, 10, 1, 1 };
+        data = new LogLine[132];
+
+        int idx = 0;
+        for (int i = 0; i < amounts.length; i++) {
+            for (int am = 0; am < amounts[i]; am++) {
+                LogLine line = new LogLine();
+                line.setMessage("Word" + i);
+                data[idx] = line;
+                idx++;
+            }
+        }
+        MetricsReport report = new MetricsReport(profile, data);
+        String[][] wordsData = report.getMostCommonWordsData();
+
+        assertEquals(amounts.length, wordsData.length);
+        for (int i = 0; i < amounts.length; i++) {
+            assertEquals(amounts[i], Integer.parseInt(wordsData[i][1]));
+        }
+    }
+
+    @Test
+    public void testMostCommonWordsNoStopWords() {
+        MetricsProfile profile = new MetricsProfile();
+        int [] amounts = new int[] { 100, 20, 10, 1, 1 };
+        data = new LogLine[132];
+
+        int idx = 0;
+        for (int i = 0; i < amounts.length; i++) {
+            for (int am = 0; am < amounts[i]; am++) {
+                LogLine line = new LogLine();
+                line.setMessage("Word" + i);
+                data[idx] = line;
+                idx++;
+            }
+        }
+        MetricsReport report = new MetricsReport(profile, data, new String[0]);
+        String[][] wordsData = report.getMostCommonWordsData();
+
+        assertEquals(amounts.length, wordsData.length);
+        for (int i = 0; i < amounts.length; i++) {
+            assertEquals(amounts[i], Integer.parseInt(wordsData[i][1]));
+        }
+    }
+
+    @Test
+    public void testMostCommonWordsSomeStopWords() {
+        MetricsProfile profile = new MetricsProfile();
+        int [] amounts = new int[] { 100, 20, 10, 1, 1 };
+        data = new LogLine[132];
+
+        int idx = 0;
+        for (int i = 0; i < amounts.length; i++) {
+            for (int am = 0; am < amounts[i]; am++) {
+                LogLine line = new LogLine();
+                line.setMessage("Word" + i);
+                data[idx] = line;
+                idx++;
+            }
+        }
+        String [] stopWords = new String[]{ "Word1", "Word2", "Test" };
+
+        MetricsReport report = new MetricsReport(profile, data, stopWords);
+        String[][] wordsData = report.getMostCommonWordsData();
+
+        assertTrue(amounts.length > wordsData.length);
+        assertEquals(amounts[0], Integer.parseInt(wordsData[0][1]));
+        assertEquals(amounts[3], Integer.parseInt(wordsData[1][1]));
+        assertEquals(amounts[4], Integer.parseInt(wordsData[2][1]));
+
+    }
+
+    @Test
+    public void testMostCommonWordsAllStopWords() {
+        MetricsProfile profile = new MetricsProfile();
+        int [] amounts = new int[] { 100, 20, 10, 1, 1 };
+        data = new LogLine[132];
+
+        int idx = 0;
+        for (int i = 0; i < amounts.length; i++) {
+            for (int am = 0; am < amounts[i]; am++) {
+                LogLine line = new LogLine();
+                line.setMessage("Word" + i);
+                data[idx] = line;
+                idx++;
+            }
+        }
+        String [] stopWords = new String[]{ "Word0", "Word1", "Word2", "Word3", "Word4" };
+
+        MetricsReport report = new MetricsReport(profile, data, stopWords);
+        String[][] wordsData = report.getMostCommonWordsData();
+
+        assertEquals(0, wordsData.length);
+    }
+
+    @Test
+    public void testMostCommonWordsNoWords() {
+        MetricsProfile profile = new MetricsProfile();
+        data = new LogLine[132];
+
+        for (int i = 0; i < data.length; i++) {
+            data[i] = new LogLine();
+        }
+
+        MetricsReport report = new MetricsReport(profile, data);
+        String[][] wordsData = report.getMostCommonWordsData();
+
+        assertEquals(0, wordsData.length);
+    }
+
 }
