@@ -1,6 +1,5 @@
 package domain.services;
 
-import data.dataaccess.reader.ToolConfigurationReader;
 import domain.entities.common.ToolConfiguration;
 import domain.entities.domainobjects.LogLine;
 import domain.entities.domainobjects.MetricsProfile;
@@ -16,7 +15,7 @@ public class FileAnalysisMetricsService {
     public FileAnalysisMetricsService(FileAnalysisService fileAnalysisService, MetricsProfile metricsProfile) {
         this.fileAnalysisService = fileAnalysisService;
         this.metricsProfile = metricsProfile;
-        this.toolConfiguration = new ToolConfigurationReader().read();
+        this.toolConfiguration = ToolConfigurationService.getInstance().getToolConfiguration();
     }
 
     public MetricsReport getMetricsReport() {
