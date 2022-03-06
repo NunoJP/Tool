@@ -119,13 +119,19 @@ public class MetricsProfileEditorScreen extends JDialog {
         thresholdComboBox.setSelectedIndex(0);
         thresholdComboBox.setLightWeightPopupEnabled(false);
         thresholdPanel.add(thresholdComboBox);
-        valueInput = new JSpinner();
-        thresholdPanel.add(valueInput);
+
         thresholdUnitComboBox = new JComboBox<>(ThresholdUnitEnum.values());
         thresholdUnitComboBox.setRenderer(new CellRenderer());
         thresholdUnitComboBox.setSelectedIndex(0);
         thresholdUnitComboBox.setLightWeightPopupEnabled(false);
         thresholdPanel.add(thresholdUnitComboBox);
+
+        valueInput = new JSpinner();
+        valueInput.setEnabled(false);
+        JSpinner.DefaultEditor editor = (JSpinner.DefaultEditor) (valueInput.getEditor());
+        editor.getTextField().setColumns(4);
+        thresholdPanel.add(valueInput);
+
         northPanel.add(thresholdPanel);
 
         JPanel buttonHolder = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, V_GAP));

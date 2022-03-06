@@ -1,2 +1,2 @@
 Configurations File
-STOP_WORDS;a;that;the;and;at;test
+STOP_WORDS;a;that;the;and;at

@@ -1,7 +1,11 @@
 package domain.entities.domainobjects;
 
+import domain.entities.common.Keyword;
+import domain.entities.common.ThresholdUnitEnum;
+import domain.entities.common.Warning;
 import general.util.DateTimeUtils;
 import presentation.common.GuiConstants;
+import presentation.common.GuiMessages;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -9,9 +13,11 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Optional;
 
 public class MetricsReport {
 
@@ -21,6 +27,7 @@ public class MetricsReport {
     private MetricsProfile metricsProfile;
     private LogLine[] data;
     private String[] stopWords;
+    private ArrayList<Warning> warningMessages = new ArrayList<>();
 
     public MetricsReport(MetricsProfile metricsProfile, LogLine[] data, String [] stopWords) {
         this.metricsProfile = metricsProfile;
@@ -33,16 +40,67 @@ public class MetricsReport {
     }
 
     public String[][] getKwdThresholdData() {
-        if(metricsProfile.isHasKeywordThreshold()){
-            return new String [][] {
-                    {"Error", "1"},
-                    {"Warning", "2"},
-                    {"Info", "3"},
-                    {"Debug", "12"},
-            };
-        } else {
-            return new String [][] {};
+        HashMap<String, Integer> occs = new HashMap<>();
+        int total = 0;
+        for (LogLine datum : data) {
+            if (datum != null && datum.getMessage() != null) {
+                String[] split = datum.getMessage().split("\\s+|,|\\)|\\(|:");
+                for (String s : split) {
+                    if(isNotStopWord(s)) {
+                        int count = occs.getOrDefault(s, 0);
+                        occs.put(s, count + 1);
+                        total++;
+                    }
+                }
+            }
         }
+
+        ArrayList<String[]> res = new ArrayList<>();
+        int idx = 0;
+        for (String s : occs.keySet()) {
+            // do the evaluation only if there is a matching keyword
+            Keyword kwd = wordMatchesKeyword(s);
+            if(kwd != null) {
+                Optional<String[]> strings = processResult(evaluate(kwd, occs.get(s), total));
+                strings.ifPresent(res::add);
+            }
+            idx++;
+        }
+
+        return res.toArray(String[][]::new);
+    }
+
+    private Optional<String[]> processResult(Optional<EvaluationResult> evaluation) {
+        if (evaluation.isPresent()) {
+            EvaluationResult result = evaluation.get();
+            if(result.getWarning().isPresent()) {
+                warningMessages.add(result.getWarning().get());
+            }
+            String[] toRet = new String[] { result.getStandard().getKeywordText(), makeThresholdMessage(result) };
+            return Optional.of(toRet);
+        }
+        return Optional.empty();
+    }
+
+    private String makeThresholdMessage(EvaluationResult result) {
+        Keyword standard = result.getStandard();
+        return String.format(GuiMessages.THRESHOLD_VALUE_BASE, standard.getKeywordText(),
+                standard.getThresholdValue(), result.actualValue());
+    }
+
+    private Keyword wordMatchesKeyword(String s) {
+        for (Keyword keyword : metricsProfile.getKeywords()) {
+            if(keyword.isCaseSensitive()) {
+                if(keyword.getKeywordText().equalsIgnoreCase(s)) {
+                    return keyword;
+                }
+            } else {
+                if(keyword.getKeywordText().equals(s)) {
+                    return keyword;
+                }
+            }
+        }
+        return null;
     }
 
     public String[][] getLogLevelData() {
@@ -107,37 +165,8 @@ public class MetricsReport {
         return true;
     }
 
-    public String[][] getWarningsData() {
-        return new String [][] {
-                {"Error", "Problem"},
-                {"Warning", "Medium issue"},
-                {"Info", "Doing things"},
-                {"Debug", "Doing things Verbosely"},
-                {"Error", "Problem"},
-                {"Warning", "Medium issue"},
-                {"Info", "Doing things"},
-                {"Debug", "Doing things Verbosely"},
-                {"Error", "Problem"},
-                {"Warning", "Medium issue"},
-                {"Info", "Doing things"},
-                {"Debug", "Doing things Verbosely"},
-                {"Error", "Problem"},
-                {"Warning", "Medium issue"},
-                {"Info", "Doing things"},
-                {"Debug", "Doing things Verbosely"},
-                {"Error", "Problem"},
-                {"Warning", "Medium issue"},
-                {"Info", "Doing things"},
-                {"Debug", "Doing things Verbosely"},
-                {"Error", "Problem"},
-                {"Warning", "Medium issue"},
-                {"Info", "Doing things"},
-                {"Debug", "Doing things Verbosely"},
-                {"Error", "Problem"},
-                {"Warning", "Medium issue"},
-                {"Info", "Doing things"},
-                {"Debug", "Doing things Verbosely"},
-        };
+    public ArrayList<Warning> getWarningsData() {
+        return warningMessages;
     }
 
     public Date getStartDate() throws ParseException {
@@ -157,4 +186,71 @@ public class MetricsReport {
         return metricsProfile.getOriginFile();
     }
 
+
+    protected Optional<EvaluationResult> evaluate(Keyword standard, Integer currValue, Integer total) {
+        EvaluationResult evaluationResult = new EvaluationResult(standard, String.valueOf(currValue));
+        if(ThresholdUnitEnum.PERCENTAGE.equals(standard.getThresholdUnit())) {
+            BigDecimal curr = new BigDecimal(currValue);
+            BigDecimal tot = new BigDecimal(total);
+            BigDecimal percentage = curr.divide(tot, 4, RoundingMode.HALF_EVEN);
+            switch (standard.getThresholdType()) {
+                case EQUAL_TO:
+                    if(standard.getThresholdValue().compareTo(percentage) == 0) {
+                        evaluationResult.setThresholdMet();
+                    }
+                    break;
+                case BIGGER_THAN:
+                    if(standard.getThresholdValue().compareTo(percentage) > 0) {
+                        evaluationResult.setThresholdMet();
+                    }
+                    break;
+                case BIGGER_OR_EQUAL_THAN:
+                    if(standard.getThresholdValue().compareTo(percentage) >= 0) {
+                        evaluationResult.setThresholdMet();
+                    }
+                    break;
+                case SMALLER_OR_EQUAL_THAN:
+                    if(standard.getThresholdValue().compareTo(percentage) <= 0) {
+                        evaluationResult.setThresholdMet();
+                    }
+                    break;
+                case SMALLER_THAN:
+                    if(standard.getThresholdValue().compareTo(percentage) < 0) {
+                        evaluationResult.setThresholdMet();
+                    }
+                    break;
+            }
+            return Optional.of(evaluationResult);
+        } else if(ThresholdUnitEnum.OCCURRENCES.equals(standard.getThresholdUnit())) {
+            switch (standard.getThresholdType()) {
+                case EQUAL_TO:
+                    if(standard.getThresholdValue().intValue() == currValue) {
+                        evaluationResult.setThresholdMet();
+                    }
+                    break;
+                case BIGGER_THAN:
+                    if(standard.getThresholdValue().intValue() < currValue) {
+                        evaluationResult.setThresholdMet();
+                    }
+                    break;
+                case BIGGER_OR_EQUAL_THAN:
+                    if(standard.getThresholdValue().intValue() <= currValue) {
+                        evaluationResult.setThresholdMet();
+                    }
+                    break;
+                case SMALLER_OR_EQUAL_THAN:
+                    if(standard.getThresholdValue().intValue() >= currValue) {
+                        evaluationResult.setThresholdMet();
+                    }
+                    break;
+                case SMALLER_THAN:
+                    if(standard.getThresholdValue().intValue() > currValue) {
+                        evaluationResult.setThresholdMet();
+                    }
+                    break;
+            }
+            return Optional.of(evaluationResult);
+        }
+        return Optional.empty();
+    }
 }

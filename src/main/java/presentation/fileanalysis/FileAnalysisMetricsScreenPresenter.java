@@ -1,6 +1,7 @@
 package presentation.fileanalysis;
 
 import domain.entities.Converter;
+import domain.entities.common.Warning;
 import domain.entities.displayobjects.MetricsProfileDo;
 import domain.entities.displayobjects.ParsingProfileDo;
 import domain.entities.domainobjects.MetricsReport;
@@ -16,6 +17,7 @@ import java.awt.Color;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -60,7 +62,7 @@ public class FileAnalysisMetricsScreenPresenter implements IViewPresenter {
         String [][] mostCommonWordsData = metricsReport.getMostCommonWordsData();
         view.getMostCommonWordsTable().setData(mostCommonWordsData);
         view.getMostCommonWordsTable().setStringColorRenderMap(generateDefaultColorMap());
-        String [][] warningsData = metricsReport.getWarningsData();
+        String [][] warningsData = getMessages(metricsReport.getWarningsData());
         view.getWarningsTable().setData(warningsData);
         view.getWarningsTable().setStringColorRenderMap(generateDefaultColorMap());
 
@@ -87,6 +89,16 @@ public class FileAnalysisMetricsScreenPresenter implements IViewPresenter {
         }
 
 
+    }
+
+    private String[][] getMessages(ArrayList<Warning> warningsData) {
+        String[][] res = new String[warningsData.size()][];
+        int idx = 0;
+        for (Warning warning : warningsData) {
+            res[idx] = new String[] { "", warning.getMessage()};
+            idx++;
+        }
+        return res;
     }
 
     private HashMap<String, Pair<Color, Color>> generateDefaultColorMap() {

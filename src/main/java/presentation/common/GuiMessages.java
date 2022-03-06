@@ -40,4 +40,10 @@ public class GuiMessages {
     public static final String EXPORT_FAILED = "Export failed";
 
 
+    public static final String WARNING_MESSAGE_BASE = "Warning: threshold %s of keyword %s was %s";
+    public static final String WARNING_MESSAGE_PARTICLE_MET = "met";
+    public static final String WARNING_MESSAGE_PARTICLE_SURPASSED = "surpassed";
+    public static final String WARNING_MESSAGE_PARTICLE_MET_OR_SURPASSED = "met/surpassed";
+
+    public static final String THRESHOLD_VALUE_BASE = "%s Th: %s Current: %s";
 }

@@ -10,7 +10,9 @@ import presentation.common.GuiMessages;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
 import javax.swing.ListSelectionModel;
+import javax.swing.SpinnerNumberModel;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.math.BigDecimal;
@@ -149,6 +151,21 @@ public class MetricsProfileEditorScreenPresenter {
                     fillKeywordElementsForUpdate();
                 }
             }
+        });
+
+        dialogView.getThresholdUnitComboBox().addItemListener( event -> {
+            JSpinner valueInput = dialogView.getThresholdValueInput();
+            if(event.getItem().equals(ThresholdUnitEnum.PERCENTAGE)) {
+                valueInput.setEnabled(true);
+                valueInput.setModel(new SpinnerNumberModel(0.0, 0.0, 1, .1));
+            } else if(event.getItem().equals(ThresholdUnitEnum.OCCURRENCES)) {
+                valueInput.setEnabled(true);
+                valueInput.setModel(new SpinnerNumberModel(0, 0, 100000.0, 1));
+            } else {
+                valueInput.setEnabled(false);
+            }
+            JSpinner.DefaultEditor editor = (JSpinner.DefaultEditor) (valueInput.getEditor());
+            editor.getTextField().setColumns(4);
         });
     }
 
