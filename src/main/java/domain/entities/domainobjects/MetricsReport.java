@@ -59,10 +59,12 @@ public class MetricsReport {
         int idx = 0;
         for (String s : occs.keySet()) {
             // do the evaluation only if there is a matching keyword
-            Keyword kwd = wordMatchesKeyword(s);
-            if(kwd != null) {
-                Optional<String[]> strings = processResult(evaluate(kwd, occs.get(s), total));
-                strings.ifPresent(res::add);
+            ArrayList<Keyword> kwds = wordMatchesKeyword(s);
+            if(!kwds.isEmpty()) {
+                for (Keyword kwd : kwds) {
+                    Optional<String[]> strings = processResult(evaluate(kwd, occs.get(s), total));
+                    strings.ifPresent(res::add);
+                }
             }
             idx++;
         }
@@ -88,19 +90,20 @@ public class MetricsReport {
                 standard.getThresholdValue(), result.actualValue());
     }
 
-    private Keyword wordMatchesKeyword(String s) {
+    private ArrayList<Keyword> wordMatchesKeyword(String s) {
+        ArrayList<Keyword> matches = new ArrayList<>();
         for (Keyword keyword : metricsProfile.getKeywords()) {
             if(keyword.isCaseSensitive()) {
                 if(keyword.getKeywordText().equalsIgnoreCase(s)) {
-                    return keyword;
+                    matches.add(keyword);
                 }
             } else {
                 if(keyword.getKeywordText().equals(s)) {
-                    return keyword;
+                    matches.add(keyword);
                 }
             }
         }
-        return null;
+        return matches;
     }
 
     public String[][] getLogLevelData() {

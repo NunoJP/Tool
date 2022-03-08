@@ -5,6 +5,7 @@ import data.dataaccess.writer.MetricsProfileFunction;
 import domain.entities.common.Keyword;
 import domain.entities.common.ThresholdTypeEnum;
 import domain.entities.common.ThresholdUnitEnum;
+import domain.entities.common.WarningLevel;
 import domain.entities.domainobjects.MetricsProfile;
 
 import java.math.BigDecimal;
@@ -26,7 +27,7 @@ public abstract class MetricsProfilesCommon {
     }
 
     protected void validateKeyword(Keyword keyword, String kwd, boolean caseSensitive,
-                                 ThresholdTypeEnum typeEnum, BigDecimal value, ThresholdUnitEnum unitEnum) {
+                                   ThresholdTypeEnum typeEnum, BigDecimal value, ThresholdUnitEnum unitEnum, WarningLevel none) {
         assertEquals(kwd, keyword.getKeywordText());
         assertEquals(caseSensitive, keyword.isCaseSensitive());
         assertEquals(typeEnum, keyword.getThresholdType());

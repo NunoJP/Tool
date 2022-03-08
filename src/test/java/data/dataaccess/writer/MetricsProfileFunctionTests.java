@@ -5,6 +5,7 @@ import data.dataaccess.reader.MetricsProfileConsumer;
 import domain.entities.common.Keyword;
 import domain.entities.common.ThresholdTypeEnum;
 import domain.entities.common.ThresholdUnitEnum;
+import domain.entities.common.WarningLevel;
 import domain.entities.domainobjects.MetricsProfile;
 import org.junit.Before;
 import org.junit.Test;
@@ -53,7 +54,7 @@ public class MetricsProfileFunctionTests extends MetricsProfilesCommon {
         ArrayList<Keyword> keywords = parsedProfile.getKeywords();
         assertEquals(1, keywords.size());
         validateEnabledProfiles(parsedProfile, false, false, false, false, false);
-        validateKeyword(keywords.get(0), "kwd", true, NOT_APPLICABLE, new BigDecimal("0"), NONE);
+        validateKeyword(keywords.get(0), "kwd", true, NOT_APPLICABLE, new BigDecimal("0"), NONE, WarningLevel.NONE);
     }
 
     @Test
@@ -77,14 +78,14 @@ public class MetricsProfileFunctionTests extends MetricsProfilesCommon {
         ArrayList<Keyword> keywords = parsedProfile.getKeywords();
         assertEquals(1, keywords.size());
         validateEnabledProfiles(parsedProfile, false, false, false, false, false);
-        validateKeyword(keywords.get(0), "kwd", true, NOT_APPLICABLE, new BigDecimal("0"), NONE);
+        validateKeyword(keywords.get(0), "kwd", true, NOT_APPLICABLE, new BigDecimal("0"), NONE, WarningLevel.NONE);
 
         parsedProfile = profiles[1];
         assertEquals(profile2.getName(), parsedProfile.getName());
         keywords = parsedProfile.getKeywords();
         assertEquals(1, keywords.size());
         validateEnabledProfiles(parsedProfile, false, false, false, false, false);
-        validateKeyword(keywords.get(0), "kwd", true, NOT_APPLICABLE, new BigDecimal("0"), NONE);
+        validateKeyword(keywords.get(0), "kwd", true, NOT_APPLICABLE, new BigDecimal("0"), NONE, WarningLevel.NONE);
     }
 
     @Test
@@ -142,7 +143,7 @@ public class MetricsProfileFunctionTests extends MetricsProfilesCommon {
         ArrayList<Keyword> keywords = parsedProfile.getKeywords();
         assertEquals(1, keywords.size());
         validateEnabledProfiles(parsedProfile, true, true, true, true, true);
-        validateKeyword(keywords.get(0), "kwd", true, NOT_APPLICABLE, new BigDecimal("0"), NONE);
+        validateKeyword(keywords.get(0), "kwd", true, NOT_APPLICABLE, new BigDecimal("0"), NONE, WarningLevel.NONE);
     }
 
     @Test
@@ -168,7 +169,7 @@ public class MetricsProfileFunctionTests extends MetricsProfilesCommon {
         ArrayList<Keyword> keywords = parsedProfile.getKeywords();
         assertEquals(1, keywords.size());
         validateEnabledProfiles(parsedProfile, false, true, false, true, false);
-        validateKeyword(keywords.get(0), "kwd", true, NOT_APPLICABLE, new BigDecimal("0"), NONE);
+        validateKeyword(keywords.get(0), "kwd", true, NOT_APPLICABLE, new BigDecimal("0"), NONE, WarningLevel.NONE);
     }
 
     @Test
@@ -207,7 +208,7 @@ public class MetricsProfileFunctionTests extends MetricsProfilesCommon {
         validateEnabledProfiles(parsedProfile, false, true, false, true, false);
         assertEquals(4, keywords.size());
         for (int i = 0; i < 4; i++) {
-            validateKeyword(keywords.get(i), kwds[i], i % 2 == 1, types[i], values[i], units[i]);
+            validateKeyword(keywords.get(i), kwds[i], i % 2 == 1, types[i], values[i], units[i], WarningLevel.NONE);
         }
 
     }

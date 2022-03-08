@@ -3,6 +3,7 @@ package data.dataaccess.reader;
 import domain.entities.common.Keyword;
 import domain.entities.common.ThresholdTypeEnum;
 import domain.entities.common.ThresholdUnitEnum;
+import domain.entities.common.WarningLevel;
 import domain.entities.domainobjects.MetricsProfile;
 
 import java.math.BigDecimal;
@@ -38,12 +39,13 @@ public class MetricsProfileConsumer implements Consumer<String> {
 
     public static final int NAME_POSITION = 1;
     public static final int PAIRED_MINIMUM_SIZE = 2;
-    public static final int KEYWORD_EXPECTED_SIZE = 5;
+    public static final int KEYWORD_EXPECTED_SIZE = 6;
     public static final int KEYWORD_POSITION = 0;
     public static final int IS_CASE_SENSITIVE_POSITION = 1;
     public static final int THRESHOLD_TYPE_POSITION = 2;
     public static final int THRESHOLD_VALUE_POSITION = 3;
     public static final int THRESHOLD_UNIT_POSITION = 4;
+    public static final int WARNING_LEVEL_POSITION = 5;
     private ArrayList<MetricsProfile> profiles;
     boolean firstLine = true;
     boolean hasProfileStarted = false;
@@ -155,6 +157,7 @@ public class MetricsProfileConsumer implements Consumer<String> {
             return;
         }
         keyword.setThresholdUnit(getThresholdUnit(split[THRESHOLD_UNIT_POSITION]));
+        keyword.setWarningLevel(getWarningLevel(split[WARNING_LEVEL_POSITION]));
         currentProfile.addKeyword(keyword);
     }
 
@@ -180,7 +183,6 @@ public class MetricsProfileConsumer implements Consumer<String> {
         return NOT_APPLICABLE;
     }
 
-
     private ThresholdUnitEnum getThresholdUnit(String s) {
         if(NONE.getParsingString().equalsIgnoreCase(s)) {
             return NONE;
@@ -192,6 +194,28 @@ public class MetricsProfileConsumer implements Consumer<String> {
             return PERCENTAGE;
         }
         return NONE;
+    }
+
+    private WarningLevel getWarningLevel(String s) {
+        if(WarningLevel.NONE.getParsingString().equalsIgnoreCase(s)) {
+            return WarningLevel.NONE;
+        }
+        if(WarningLevel.CRITICAL.getParsingString().equalsIgnoreCase(s)) {
+            return WarningLevel.CRITICAL;
+        }
+        if(WarningLevel.HIGH.getParsingString().equalsIgnoreCase(s)) {
+            return WarningLevel.HIGH;
+        }
+        if(WarningLevel.MEDIUM.getParsingString().equalsIgnoreCase(s)) {
+            return WarningLevel.MEDIUM;
+        }
+        if(WarningLevel.LOW.getParsingString().equalsIgnoreCase(s)) {
+            return WarningLevel.LOW;
+        }
+        if(WarningLevel.INFO.getParsingString().equalsIgnoreCase(s)) {
+            return WarningLevel.INFO;
+        }
+        return WarningLevel.NONE;
     }
 
     private MetricsProfile getCurrentProfile() {

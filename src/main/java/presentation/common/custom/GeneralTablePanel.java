@@ -118,7 +118,6 @@ public class GeneralTablePanel extends JPanel {
 
         }
 
-
     }
 
     public void setStringColorRenderMap(HashMap<String, Pair<Color,Color>> colorRenderMap){
@@ -148,7 +147,6 @@ public class GeneralTablePanel extends JPanel {
             setForeground(color.getRight());
             return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, indexToModel, column);
         }
-
 
     }
 }

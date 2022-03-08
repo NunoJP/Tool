@@ -4,6 +4,7 @@ import domain.entities.common.SeparatorEnum;
 import domain.entities.common.TextClassesEnum;
 import domain.entities.common.ThresholdTypeEnum;
 import domain.entities.common.ThresholdUnitEnum;
+import domain.entities.common.WarningLevel;
 import domain.entities.displayobjects.MetricsProfileDo;
 import domain.entities.displayobjects.ParsingProfileDo;
 
@@ -31,6 +32,8 @@ public class CellRenderer extends DefaultListCellRenderer {
             value = ((ThresholdTypeEnum) value).getSymbol();
         } else if(value instanceof ThresholdUnitEnum) {
             value = ((ThresholdUnitEnum) value).getSymbol();
+        } else if(value instanceof WarningLevel) {
+            value = ((WarningLevel) value).getSymbol();
         }
         super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
         return this;

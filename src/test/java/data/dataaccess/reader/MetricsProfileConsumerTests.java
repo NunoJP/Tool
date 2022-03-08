@@ -2,6 +2,7 @@ package data.dataaccess.reader;
 
 import data.dataaccess.MetricsProfilesCommon;
 import domain.entities.common.Keyword;
+import domain.entities.common.WarningLevel;
 import domain.entities.domainobjects.MetricsProfile;
 import org.junit.Test;
 
@@ -44,9 +45,9 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         consumer.accept(KEYWORD_OVER_TIME_TOKEN + SEPARATOR + false);
         consumer.accept(KEYWORD_THRESHOLD_TOKEN + SEPARATOR + true);
         consumer.accept(START_KEYWORDS_TOKEN);
-        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 0 + SEPARATOR + NONE);
-        consumer.accept("Kws2" + SEPARATOR + true + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 0 + SEPARATOR + NONE);
-        consumer.accept("Kws3" + SEPARATOR + true + SEPARATOR + EQUAL_TO + SEPARATOR + 1 + SEPARATOR + OCCURRENCES);
+        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 0 + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
+        consumer.accept("Kws2" + SEPARATOR + true + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 0 + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
+        consumer.accept("Kws3" + SEPARATOR + true + SEPARATOR + EQUAL_TO + SEPARATOR + 1 + SEPARATOR + OCCURRENCES + SEPARATOR + WarningLevel.NONE);
         consumer.accept(END_KEYWORDS_TOKEN);
         consumer.accept(END_PROFILE_TOKEN);
 
@@ -58,9 +59,9 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         validateEnabledProfiles(profile, true, false, true, false, true);
         ArrayList<Keyword> keywords = profile.getKeywords();
         assertEquals(3, keywords.size());
-        validateKeyword(keywords.get(0), "Kws1", false, NOT_APPLICABLE, new BigDecimal(0), NONE);
-        validateKeyword(keywords.get(1), "Kws2", true, NOT_APPLICABLE, new BigDecimal(0), NONE);
-        validateKeyword(keywords.get(2), "Kws3", true, EQUAL_TO, new BigDecimal(1), OCCURRENCES);
+        validateKeyword(keywords.get(0), "Kws1", false, NOT_APPLICABLE, new BigDecimal(0), NONE, WarningLevel.NONE);
+        validateKeyword(keywords.get(1), "Kws2", true, NOT_APPLICABLE, new BigDecimal(0), NONE, WarningLevel.NONE);
+        validateKeyword(keywords.get(2), "Kws3", true, EQUAL_TO, new BigDecimal(1), OCCURRENCES, WarningLevel.NONE);
     }
 
 
@@ -79,9 +80,12 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         consumer.accept(KEYWORD_OVER_TIME_TOKEN + SEPARATOR + false);
         consumer.accept(KEYWORD_THRESHOLD_TOKEN + SEPARATOR + false);
         consumer.accept(START_KEYWORDS_TOKEN);
-        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 0 + SEPARATOR + NONE);
-        consumer.accept("Kws2" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 0 + SEPARATOR + NONE);
-        consumer.accept("Kws3" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 0 + SEPARATOR + NONE);
+        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR
+                + 0 + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
+        consumer.accept("Kws2" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR
+                + 0 + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
+        consumer.accept("Kws3" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR
+                + 0 + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
         consumer.accept(END_KEYWORDS_TOKEN);
         consumer.accept(END_PROFILE_TOKEN);
         consumer.accept(NAME_TOKEN + SEPARATOR + VALUE);
@@ -92,9 +96,12 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         consumer.accept(KEYWORD_OVER_TIME_TOKEN + SEPARATOR + true);
         consumer.accept(KEYWORD_THRESHOLD_TOKEN + SEPARATOR + true);
         consumer.accept(START_KEYWORDS_TOKEN);
-        consumer.accept("Kws1" + SEPARATOR + true + SEPARATOR + EQUAL_TO + SEPARATOR + 1 + SEPARATOR + OCCURRENCES);
-        consumer.accept("Kws2" + SEPARATOR + true + SEPARATOR + EQUAL_TO + SEPARATOR + 1 + SEPARATOR + OCCURRENCES);
-        consumer.accept("Kws3" + SEPARATOR + true + SEPARATOR + EQUAL_TO + SEPARATOR + 1 + SEPARATOR + OCCURRENCES);
+        consumer.accept("Kws1" + SEPARATOR + true + SEPARATOR + EQUAL_TO + SEPARATOR
+                + 1 + SEPARATOR + OCCURRENCES + SEPARATOR + WarningLevel.NONE);
+        consumer.accept("Kws2" + SEPARATOR + true + SEPARATOR + EQUAL_TO + SEPARATOR
+                + 1 + SEPARATOR + OCCURRENCES + SEPARATOR + WarningLevel.NONE);
+        consumer.accept("Kws3" + SEPARATOR + true + SEPARATOR + EQUAL_TO + SEPARATOR
+                + 1 + SEPARATOR + OCCURRENCES + SEPARATOR + WarningLevel.NONE);
         consumer.accept(END_KEYWORDS_TOKEN);
         consumer.accept(END_PROFILE_TOKEN);
 
@@ -106,18 +113,18 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         validateEnabledProfiles(profile, false, false, false, false, false);
         ArrayList<Keyword> keywords = profile.getKeywords();
         assertEquals(3, keywords.size());
-        validateKeyword(keywords.get(0), "Kws1", false, NOT_APPLICABLE, new BigDecimal(0), NONE);
-        validateKeyword(keywords.get(1), "Kws2", false, NOT_APPLICABLE, new BigDecimal(0), NONE);
-        validateKeyword(keywords.get(2), "Kws3", false, NOT_APPLICABLE, new BigDecimal(0), NONE);
+        validateKeyword(keywords.get(0), "Kws1", false, NOT_APPLICABLE, new BigDecimal(0), NONE, WarningLevel.NONE);
+        validateKeyword(keywords.get(1), "Kws2", false, NOT_APPLICABLE, new BigDecimal(0), NONE, WarningLevel.NONE);
+        validateKeyword(keywords.get(2), "Kws3", false, NOT_APPLICABLE, new BigDecimal(0), NONE, WarningLevel.NONE);
 
         profile = profiles[1];
         assertEquals(VALUE, profile.getName());
         validateEnabledProfiles(profile, true, true, true, true, true);
         keywords = profile.getKeywords();
         assertEquals(3, keywords.size());
-        validateKeyword(keywords.get(0), "Kws1", true, EQUAL_TO, new BigDecimal(1), OCCURRENCES);
-        validateKeyword(keywords.get(1), "Kws2", true, EQUAL_TO, new BigDecimal(1), OCCURRENCES);
-        validateKeyword(keywords.get(2), "Kws3", true, EQUAL_TO, new BigDecimal(1), OCCURRENCES);
+        validateKeyword(keywords.get(0), "Kws1", true, EQUAL_TO, new BigDecimal(1), OCCURRENCES, WarningLevel.NONE);
+        validateKeyword(keywords.get(1), "Kws2", true, EQUAL_TO, new BigDecimal(1), OCCURRENCES, WarningLevel.NONE);
+        validateKeyword(keywords.get(2), "Kws3", true, EQUAL_TO, new BigDecimal(1), OCCURRENCES, WarningLevel.NONE);
     }
 
     @Test
@@ -222,9 +229,9 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         consumer.accept(KEYWORD_OVER_TIME_TOKEN + SEPARATOR + false);
         consumer.accept(KEYWORD_THRESHOLD_TOKEN + SEPARATOR + true);
         consumer.accept(START_KEYWORDS_TOKEN);
-        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 0 + SEPARATOR + NONE);
-        consumer.accept("Kws2" + SEPARATOR + true + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 0 + SEPARATOR + NONE);
-        consumer.accept("Kws3" + SEPARATOR + true + SEPARATOR + EQUAL_TO + SEPARATOR + 1 + SEPARATOR + OCCURRENCES);
+        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 0 + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
+        consumer.accept("Kws2" + SEPARATOR + true + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 0 + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
+        consumer.accept("Kws3" + SEPARATOR + true + SEPARATOR + EQUAL_TO + SEPARATOR + 1 + SEPARATOR + OCCURRENCES + SEPARATOR + WarningLevel.NONE);
         consumer.accept(END_KEYWORDS_TOKEN);
         consumer.accept(END_PROFILE_TOKEN);
 
@@ -236,9 +243,9 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         validateEnabledProfiles(profile, true, false, true, false, true);
         ArrayList<Keyword> keywords = profile.getKeywords();
         assertEquals(3, keywords.size());
-        validateKeyword(keywords.get(0), "Kws1", false, NOT_APPLICABLE, new BigDecimal(0), NONE);
-        validateKeyword(keywords.get(1), "Kws2", true, NOT_APPLICABLE, new BigDecimal(0), NONE);
-        validateKeyword(keywords.get(2), "Kws3", true, EQUAL_TO, new BigDecimal(1), OCCURRENCES);
+        validateKeyword(keywords.get(0), "Kws1", false, NOT_APPLICABLE, new BigDecimal(0), NONE, WarningLevel.NONE);
+        validateKeyword(keywords.get(1), "Kws2", true, NOT_APPLICABLE, new BigDecimal(0), NONE, WarningLevel.NONE);
+        validateKeyword(keywords.get(2), "Kws3", true, EQUAL_TO, new BigDecimal(1), OCCURRENCES, WarningLevel.NONE);
     }
 
     @Test
@@ -310,9 +317,9 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         consumer.accept(KEYWORD_OVER_TIME_TOKEN + SEPARATOR + false);
         consumer.accept(KEYWORD_THRESHOLD_TOKEN + SEPARATOR + true);
         consumer.accept(START_KEYWORDS_TOKEN);
-        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 0 + SEPARATOR + NONE);
-        consumer.accept("Kws2" + SEPARATOR + true + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 0 + SEPARATOR + NONE);
-        consumer.accept("Kws3" + SEPARATOR + true + SEPARATOR + EQUAL_TO + SEPARATOR + 1 + SEPARATOR + OCCURRENCES);
+        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 0 + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
+        consumer.accept("Kws2" + SEPARATOR + true + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 0 + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
+        consumer.accept("Kws3" + SEPARATOR + true + SEPARATOR + EQUAL_TO + SEPARATOR + 1 + SEPARATOR + OCCURRENCES + SEPARATOR + WarningLevel.NONE);
         consumer.accept(END_KEYWORDS_TOKEN);
 
         // validations
@@ -323,9 +330,9 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         validateEnabledProfiles(profile, true, false, true, false, true);
         ArrayList<Keyword> keywords = profile.getKeywords();
         assertEquals(3, keywords.size());
-        validateKeyword(keywords.get(0), "Kws1", false, NOT_APPLICABLE, new BigDecimal(0), NONE);
-        validateKeyword(keywords.get(1), "Kws2", true, NOT_APPLICABLE, new BigDecimal(0), NONE);
-        validateKeyword(keywords.get(2), "Kws3", true, EQUAL_TO, new BigDecimal(1), OCCURRENCES);
+        validateKeyword(keywords.get(0), "Kws1", false, NOT_APPLICABLE, new BigDecimal(0), NONE, WarningLevel.NONE);
+        validateKeyword(keywords.get(1), "Kws2", true, NOT_APPLICABLE, new BigDecimal(0), NONE, WarningLevel.NONE);
+        validateKeyword(keywords.get(2), "Kws3", true, EQUAL_TO, new BigDecimal(1), OCCURRENCES, WarningLevel.NONE);
     }
 
     @Test
@@ -343,9 +350,12 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         consumer.accept(KEYWORD_OVER_TIME_TOKEN + SEPARATOR + false);
         consumer.accept(KEYWORD_THRESHOLD_TOKEN + SEPARATOR + false);
         consumer.accept(START_KEYWORDS_TOKEN);
-        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 0 + SEPARATOR + NONE);
-        consumer.accept("Kws2" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 0 + SEPARATOR + NONE);
-        consumer.accept("Kws3" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 0 + SEPARATOR + NONE);
+        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR
+                + 0 + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
+        consumer.accept("Kws2" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR
+                + 0 + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
+        consumer.accept("Kws3" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR
+                + 0 + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
         consumer.accept(END_KEYWORDS_TOKEN);
         consumer.accept(NAME_TOKEN + SEPARATOR + VALUE);
         consumer.accept(START_PROFILE_TOKEN);
@@ -355,9 +365,12 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         consumer.accept(KEYWORD_OVER_TIME_TOKEN + SEPARATOR + true);
         consumer.accept(KEYWORD_THRESHOLD_TOKEN + SEPARATOR + true);
         consumer.accept(START_KEYWORDS_TOKEN);
-        consumer.accept("Kws1" + SEPARATOR + true + SEPARATOR + EQUAL_TO + SEPARATOR + 1 + SEPARATOR + OCCURRENCES);
-        consumer.accept("Kws2" + SEPARATOR + true + SEPARATOR + EQUAL_TO + SEPARATOR + 1 + SEPARATOR + OCCURRENCES);
-        consumer.accept("Kws3" + SEPARATOR + true + SEPARATOR + EQUAL_TO + SEPARATOR + 1 + SEPARATOR + OCCURRENCES);
+        consumer.accept("Kws1" + SEPARATOR + true + SEPARATOR + EQUAL_TO + SEPARATOR
+                + 1 + SEPARATOR + OCCURRENCES + SEPARATOR + WarningLevel.NONE);
+        consumer.accept("Kws2" + SEPARATOR + true + SEPARATOR + EQUAL_TO + SEPARATOR
+                + 1 + SEPARATOR + OCCURRENCES + SEPARATOR + WarningLevel.NONE);
+        consumer.accept("Kws3" + SEPARATOR + true + SEPARATOR + EQUAL_TO + SEPARATOR
+                + 1 + SEPARATOR + OCCURRENCES + SEPARATOR + WarningLevel.NONE);
         consumer.accept(END_KEYWORDS_TOKEN);
         consumer.accept(END_PROFILE_TOKEN);
 
@@ -370,12 +383,12 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         validateEnabledProfiles(profile, true, true, true, true, true);
         ArrayList<Keyword> keywords = profile.getKeywords();
         assertEquals(6, keywords.size());
-        validateKeyword(keywords.get(0), "Kws1", false, NOT_APPLICABLE, new BigDecimal(0), NONE);
-        validateKeyword(keywords.get(1), "Kws2", false, NOT_APPLICABLE, new BigDecimal(0), NONE);
-        validateKeyword(keywords.get(2), "Kws3", false, NOT_APPLICABLE, new BigDecimal(0), NONE);
-        validateKeyword(keywords.get(3), "Kws1", true, EQUAL_TO, new BigDecimal(1), OCCURRENCES);
-        validateKeyword(keywords.get(4), "Kws2", true, EQUAL_TO, new BigDecimal(1), OCCURRENCES);
-        validateKeyword(keywords.get(5), "Kws3", true, EQUAL_TO, new BigDecimal(1), OCCURRENCES);
+        validateKeyword(keywords.get(0), "Kws1", false, NOT_APPLICABLE, new BigDecimal(0), NONE, WarningLevel.NONE);
+        validateKeyword(keywords.get(1), "Kws2", false, NOT_APPLICABLE, new BigDecimal(0), NONE, WarningLevel.NONE);
+        validateKeyword(keywords.get(2), "Kws3", false, NOT_APPLICABLE, new BigDecimal(0), NONE, WarningLevel.NONE);
+        validateKeyword(keywords.get(3), "Kws1", true, EQUAL_TO, new BigDecimal(1), OCCURRENCES, WarningLevel.NONE);
+        validateKeyword(keywords.get(4), "Kws2", true, EQUAL_TO, new BigDecimal(1), OCCURRENCES, WarningLevel.NONE);
+        validateKeyword(keywords.get(5), "Kws3", true, EQUAL_TO, new BigDecimal(1), OCCURRENCES, WarningLevel.NONE);
     }
 
     @Test
@@ -393,9 +406,12 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         consumer.accept(KEYWORD_OVER_TIME_TOKEN + SEPARATOR + false);
         consumer.accept(KEYWORD_THRESHOLD_TOKEN + SEPARATOR + false);
         consumer.accept(START_KEYWORDS_TOKEN);
-        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 0 + SEPARATOR + NONE);
-        consumer.accept("Kws2" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 0 + SEPARATOR + NONE);
-        consumer.accept("Kws3" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 0 + SEPARATOR + NONE);
+        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR
+                + 0 + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
+        consumer.accept("Kws2" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR
+                + 0 + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
+        consumer.accept("Kws3" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR
+                + 0 + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
         consumer.accept(END_PROFILE_TOKEN);
         consumer.accept(NAME_TOKEN + SEPARATOR + VALUE);
         consumer.accept(START_PROFILE_TOKEN);
@@ -405,9 +421,12 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         consumer.accept(KEYWORD_OVER_TIME_TOKEN + SEPARATOR + true);
         consumer.accept(KEYWORD_THRESHOLD_TOKEN + SEPARATOR + true);
         consumer.accept(START_KEYWORDS_TOKEN);
-        consumer.accept("Kws1" + SEPARATOR + true + SEPARATOR + EQUAL_TO + SEPARATOR + 1 + SEPARATOR + OCCURRENCES);
-        consumer.accept("Kws2" + SEPARATOR + true + SEPARATOR + EQUAL_TO + SEPARATOR + 1 + SEPARATOR + OCCURRENCES);
-        consumer.accept("Kws3" + SEPARATOR + true + SEPARATOR + EQUAL_TO + SEPARATOR + 1 + SEPARATOR + OCCURRENCES);
+        consumer.accept("Kws1" + SEPARATOR + true + SEPARATOR + EQUAL_TO + SEPARATOR + 1 + SEPARATOR
+                + OCCURRENCES + SEPARATOR + WarningLevel.NONE);
+        consumer.accept("Kws2" + SEPARATOR + true + SEPARATOR + EQUAL_TO + SEPARATOR + 1 + SEPARATOR
+                + OCCURRENCES + SEPARATOR + WarningLevel.NONE);
+        consumer.accept("Kws3" + SEPARATOR + true + SEPARATOR + EQUAL_TO + SEPARATOR + 1 + SEPARATOR
+                + OCCURRENCES + SEPARATOR + WarningLevel.NONE);
         consumer.accept(END_KEYWORDS_TOKEN);
         consumer.accept(END_PROFILE_TOKEN);
 
@@ -419,18 +438,18 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         validateEnabledProfiles(profile, false, false, false, false, false);
         ArrayList<Keyword> keywords = profile.getKeywords();
         assertEquals(3, keywords.size());
-        validateKeyword(keywords.get(0), "Kws1", false, NOT_APPLICABLE, new BigDecimal(0), NONE);
-        validateKeyword(keywords.get(1), "Kws2", false, NOT_APPLICABLE, new BigDecimal(0), NONE);
-        validateKeyword(keywords.get(2), "Kws3", false, NOT_APPLICABLE, new BigDecimal(0), NONE);
+        validateKeyword(keywords.get(0), "Kws1", false, NOT_APPLICABLE, new BigDecimal(0), NONE, WarningLevel.NONE);
+        validateKeyword(keywords.get(1), "Kws2", false, NOT_APPLICABLE, new BigDecimal(0), NONE, WarningLevel.NONE);
+        validateKeyword(keywords.get(2), "Kws3", false, NOT_APPLICABLE, new BigDecimal(0), NONE, WarningLevel.NONE);
 
         profile = profiles[1];
         assertEquals(VALUE, profile.getName());
         validateEnabledProfiles(profile, true, true, true, true, true);
         keywords = profile.getKeywords();
         assertEquals(3, keywords.size());
-        validateKeyword(keywords.get(0), "Kws1", true, EQUAL_TO, new BigDecimal(1), OCCURRENCES);
-        validateKeyword(keywords.get(1), "Kws2", true, EQUAL_TO, new BigDecimal(1), OCCURRENCES);
-        validateKeyword(keywords.get(2), "Kws3", true, EQUAL_TO, new BigDecimal(1), OCCURRENCES);
+        validateKeyword(keywords.get(0), "Kws1", true, EQUAL_TO, new BigDecimal(1), OCCURRENCES, WarningLevel.NONE);
+        validateKeyword(keywords.get(1), "Kws2", true, EQUAL_TO, new BigDecimal(1), OCCURRENCES, WarningLevel.NONE);
+        validateKeyword(keywords.get(2), "Kws3", true, EQUAL_TO, new BigDecimal(1), OCCURRENCES, WarningLevel.NONE);
     }
 
 
@@ -444,8 +463,10 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         consumer.accept(NAME_TOKEN + SEPARATOR + VALUE);
         consumer.accept(START_PROFILE_TOKEN);
         consumer.accept(START_KEYWORDS_TOKEN);
-        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 0.1 + SEPARATOR + NONE);
-        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 1.1221 + SEPARATOR + NONE);
+        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR
+                + 0.1 + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
+        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR
+                + 1.1221 + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
         consumer.accept(END_KEYWORDS_TOKEN);
         consumer.accept(END_PROFILE_TOKEN);
 
@@ -457,8 +478,8 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         validateEnabledProfiles(profile, false, false, false, false, false);
         ArrayList<Keyword> keywords = profile.getKeywords();
         assertEquals(2, keywords.size());
-        validateKeyword(keywords.get(0), "Kws1", false, NOT_APPLICABLE, new BigDecimal("0.1"), NONE);
-        validateKeyword(keywords.get(1), "Kws1", false, NOT_APPLICABLE, new BigDecimal("1.1221"), NONE);
+        validateKeyword(keywords.get(0), "Kws1", false, NOT_APPLICABLE, new BigDecimal("0.1"), NONE, WarningLevel.NONE);
+        validateKeyword(keywords.get(1), "Kws1", false, NOT_APPLICABLE, new BigDecimal("1.1221"), NONE, WarningLevel.NONE);
     }
 
     @Test
@@ -474,8 +495,10 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         consumer.accept(NAME_TOKEN + SEPARATOR + VALUE);
         consumer.accept(START_PROFILE_TOKEN);
         consumer.accept(START_KEYWORDS_TOKEN);
-        consumer.accept("" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 0.1 + SEPARATOR + NONE);
-        consumer.accept(false + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 1.1221 + SEPARATOR + NONE);
+        consumer.accept("" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR
+                + 0.1 + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
+        consumer.accept(false + SEPARATOR + NOT_APPLICABLE + SEPARATOR
+                + 1.1221 + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
         consumer.accept(END_KEYWORDS_TOKEN);
         consumer.accept(END_PROFILE_TOKEN);
 
@@ -487,7 +510,7 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         validateEnabledProfiles(profile, false, false, false, false, false);
         ArrayList<Keyword> keywords = profile.getKeywords();
         assertEquals(1, keywords.size());
-        validateKeyword(keywords.get(0), "", false, NOT_APPLICABLE, new BigDecimal("0.1"), NONE);
+        validateKeyword(keywords.get(0), "", false, NOT_APPLICABLE, new BigDecimal("0.1"), NONE, WarningLevel.NONE);
     }
 
     @Test
@@ -502,8 +525,10 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         consumer.accept(NAME_TOKEN + SEPARATOR + VALUE);
         consumer.accept(START_PROFILE_TOKEN);
         consumer.accept(START_KEYWORDS_TOKEN);
-        consumer.accept("Kws1" + SEPARATOR + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 0.1 + SEPARATOR + NONE);
-        consumer.accept("Kws1" + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 1.1221 + SEPARATOR + NONE);
+        consumer.accept("Kws1" + SEPARATOR + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 0.1
+                + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
+        consumer.accept("Kws1" + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 1.1221
+                + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
         consumer.accept(END_KEYWORDS_TOKEN);
         consumer.accept(END_PROFILE_TOKEN);
 
@@ -515,7 +540,7 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         validateEnabledProfiles(profile, false, false, false, false, false);
         ArrayList<Keyword> keywords = profile.getKeywords();
         assertEquals(1, keywords.size());
-        validateKeyword(keywords.get(0), "Kws1", false, NOT_APPLICABLE, new BigDecimal("0.1"), NONE);
+        validateKeyword(keywords.get(0), "Kws1", false, NOT_APPLICABLE, new BigDecimal("0.1"), NONE, WarningLevel.NONE);
     }
 
     @Test
@@ -528,8 +553,8 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         consumer.accept(NAME_TOKEN + SEPARATOR + VALUE);
         consumer.accept(START_PROFILE_TOKEN);
         consumer.accept(START_KEYWORDS_TOKEN);
-        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + SEPARATOR + 0.1 + SEPARATOR + NONE);
-        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + 1.1221 + SEPARATOR + NONE);
+        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + SEPARATOR + 0.1 + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
+        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + 1.1221 + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
         consumer.accept(END_KEYWORDS_TOKEN);
         consumer.accept(END_PROFILE_TOKEN);
 
@@ -541,7 +566,7 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         validateEnabledProfiles(profile, false, false, false, false, false);
         ArrayList<Keyword> keywords = profile.getKeywords();
         assertEquals(1, keywords.size());
-        validateKeyword(keywords.get(0), "Kws1", false, NOT_APPLICABLE, new BigDecimal("0.1"), NONE);
+        validateKeyword(keywords.get(0), "Kws1", false, NOT_APPLICABLE, new BigDecimal("0.1"), NONE, WarningLevel.NONE);
     }
 
     @Test
@@ -554,8 +579,10 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         consumer.accept(NAME_TOKEN + SEPARATOR + VALUE);
         consumer.accept(START_PROFILE_TOKEN);
         consumer.accept(START_KEYWORDS_TOKEN);
-        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR + SEPARATOR + NONE);
-        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR + NONE);
+        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE
+                + SEPARATOR + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
+        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE
+                + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
         consumer.accept(END_KEYWORDS_TOKEN);
         consumer.accept(END_PROFILE_TOKEN);
 
@@ -567,7 +594,7 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         validateEnabledProfiles(profile, false, false, false, false, false);
         ArrayList<Keyword> keywords = profile.getKeywords();
         assertEquals(1, keywords.size());
-        validateKeyword(keywords.get(0), "Kws1", false, NOT_APPLICABLE, new BigDecimal("0"), NONE);
+        validateKeyword(keywords.get(0), "Kws1", false, NOT_APPLICABLE, new BigDecimal("0"), NONE, WarningLevel.NONE);
     }
 
     @Test
@@ -580,8 +607,10 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         consumer.accept(NAME_TOKEN + SEPARATOR + VALUE);
         consumer.accept(START_PROFILE_TOKEN);
         consumer.accept(START_KEYWORDS_TOKEN);
-        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 0.1 + SEPARATOR + NONE);
-        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 1.1221 + SEPARATOR + NONE);
+        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR
+                + 0.1 + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
+        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR
+                + 1.1221 + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
         consumer.accept(END_KEYWORDS_TOKEN);
         consumer.accept(END_PROFILE_TOKEN);
 
@@ -593,8 +622,8 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         validateEnabledProfiles(profile, false, false, false, false, false);
         ArrayList<Keyword> keywords = profile.getKeywords();
         assertEquals(2, keywords.size());
-        validateKeyword(keywords.get(0), "Kws1", false, NOT_APPLICABLE, new BigDecimal("0.1"), NONE);
-        validateKeyword(keywords.get(1), "Kws1", false, NOT_APPLICABLE, new BigDecimal("1.1221"), NONE);
+        validateKeyword(keywords.get(0), "Kws1", false, NOT_APPLICABLE, new BigDecimal("0.1"), NONE, WarningLevel.NONE);
+        validateKeyword(keywords.get(1), "Kws1", false, NOT_APPLICABLE, new BigDecimal("1.1221"), NONE, WarningLevel.NONE);
     }
 
     @Test
@@ -609,9 +638,11 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         consumer.accept(START_PROFILE_TOKEN);
         consumer.accept(START_KEYWORDS_TOKEN);
         // invalid line
-        consumer.accept("Kws1" + SEPARATOR + "not a boolean" + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 0.1 + SEPARATOR + NONE);
+        consumer.accept("Kws1" + SEPARATOR + "not a boolean" + SEPARATOR + NOT_APPLICABLE + SEPARATOR
+                + 0.1 + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
         // valid line
-        consumer.accept("Kws1" + SEPARATOR + true + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 1.1221 + SEPARATOR + NONE);
+        consumer.accept("Kws1" + SEPARATOR + true + SEPARATOR + NOT_APPLICABLE + SEPARATOR
+                + 1.1221 + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
         consumer.accept(END_KEYWORDS_TOKEN);
         consumer.accept(END_PROFILE_TOKEN);
 
@@ -624,8 +655,8 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         ArrayList<Keyword> keywords = profile.getKeywords();
         assertEquals(2, keywords.size());
         // Parse Boolean returns false if the value is not parsable, that's convenient!
-        validateKeyword(keywords.get(0), "Kws1", false, NOT_APPLICABLE, new BigDecimal("0.1"), NONE);
-        validateKeyword(keywords.get(1), "Kws1", true, NOT_APPLICABLE, new BigDecimal("1.1221"), NONE);
+        validateKeyword(keywords.get(0), "Kws1", false, NOT_APPLICABLE, new BigDecimal("0.1"), NONE, WarningLevel.NONE);
+        validateKeyword(keywords.get(1), "Kws1", true, NOT_APPLICABLE, new BigDecimal("1.1221"), NONE, WarningLevel.NONE);
     }
 
     @Test
@@ -639,8 +670,10 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         consumer.accept(NAME_TOKEN + SEPARATOR + VALUE);
         consumer.accept(START_PROFILE_TOKEN);
         consumer.accept(START_KEYWORDS_TOKEN);
-        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + "not a valid thing" + SEPARATOR + 0.1 + SEPARATOR + NONE);
-        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 1.1221 + SEPARATOR + NONE);
+        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + "not a valid thing" + SEPARATOR
+                + 0.1 + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
+        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR
+                + 1.1221 + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
         consumer.accept(END_KEYWORDS_TOKEN);
         consumer.accept(END_PROFILE_TOKEN);
 
@@ -653,8 +686,8 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         ArrayList<Keyword> keywords = profile.getKeywords();
         assertEquals(2, keywords.size());
         // By default if the Type is invalid, returns the NOT_APPLICABLE
-        validateKeyword(keywords.get(0), "Kws1", false, NOT_APPLICABLE, new BigDecimal("0.1"), NONE);
-        validateKeyword(keywords.get(1), "Kws1", false, NOT_APPLICABLE, new BigDecimal("1.1221"), NONE);
+        validateKeyword(keywords.get(0), "Kws1", false, NOT_APPLICABLE, new BigDecimal("0.1"), NONE, WarningLevel.NONE);
+        validateKeyword(keywords.get(1), "Kws1", false, NOT_APPLICABLE, new BigDecimal("1.1221"), NONE, WarningLevel.NONE);
     }
 
     @Test
@@ -668,8 +701,10 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         consumer.accept(NAME_TOKEN + SEPARATOR + VALUE);
         consumer.accept(START_PROFILE_TOKEN);
         consumer.accept(START_KEYWORDS_TOKEN);
-        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR + "not a valid thing" + SEPARATOR + NONE);
-        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 1.1221 + SEPARATOR + NONE);
+        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR + "not a valid thing"
+                + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
+        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 1.1221
+                + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
         consumer.accept(END_KEYWORDS_TOKEN);
         consumer.accept(END_PROFILE_TOKEN);
 
@@ -681,7 +716,7 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         validateEnabledProfiles(profile, false, false, false, false, false);
         ArrayList<Keyword> keywords = profile.getKeywords();
         assertEquals(1, keywords.size());
-        validateKeyword(keywords.get(0), "Kws1", false, NOT_APPLICABLE, new BigDecimal("1.1221"), NONE);
+        validateKeyword(keywords.get(0), "Kws1", false, NOT_APPLICABLE, new BigDecimal("1.1221"), NONE, WarningLevel.NONE);
     }
 
     @Test
@@ -695,8 +730,10 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         consumer.accept(NAME_TOKEN + SEPARATOR + VALUE);
         consumer.accept(START_PROFILE_TOKEN);
         consumer.accept(START_KEYWORDS_TOKEN);
-        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 0.1 + SEPARATOR + "not a valid unit");
-        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR + 1.1221 + SEPARATOR + NONE);
+        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR
+                + 0.1 + SEPARATOR + "not a valid unit" + SEPARATOR + WarningLevel.NONE);
+        consumer.accept("Kws1" + SEPARATOR + false + SEPARATOR + NOT_APPLICABLE + SEPARATOR
+                + 1.1221 + SEPARATOR + NONE + SEPARATOR + WarningLevel.NONE);
         consumer.accept(END_KEYWORDS_TOKEN);
         consumer.accept(END_PROFILE_TOKEN);
 
@@ -708,8 +745,8 @@ public class MetricsProfileConsumerTests extends MetricsProfilesCommon {
         validateEnabledProfiles(profile, false, false, false, false, false);
         ArrayList<Keyword> keywords = profile.getKeywords();
         assertEquals(2, keywords.size());
-        validateKeyword(keywords.get(0), "Kws1", false, NOT_APPLICABLE, new BigDecimal("0.1"), NONE);
-        validateKeyword(keywords.get(1), "Kws1", false, NOT_APPLICABLE, new BigDecimal("1.1221"), NONE);
+        validateKeyword(keywords.get(0), "Kws1", false, NOT_APPLICABLE, new BigDecimal("0.1"), NONE, WarningLevel.NONE);
+        validateKeyword(keywords.get(1), "Kws1", false, NOT_APPLICABLE, new BigDecimal("1.1221"), NONE, WarningLevel.NONE);
     }
 
 

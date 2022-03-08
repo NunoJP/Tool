@@ -4,6 +4,7 @@ import domain.entities.Validator;
 import domain.entities.common.Keyword;
 import domain.entities.common.ThresholdTypeEnum;
 import domain.entities.common.ThresholdUnitEnum;
+import domain.entities.common.WarningLevel;
 import domain.entities.displayobjects.MetricsProfileDo;
 import domain.services.MetricsProfileManagementService;
 import presentation.common.GuiMessages;
@@ -167,6 +168,7 @@ public class MetricsProfileEditorScreenPresenter {
             JSpinner.DefaultEditor editor = (JSpinner.DefaultEditor) (valueInput.getEditor());
             editor.getTextField().setColumns(4);
         });
+
     }
 
     /**
@@ -182,6 +184,7 @@ public class MetricsProfileEditorScreenPresenter {
             keyword.setThresholdTrio((ThresholdTypeEnum) dialogView.getThresholdComboBox().getSelectedItem(),
                     (ThresholdUnitEnum) dialogView.getThresholdUnitComboBox().getSelectedItem(),
                     new BigDecimal(String.valueOf(dialogView.getThresholdValueInput().getValue())));
+            keyword.setWarningLevel((WarningLevel) dialogView.getWarningLevelComboBox().getSelectedItem());
             if(!isAdd && selectedKwdTableItemIndex != -1) {
                 keywords.set(selectedKwdTableItemIndex, keyword);
                 selectedKwdTableItemIndex = -1;
@@ -200,6 +203,7 @@ public class MetricsProfileEditorScreenPresenter {
         dialogView.getKeywordPanel().setVariableLabelText(keyword.getKeywordText());
         ThresholdTypeEnum[] thTypeValues = ThresholdTypeEnum.values();
         ThresholdUnitEnum[] thUnitValues = ThresholdUnitEnum.values();
+        WarningLevel[] warningLevels = WarningLevel.values();
         for (int i = 0; i < thTypeValues.length; i++) {
             if(thTypeValues[i].getName().equalsIgnoreCase(keyword.getThresholdType().getName())){
                 dialogView.getThresholdComboBox().setSelectedIndex(i);
@@ -209,6 +213,12 @@ public class MetricsProfileEditorScreenPresenter {
         for (int i = 0; i < thUnitValues.length; i++) {
             if(thUnitValues[i].getName().equalsIgnoreCase(keyword.getThresholdUnit().getName())){
                 dialogView.getThresholdUnitComboBox().setSelectedIndex(i);
+                break;
+            }
+        }
+        for (int i = 0; i < warningLevels.length; i++) {
+            if(warningLevels[i].getName().equalsIgnoreCase(keyword.getWarningLevel().getName())){
+                dialogView.getWarningLevelComboBox().setSelectedIndex(i);
                 break;
             }
         }
@@ -245,10 +255,13 @@ public class MetricsProfileEditorScreenPresenter {
 
     private Object[][] convertDataForTable(ArrayList<Keyword> data) {
         Object[][] objects = new Object[data.size()][];
-        for (int i = 0; i <data.size(); i++) {
-            objects[i] = new Object[] {data.get(i).getKeywordText(), data.get(i).isCaseSensitive(),
-                    data.get(i).getThresholdType().getSymbol() + " " + data.get(i).getThresholdValue()
-                            + " " + data.get(i).getThresholdUnit().getSymbol() };
+        for (int i = 0; i < data.size(); i++) {
+            Keyword keyword = data.get(i);
+            objects[i] = new Object[]{keyword.getKeywordText(), keyword.isCaseSensitive(),
+                    keyword.getThresholdType().getSymbol()
+                            + " " + keyword.getThresholdValue()
+                            + " " + keyword.getThresholdUnit().getSymbol(),
+                    keyword.getWarningLevel().getSymbol()};
         }
         return objects;
     }

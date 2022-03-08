@@ -2,11 +2,13 @@ package presentation.fileanalysis;
 
 import domain.entities.Converter;
 import domain.entities.common.Warning;
+import domain.entities.common.WarningLevel;
 import domain.entities.displayobjects.MetricsProfileDo;
 import domain.entities.displayobjects.ParsingProfileDo;
 import domain.entities.domainobjects.MetricsReport;
 import domain.services.FileAnalysisMetricsService;
 import domain.services.FileAnalysisService;
+import domain.services.ToolConfigurationService;
 import general.util.Pair;
 import presentation.common.GuiMessages;
 import presentation.common.IViewPresenter;
@@ -55,13 +57,10 @@ public class FileAnalysisMetricsScreenPresenter implements IViewPresenter {
         MetricsReport metricsReport = fileAnalysisMetricsService.getMetricsReport();
         String [][] kwdThresholdData = metricsReport.getKwdThresholdData();
         view.getKwdThTable().setData(kwdThresholdData);
-        view.getKwdThTable().setStringColorRenderMap(generateDefaultColorMap());
         String [][] logLevelData = metricsReport.getLogLevelData();
         view.getLogLevelTable().setData(logLevelData);
-        view.getLogLevelTable().setStringColorRenderMap(generateDefaultColorMap());
         String [][] mostCommonWordsData = metricsReport.getMostCommonWordsData();
         view.getMostCommonWordsTable().setData(mostCommonWordsData);
-        view.getMostCommonWordsTable().setStringColorRenderMap(generateDefaultColorMap());
         String [][] warningsData = getMessages(metricsReport.getWarningsData());
         view.getWarningsTable().setData(warningsData);
         view.getWarningsTable().setStringColorRenderMap(generateDefaultColorMap());
@@ -95,16 +94,18 @@ public class FileAnalysisMetricsScreenPresenter implements IViewPresenter {
         String[][] res = new String[warningsData.size()][];
         int idx = 0;
         for (Warning warning : warningsData) {
-            res[idx] = new String[] { "", warning.getMessage()};
+            res[idx] = new String[] { warning.getWarningLevel().getSymbol(), warning.getMessage()};
             idx++;
         }
         return res;
     }
 
     private HashMap<String, Pair<Color, Color>> generateDefaultColorMap() {
+        HashMap<WarningLevel, Color> warningColorMap = ToolConfigurationService.getInstance().getToolConfiguration().getWarningColorMap();
         HashMap<String, Pair<Color, Color>> colorMap = new HashMap<>();
-        colorMap.put("Error", Pair.of(new Color(255, 102, 102), Color.BLACK));
-        colorMap.put("Warning", Pair.of(new Color(255, 255, 179), Color.BLACK));
+        for (WarningLevel s : warningColorMap.keySet()) {
+            colorMap.put(s.getSymbol(), Pair.of(warningColorMap.get(s), Color.BLACK));
+        }
         return colorMap;
     }
 

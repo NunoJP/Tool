@@ -63,7 +63,8 @@ public class MetricsProfileFunction implements Function<MetricsProfile, String> 
                 + portion.isCaseSensitive() + SEPARATOR
                 + portion.getThresholdType().getParsingString() + SEPARATOR
                 + portion.getThresholdValue() + SEPARATOR
-                + portion.getThresholdUnit().getParsingString();
+                + portion.getThresholdUnit().getParsingString() + SEPARATOR
+                + portion.getWarningLevel().getParsingString();
     }
 
     public void setIsNewFile(boolean isNew) {

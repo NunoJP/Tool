@@ -9,7 +9,8 @@ import static data.dataaccess.common.ToolConfigurationReadWriteConstants.PORTION
 public class ToolConfigurationFileSupplier implements Supplier<String> {
 
     private final String [][] configurations = new String[][] {
-            { ToolConfigurationReadWriteConstants.STOP_WORDS_TOKEN, ToolConfigurationReadWriteConstants.STOP_WORDS_DEFAULT_VALUES }
+            { ToolConfigurationReadWriteConstants.STOP_WORDS_TOKEN, ToolConfigurationReadWriteConstants.STOP_WORDS_DEFAULT_VALUES },
+            { ToolConfigurationReadWriteConstants.WARNING_COLORS_TOKEN, ToolConfigurationReadWriteConstants.WARNING_COLORS_DEFAULT_VALUES }
     };
 
     @Override

@@ -9,6 +9,7 @@ public class Keyword {
     private ThresholdTypeEnum threshold;
     private BigDecimal thresholdValue;
     private ThresholdUnitEnum thresholdUnit;
+    private WarningLevel warningLevel;
 
     public Keyword(String keywordText, boolean isCaseSensitive) {
         this.keywordText = keywordText;
@@ -24,7 +25,6 @@ public class Keyword {
         this.thresholdValue = thresholdValue;
         return this;
     }
-
 
     public String getKeywordText() {
         return keywordText;
@@ -64,5 +64,16 @@ public class Keyword {
 
     public void setThresholdUnit(ThresholdUnitEnum thresholdUnit) {
         this.thresholdUnit = thresholdUnit;
+    }
+
+    public WarningLevel getWarningLevel() {
+        if (warningLevel == null) {
+            warningLevel = WarningLevel.NONE;
+        }
+        return warningLevel;
+    }
+
+    public void setWarningLevel(WarningLevel warningLevel) {
+        this.warningLevel = warningLevel;
     }
 }

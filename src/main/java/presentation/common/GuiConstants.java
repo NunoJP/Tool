@@ -79,6 +79,7 @@ public class GuiConstants {
     public static final String CHOOSE_BUTTON = "Choose";
     public static final String CLEAR_KEYWORDS_TABLE_BUTTON = "Clear table";
     public static final String CANCEL_BUTTON = "Cancel";
+    public static final String CHOOSE_COLOR_BUTTON = "Color";
 
     // Labels
     public static final String FILE_INDICATION_LABEL = "File: ";
@@ -116,6 +117,8 @@ public class GuiConstants {
     public static final String WORD_LABEL = "Word";
     public static final String SIZE_LABEL = "Size";
     public static final String IDENTIFIER_LABEL = "Id:";
+    public static final String WARNING_CONFIG_LABEL = "Warning:";
+
 
     // Columns
     public static final String LEVEL_COLUMN = "Level";
@@ -134,6 +137,7 @@ public class GuiConstants {
     public static final String CASE_SENSITIVE_COLUMN = "Case sensitive";
     public static final String THRESHOLD_COLUMN = "Threshold";
     public static final String IDENTIFIER_COLUMN = "Id";
+    public static final String WARNING_LEVEL_COLUMN = "Warning";
 
     public static final String NO_NAME_PROVIDED = "No name provided";
 

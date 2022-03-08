@@ -5,6 +5,8 @@ import presentation.common.GuiMessages;
 public class Warning {
 
     private final String message;
+    private WarningLevel warningLevel;
+
     public Warning(Keyword standard) {
         String particle = "";
         switch (standard.getThresholdType()) {
@@ -22,9 +24,21 @@ public class Warning {
         }
 
         message = String.format(GuiMessages.WARNING_MESSAGE_BASE, standard.getThresholdValue(), standard.getKeywordText(), particle);
+        warningLevel = standard.getWarningLevel();
     }
 
     public String getMessage() {
         return message;
+    }
+
+    public WarningLevel getWarningLevel() {
+        if (warningLevel == null) {
+            warningLevel = WarningLevel.NONE;
+        }
+        return warningLevel;
+    }
+
+    public void setWarningLevel(WarningLevel warningLevel) {
+        this.warningLevel = warningLevel;
     }
 }

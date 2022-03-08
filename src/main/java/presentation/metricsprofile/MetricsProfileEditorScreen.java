@@ -2,6 +2,7 @@ package presentation.metricsprofile;
 
 import domain.entities.common.ThresholdTypeEnum;
 import domain.entities.common.ThresholdUnitEnum;
+import domain.entities.common.WarningLevel;
 import presentation.common.GuiConstants;
 import presentation.common.custom.CellRenderer;
 import presentation.common.custom.GeneralTablePanel;
@@ -25,6 +26,7 @@ import static presentation.common.GuiConstants.H_GAP;
 import static presentation.common.GuiConstants.H_METRIC_PROFILES_EDITOR_SCREEN_SIZE;
 import static presentation.common.GuiConstants.V_GAP;
 import static presentation.common.GuiConstants.V_METRIC_PROFILES_EDITOR_SCREEN_SIZE;
+import static presentation.common.GuiConstants.WARNING_CONFIG_LABEL;
 
 
 public class MetricsProfileEditorScreen extends JDialog {
@@ -43,6 +45,7 @@ public class MetricsProfileEditorScreen extends JDialog {
     private JButton clearKwdsButton;
     private JComboBox<ThresholdTypeEnum> thresholdComboBox;
     private JComboBox<ThresholdUnitEnum> thresholdUnitComboBox;
+    private JComboBox<WarningLevel> warningLevelComboBox;
     private JSpinner valueInput;
     private GeneralTablePanel keywordTable;
     private JButton saveProfileButton;
@@ -132,6 +135,14 @@ public class MetricsProfileEditorScreen extends JDialog {
         editor.getTextField().setColumns(4);
         thresholdPanel.add(valueInput);
 
+        thresholdPanel.add(new JLabel(WARNING_CONFIG_LABEL));
+
+        warningLevelComboBox = new JComboBox<>(WarningLevel.values());
+        warningLevelComboBox.setRenderer(new CellRenderer());
+        warningLevelComboBox.setSelectedIndex(0);
+        warningLevelComboBox.setLightWeightPopupEnabled(false);
+        thresholdPanel.add(warningLevelComboBox);
+
         northPanel.add(thresholdPanel);
 
         JPanel buttonHolder = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, V_GAP));
@@ -147,7 +158,8 @@ public class MetricsProfileEditorScreen extends JDialog {
         northPanel.add(buttonHolder);
 
         keywordTable = new GeneralTablePanel(
-                new String[]{GuiConstants.KEYWORD_COLUMN, GuiConstants.CASE_SENSITIVE_COLUMN, GuiConstants.THRESHOLD_COLUMN}, false
+                new String[]{GuiConstants.KEYWORD_COLUMN, GuiConstants.CASE_SENSITIVE_COLUMN,
+                        GuiConstants.THRESHOLD_COLUMN, GuiConstants.WARNING_LEVEL_COLUMN}, false
         );
 
         holder.add(northPanel, BorderLayout.NORTH);
@@ -272,4 +284,9 @@ public class MetricsProfileEditorScreen extends JDialog {
     public String getProfileNameText() {
         return namePanel.getVariableTextField().getText();
     }
+
+    public JComboBox<WarningLevel> getWarningLevelComboBox() {
+        return warningLevelComboBox;
+    }
+
 }
