@@ -33,6 +33,7 @@ public abstract class MetricsProfilesCommon {
         assertEquals(typeEnum, keyword.getThresholdType());
         assertEquals(value, keyword.getThresholdValue());
         assertEquals(unitEnum, keyword.getThresholdUnit());
+        assertEquals(none, keyword.getWarningLevel());
     }
 
     protected void validateEnabledProfiles(MetricsProfile profile, boolean mCw, boolean fs, boolean kwdH, boolean kwdOt, boolean kwdTh) {

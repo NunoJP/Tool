@@ -67,6 +67,11 @@ public class GeneralTablePanel extends JPanel {
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
+    public void setCellSelectionOnly() {
+        table.setCellSelectionEnabled(true);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    }
+
     public void addRowSelectionEvent(ListSelectionListener listSelectionListener) {
         table.getSelectionModel().addListSelectionListener(listSelectionListener);
     }

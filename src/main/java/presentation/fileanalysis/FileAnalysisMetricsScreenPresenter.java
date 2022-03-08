@@ -57,12 +57,16 @@ public class FileAnalysisMetricsScreenPresenter implements IViewPresenter {
         MetricsReport metricsReport = fileAnalysisMetricsService.getMetricsReport();
         String [][] kwdThresholdData = metricsReport.getKwdThresholdData();
         view.getKwdThTable().setData(kwdThresholdData);
+        view.getKwdThTable().setCellSelectionOnly();
         String [][] logLevelData = metricsReport.getLogLevelData();
         view.getLogLevelTable().setData(logLevelData);
+        view.getLogLevelTable().setCellSelectionOnly();
         String [][] mostCommonWordsData = metricsReport.getMostCommonWordsData();
         view.getMostCommonWordsTable().setData(mostCommonWordsData);
+        view.getMostCommonWordsTable().setCellSelectionOnly();
         String [][] warningsData = getMessages(metricsReport.getWarningsData());
         view.getWarningsTable().setData(warningsData);
+        view.getWarningsTable().setCellSelectionOnly();
         view.getWarningsTable().setStringColorRenderMap(generateDefaultColorMap());
 
         // File name and dates
