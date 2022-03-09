@@ -252,20 +252,59 @@ public class MetricsReportTests extends LogLineTests {
 
 
     @Test
-    public void testThresholdOcc() {
+    public void testThresholdOccNonCaseSensitive() {
         HashMap<String, Integer> wordValues = new HashMap<>();
         HashMap<String, Keyword> wordKeyword = new HashMap<>();
         ArrayList<Keyword> kwds = new ArrayList<>();
         MetricsProfile profile = new MetricsProfile();
-        Keyword kwd0 = makeKeyword(kwds, "Word0", ThresholdTypeEnum.BIGGER_OR_EQUAL_THAN, 1);
+        Keyword kwd0 = makeKeyword(kwds, "Word0", ThresholdTypeEnum.BIGGER_OR_EQUAL_THAN, 1, false);
+        wordKeyword.put(kwd0.getKeywordText().toLowerCase(), kwd0);
+        Keyword kwd1 = makeKeyword(kwds, "Word1", ThresholdTypeEnum.BIGGER_THAN, 1, false);
+        wordKeyword.put(kwd1.getKeywordText().toLowerCase(), kwd1);
+        Keyword kwd2 = makeKeyword(kwds, "Word2", ThresholdTypeEnum.EQUAL_TO, 1, false);
+        wordKeyword.put(kwd2.getKeywordText().toLowerCase(), kwd2);
+        Keyword kwd3 = makeKeyword(kwds, "Word3", ThresholdTypeEnum.SMALLER_THAN, 2, false);
+        wordKeyword.put(kwd3.getKeywordText().toLowerCase(), kwd3);
+        Keyword kwd4 = makeKeyword(kwds, "Word4", ThresholdTypeEnum.SMALLER_OR_EQUAL_THAN, 1, false);
+        wordKeyword.put(kwd4.getKeywordText().toLowerCase(), kwd4);
+        int [] amounts = new int[] { 1, 2, 1, 1, 1, 100 };
+        profile.setKeywords(kwds);
+        data = new LogLine[106];
+
+        int idx = 0;
+        for (int i = 0; i < amounts.length; i++) {
+            for (int am = 0; am < amounts[i]; am++) {
+                LogLine line = new LogLine();
+                line.setMessage("word" + i);
+                data[idx] = line;
+                idx++;
+            }
+            wordValues.put("word" + i, amounts[i]);
+        }
+        MetricsReport report = new MetricsReport(profile, data);
+        String[][] thresholdData = report.getKwdThresholdData();
+
+        assertEquals(amounts.length -1, thresholdData.length);
+        for (int i = 0; i < amounts.length -1; i++) {
+            assertEquals(makeThresholdMessage(wordKeyword.get(thresholdData[i][0].toLowerCase()),
+                    String.valueOf(wordValues.get(thresholdData[i][0].toLowerCase()))), thresholdData[i][1]);
+        }
+    }
+    @Test
+    public void testThresholdOccCaseSensitive() {
+        HashMap<String, Integer> wordValues = new HashMap<>();
+        HashMap<String, Keyword> wordKeyword = new HashMap<>();
+        ArrayList<Keyword> kwds = new ArrayList<>();
+        MetricsProfile profile = new MetricsProfile();
+        Keyword kwd0 = makeKeyword(kwds, "Word0", ThresholdTypeEnum.BIGGER_OR_EQUAL_THAN, 1, true);
         wordKeyword.put(kwd0.getKeywordText(), kwd0);
-        Keyword kwd1 = makeKeyword(kwds, "Word1", ThresholdTypeEnum.BIGGER_THAN, 1);
+        Keyword kwd1 = makeKeyword(kwds, "word1", ThresholdTypeEnum.BIGGER_THAN, 1, true);
         wordKeyword.put(kwd1.getKeywordText(), kwd1);
-        Keyword kwd2 = makeKeyword(kwds, "Word2", ThresholdTypeEnum.EQUAL_TO, 1);
+        Keyword kwd2 = makeKeyword(kwds, "word2", ThresholdTypeEnum.EQUAL_TO, 1, true);
         wordKeyword.put(kwd2.getKeywordText(), kwd2);
-        Keyword kwd3 = makeKeyword(kwds, "Word3", ThresholdTypeEnum.SMALLER_THAN, 2);
+        Keyword kwd3 = makeKeyword(kwds, "word3", ThresholdTypeEnum.SMALLER_THAN, 2, true);
         wordKeyword.put(kwd3.getKeywordText(), kwd3);
-        Keyword kwd4 = makeKeyword(kwds, "Word4", ThresholdTypeEnum.SMALLER_OR_EQUAL_THAN, 1);
+        Keyword kwd4 = makeKeyword(kwds, "word4", ThresholdTypeEnum.SMALLER_OR_EQUAL_THAN, 1, true);
         wordKeyword.put(kwd4.getKeywordText(), kwd4);
         int [] amounts = new int[] { 1, 2, 1, 1, 1, 100 };
         profile.setKeywords(kwds);
@@ -284,11 +323,11 @@ public class MetricsReportTests extends LogLineTests {
         MetricsReport report = new MetricsReport(profile, data);
         String[][] thresholdData = report.getKwdThresholdData();
 
-        assertEquals(amounts.length -1, thresholdData.length);
-        for (int i = 0; i < amounts.length -1; i++) {
-            assertEquals(makeThresholdMessage(wordKeyword.get(thresholdData[i][0]),
-                    String.valueOf(wordValues.get(thresholdData[i][0]))), thresholdData[i][1]);
-        }
+        assertEquals(1, thresholdData.length);
+
+        assertEquals(makeThresholdMessage(wordKeyword.get(thresholdData[0][0]),
+                    String.valueOf(wordValues.get(thresholdData[0][0]))), thresholdData[0][1]);
+
     }
 
 
@@ -298,15 +337,56 @@ public class MetricsReportTests extends LogLineTests {
         HashMap<String, Keyword> wordKeyword = new HashMap<>();
         ArrayList<Keyword> kwds = new ArrayList<>();
         MetricsProfile profile = new MetricsProfile();
-        Keyword kwd0 = makeKeyword(kwds, "Word0", ThresholdTypeEnum.BIGGER_OR_EQUAL_THAN);
+        Keyword kwd0 = makeKeyword(kwds, "Word0", ThresholdTypeEnum.BIGGER_OR_EQUAL_THAN, false);
+        wordKeyword.put(kwd0.getKeywordText().toLowerCase(), kwd0);
+        Keyword kwd1 = makeKeyword(kwds, "Word1", ThresholdTypeEnum.BIGGER_THAN, false);
+        wordKeyword.put(kwd1.getKeywordText().toLowerCase(), kwd1);
+        Keyword kwd2 = makeKeyword(kwds, "Word2", ThresholdTypeEnum.EQUAL_TO, false);
+        wordKeyword.put(kwd2.getKeywordText().toLowerCase(), kwd2);
+        Keyword kwd3 = makeKeyword(kwds, "Word3", ThresholdTypeEnum.SMALLER_THAN, false);
+        wordKeyword.put(kwd3.getKeywordText().toLowerCase(), kwd3);
+        Keyword kwd4 = makeKeyword(kwds, "Word4", ThresholdTypeEnum.SMALLER_OR_EQUAL_THAN, false);
+        wordKeyword.put(kwd4.getKeywordText().toLowerCase(), kwd4);
+        int [] amounts = new int[] { 10, 15, 10, 5, 10, 50 };
+        profile.setKeywords(kwds);
+        data = new LogLine[100];
+
+        int idx = 0;
+        for (int i = 0; i < amounts.length; i++) {
+            for (int am = 0; am < amounts[i]; am++) {
+                LogLine line = new LogLine();
+                line.setMessage("word" + i);
+                data[idx] = line;
+                idx++;
+            }
+            wordValues.put("word" + i, amounts[i]);
+        }
+        MetricsReport report = new MetricsReport(profile, data);
+        String[][] thresholdData = report.getKwdThresholdData();
+
+        assertEquals(amounts.length -1, thresholdData.length);
+        for (int i = 0; i < amounts.length -1; i++) {
+            assertEquals(makeThresholdMessage(wordKeyword.get(thresholdData[i][0].toLowerCase()),
+                    String.valueOf(wordValues.get(thresholdData[i][0].toLowerCase()))), thresholdData[i][1]);
+        }
+    }
+
+
+    @Test
+    public void testThresholdPercentageCaseSensitive() {
+        HashMap<String, Integer> wordValues = new HashMap<>();
+        HashMap<String, Keyword> wordKeyword = new HashMap<>();
+        ArrayList<Keyword> kwds = new ArrayList<>();
+        MetricsProfile profile = new MetricsProfile();
+        Keyword kwd0 = makeKeyword(kwds, "Word0", ThresholdTypeEnum.BIGGER_OR_EQUAL_THAN, true);
         wordKeyword.put(kwd0.getKeywordText(), kwd0);
-        Keyword kwd1 = makeKeyword(kwds, "Word1", ThresholdTypeEnum.BIGGER_THAN);
+        Keyword kwd1 = makeKeyword(kwds, "Word1", ThresholdTypeEnum.BIGGER_THAN, true);
         wordKeyword.put(kwd1.getKeywordText(), kwd1);
-        Keyword kwd2 = makeKeyword(kwds, "Word2", ThresholdTypeEnum.EQUAL_TO);
+        Keyword kwd2 = makeKeyword(kwds, "Word2", ThresholdTypeEnum.EQUAL_TO, true);
         wordKeyword.put(kwd2.getKeywordText(), kwd2);
-        Keyword kwd3 = makeKeyword(kwds, "Word3", ThresholdTypeEnum.SMALLER_THAN);
+        Keyword kwd3 = makeKeyword(kwds, "Word3", ThresholdTypeEnum.SMALLER_THAN, true);
         wordKeyword.put(kwd3.getKeywordText(), kwd3);
-        Keyword kwd4 = makeKeyword(kwds, "Word4", ThresholdTypeEnum.SMALLER_OR_EQUAL_THAN);
+        Keyword kwd4 = makeKeyword(kwds, "Word4", ThresholdTypeEnum.SMALLER_OR_EQUAL_THAN, true);
         wordKeyword.put(kwd4.getKeywordText(), kwd4);
         int [] amounts = new int[] { 10, 15, 10, 5, 10, 50 };
         profile.setKeywords(kwds);
@@ -336,7 +416,7 @@ public class MetricsReportTests extends LogLineTests {
     public void testThresholdForNonExistingWord() {
         ArrayList<Keyword> kwds = new ArrayList<>();
         MetricsProfile profile = new MetricsProfile();
-        Keyword kwd0 = makeKeyword(kwds, "WordNon", ThresholdTypeEnum.BIGGER_OR_EQUAL_THAN);
+        Keyword kwd0 = makeKeyword(kwds, "WordNon", ThresholdTypeEnum.BIGGER_OR_EQUAL_THAN, false);
         int [] amounts = new int[] { 10, 15, 10, 5, 10, 50 };
         profile.setKeywords(kwds);
         data = new LogLine[100];
@@ -383,15 +463,15 @@ public class MetricsReportTests extends LogLineTests {
     }
 
 
-    private Keyword makeKeyword(ArrayList<Keyword> kwds, String word, ThresholdTypeEnum biggerOrEqualThan) {
-        Keyword kwd0 = new Keyword(word, false);
+    private Keyword makeKeyword(ArrayList<Keyword> kwds, String word, ThresholdTypeEnum biggerOrEqualThan, boolean caseSensitive) {
+        Keyword kwd0 = new Keyword(word, caseSensitive);
         kwd0.setThresholdTrio(biggerOrEqualThan, ThresholdUnitEnum.PERCENTAGE, new BigDecimal("0.1"));
         kwds.add(kwd0);
         return kwd0;
     }
 
-    private Keyword makeKeyword(ArrayList<Keyword> kwds, String word0, ThresholdTypeEnum biggerOrEqualThan, int i2) {
-        Keyword kwd0 = new Keyword(word0, false);
+    private Keyword makeKeyword(ArrayList<Keyword> kwds, String word0, ThresholdTypeEnum biggerOrEqualThan, int i2, boolean caseSensitive) {
+        Keyword kwd0 = new Keyword(word0, caseSensitive);
         kwd0.setThresholdTrio(biggerOrEqualThan, ThresholdUnitEnum.OCCURRENCES, new BigDecimal(i2));
         kwds.add(kwd0);
         return kwd0;

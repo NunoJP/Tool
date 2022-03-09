@@ -94,11 +94,11 @@ public class MetricsReport {
         ArrayList<Keyword> matches = new ArrayList<>();
         for (Keyword keyword : metricsProfile.getKeywords()) {
             if(keyword.isCaseSensitive()) {
-                if(keyword.getKeywordText().equalsIgnoreCase(s)) {
+                if(keyword.getKeywordText().equals(s)) {
                     matches.add(keyword);
                 }
             } else {
-                if(keyword.getKeywordText().equals(s)) {
+                if(keyword.getKeywordText().equalsIgnoreCase(s)) {
                     matches.add(keyword);
                 }
             }

@@ -39,7 +39,7 @@ public class FileAnalysisMetricsScreenPresenter implements IViewPresenter {
     public FileAnalysisMetricsScreenPresenter(File selectedFile, ParsingProfileDo parsingProfile,
                                               MetricsProfileDo metricsProfile,
                                               FileAnalysisService fileAnalysisService) {
-        view = new FileAnalysisMetricsScreen();
+        view = new FileAnalysisMetricsScreen(metricsProfile);
         this.fileAnalysisService = fileAnalysisService;
         fileAnalysisService.setLogMessageConsumer(this::messagePopup);
         this.fileAnalysisMetricsService = new FileAnalysisMetricsService(fileAnalysisService, Converter.toDomainObject(metricsProfile));
@@ -55,20 +55,23 @@ public class FileAnalysisMetricsScreenPresenter implements IViewPresenter {
 
     public void execute(){
         MetricsReport metricsReport = fileAnalysisMetricsService.getMetricsReport();
-        String [][] kwdThresholdData = metricsReport.getKwdThresholdData();
-        view.getKwdThTable().setData(kwdThresholdData);
-        view.getKwdThTable().setCellSelectionOnly();
+        if(metricsProfile.isHasKeywordThreshold()) {
+            String[][] kwdThresholdData = metricsReport.getKwdThresholdData();
+            view.getKwdThTable().setData(kwdThresholdData);
+            view.getKwdThTable().setCellSelectionOnly();
+        }
         String [][] logLevelData = metricsReport.getLogLevelData();
         view.getLogLevelTable().setData(logLevelData);
         view.getLogLevelTable().setCellSelectionOnly();
-        String [][] mostCommonWordsData = metricsReport.getMostCommonWordsData();
-        view.getMostCommonWordsTable().setData(mostCommonWordsData);
-        view.getMostCommonWordsTable().setCellSelectionOnly();
-        String [][] warningsData = getMessages(metricsReport.getWarningsData());
-        view.getWarningsTable().setData(warningsData);
-        view.getWarningsTable().setCellSelectionOnly();
-        view.getWarningsTable().setStringColorRenderMap(generateDefaultColorMap());
-
+        if(metricsProfile.isHasMostCommonWords()) {
+            String[][] mostCommonWordsData = metricsReport.getMostCommonWordsData();
+            view.getMostCommonWordsTable().setData(mostCommonWordsData);
+            view.getMostCommonWordsTable().setCellSelectionOnly();
+            String[][] warningsData = getMessages(metricsReport.getWarningsData());
+            view.getWarningsTable().setData(warningsData);
+            view.getWarningsTable().setCellSelectionOnly();
+            view.getWarningsTable().setStringColorRenderMap(generateDefaultColorMap());
+        }
         // File name and dates
         view.getFileNamePanel().setVariableLabelText(metricsReport.getFileName());
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_TIME_FORMATTER);
