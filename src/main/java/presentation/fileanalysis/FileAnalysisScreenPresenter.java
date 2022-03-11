@@ -167,7 +167,7 @@ public class FileAnalysisScreenPresenter implements IViewPresenter {
         return objects;
     }
 
-    private String getTime(LogLine datum) {
+    public static String getTime(LogLine datum) {
         DateFormat timeFormat = new SimpleDateFormat(GuiConstants.TIME_FORMATTER);
         if(datum.getTimestamp() == null) {
             if(datum.getTime() == null) {
@@ -179,7 +179,7 @@ public class FileAnalysisScreenPresenter implements IViewPresenter {
         return timeFormat.format(datum.getTimestamp());
     }
 
-    private String getDate(LogLine datum) {
+    public static String getDate(LogLine datum) {
         DateFormat dateFormat = new SimpleDateFormat(GuiConstants.DATE_FORMATTER);
         if(datum.getTimestamp() == null) {
             if (datum.getDate() == null) {

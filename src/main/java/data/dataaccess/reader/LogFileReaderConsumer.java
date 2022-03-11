@@ -5,6 +5,7 @@ import domain.entities.common.TextClassesEnum;
 import domain.entities.domainobjects.LogLine;
 import domain.entities.domainobjects.ParsingProfile;
 import presentation.common.GuiConstants;
+import presentation.common.GuiMessages;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -19,6 +20,7 @@ public class LogFileReaderConsumer implements Consumer<String> {
     private ArrayList<LogLine> logLines;
     private static final Logger LOGGER = Logger.getLogger(LogFileReaderConsumer.class.getName());
     private LogLine latestValidLine;
+    private ArrayList<String> warningMessages = new ArrayList<>();
 
     public LogFileReaderConsumer(ParsingProfile parsingProfile) {
         this.parsingProfile = parsingProfile;
@@ -78,49 +80,65 @@ public class LogFileReaderConsumer implements Consumer<String> {
             return;
         }
 
-        DateFormat dateFormat = new SimpleDateFormat(GuiConstants.DATE_FORMATTER);
-        DateFormat timeFormat = new SimpleDateFormat(GuiConstants.TIME_FORMATTER);
-        DateFormat timeStampFormat = new SimpleDateFormat(GuiConstants.DATE_TIME_FORMATTER);
+        try {
 
-        if(TextClassesEnum.TIMESTAMP.getName().equals(portion.getPortionName())) {
-            if(portion.isSpecificFormat()) {
-                timeStampFormat = new SimpleDateFormat(portion.getSpecificFormat());
+            DateFormat dateFormat = new SimpleDateFormat(GuiConstants.DATE_FORMATTER);
+            DateFormat timeFormat = new SimpleDateFormat(GuiConstants.TIME_FORMATTER);
+            DateFormat timeStampFormat = new SimpleDateFormat(GuiConstants.DATE_TIME_FORMATTER);
+
+            if (TextClassesEnum.TIMESTAMP.getName().equals(portion.getPortionName())) {
+                if (portion.isSpecificFormat()) {
+                    timeStampFormat = new SimpleDateFormat(portion.getSpecificFormat());
+                }
+                line.setTimestamp(timeStampFormat.parse(subString));
+            } else if (TextClassesEnum.DATE.getName().equals(portion.getPortionName())) {
+                if (portion.isSpecificFormat()) {
+                    dateFormat = new SimpleDateFormat(portion.getSpecificFormat());
+                }
+                line.setDate(dateFormat.parse(subString));
+            } else if (TextClassesEnum.TIME.getName().equals(portion.getPortionName())) {
+                if (portion.isSpecificFormat()) {
+                    timeFormat = new SimpleDateFormat(portion.getSpecificFormat());
+                }
+                line.setTime(timeFormat.parse(subString));
+            } else if (TextClassesEnum.LEVEL.getName().equals(portion.getPortionName())) {
+                if (portion.isSpecificFormat()) {
+                    subString = String.format(portion.getSpecificFormat(), subString);
+                }
+                line.setLevel(subString);
+            } else if (TextClassesEnum.MESSAGE.getName().equals(portion.getPortionName())) {
+                if (portion.isSpecificFormat()) {
+                    subString = String.format(portion.getSpecificFormat(), subString);
+                }
+                line.setMessage(subString);
+            } else if (TextClassesEnum.ID.getName().equals(portion.getPortionName())) {
+                if (portion.isSpecificFormat()) {
+                    subString = String.format(portion.getSpecificFormat(), subString);
+                }
+                line.setIdentifier(subString);
+            } else if (TextClassesEnum.METHOD.getName().equals(portion.getPortionName())) {
+                if (portion.isSpecificFormat()) {
+                    subString = String.format(portion.getSpecificFormat(), subString);
+                }
+                line.setOrigin(subString);
             }
-            line.setTimestamp(timeStampFormat.parse(subString));
-        } else if(TextClassesEnum.DATE.getName().equals(portion.getPortionName())) {
+        } catch (ParseException parseException) {
             if(portion.isSpecificFormat()) {
-                dateFormat = new SimpleDateFormat(portion.getSpecificFormat());
+                this.warningMessages.add(String.format(GuiMessages.ERROR_PARSING_TEXT_CLASS_SPECIFIC_FORMAT,
+                        subString, portion.getPortionName(), portion.getSpecificFormat()));
+            } else {
+                this.warningMessages.add(String.format(GuiMessages.ERROR_PARSING_TEXT_CLASS,
+                        subString, portion.getPortionName()));
             }
-            line.setDate(dateFormat.parse(subString));
-        } else if(TextClassesEnum.TIME.getName().equals(portion.getPortionName())) {
-            if(portion.isSpecificFormat()) {
-                timeFormat = new SimpleDateFormat(portion.getSpecificFormat());
-            }
-            line.setTime(timeFormat.parse(subString));
-        } else if(TextClassesEnum.LEVEL.getName().equals(portion.getPortionName())) {
-            if(portion.isSpecificFormat()) {
-                subString = String.format(portion.getSpecificFormat(), subString);
-            }
-            line.setLevel(subString);
-        } else if(TextClassesEnum.MESSAGE.getName().equals(portion.getPortionName())) {
-            if(portion.isSpecificFormat()) {
-                subString = String.format(portion.getSpecificFormat(), subString);
-            }
-            line.setMessage(subString);
-        } else if(TextClassesEnum.ID.getName().equals(portion.getPortionName())) {
-            if(portion.isSpecificFormat()) {
-                subString = String.format(portion.getSpecificFormat(), subString);
-            }
-            line.setIdentifier(subString);
-        } else if(TextClassesEnum.METHOD.getName().equals(portion.getPortionName())) {
-            if(portion.isSpecificFormat()) {
-                subString = String.format(portion.getSpecificFormat(), subString);
-            }
-            line.setOrigin(subString);
+            throw parseException;
         }
     }
 
     public LogLine[] getLines() {
         return logLines.toArray(new LogLine[0]);
+    }
+
+    public ArrayList<String> getWarningMessages() {
+        return warningMessages;
     }
 }

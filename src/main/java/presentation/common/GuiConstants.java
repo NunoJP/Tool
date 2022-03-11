@@ -9,7 +9,7 @@ public class GuiConstants {
     public static final int H_FILE_ANALYSIS_SCREEN_SIZE = 1200;
     public static final int V_FILE_ANALYSIS_SCREEN_SIZE = 700;
     public static final int H_PARSING_PROFILES_EDITOR_SCREEN_SIZE = 650;
-    public static final int V_PARSING_PROFILES_EDITOR_SCREEN_SIZE = 250;
+    public static final int V_PARSING_PROFILES_EDITOR_SCREEN_SIZE = 280;
     public static final int H_METRIC_PROFILES_EDITOR_SCREEN_SIZE = 650;
     public static final int V_METRIC_PROFILES_EDITOR_SCREEN_SIZE = 650;
     public static final int FILE_NAME_FIELD_SIZE = 100/3;
@@ -51,6 +51,8 @@ public class GuiConstants {
     public static final String ORGANIZATION_TAB = "Organization";
     public static final String FILE_METRICS_TAB = "File metrics";
     public static final String FILE_OPERATIONS_TAB = "File operations";
+    public static final String EDIT_PROFILE_TAB = "Edit profile";
+    public static final String TEST_PROFILE_TAB = "Test profile";
 
     // Buttons
     public static final String ANALYSIS_BUTTON = "Analysis";
@@ -80,6 +82,7 @@ public class GuiConstants {
     public static final String CLEAR_KEYWORDS_TABLE_BUTTON = "Clear table";
     public static final String CANCEL_BUTTON = "Cancel";
     public static final String CHOOSE_COLOR_BUTTON = "Color";
+    public static final String TEST_BUTTON = "Test";
 
     // Labels
     public static final String FILE_INDICATION_LABEL = "File: ";

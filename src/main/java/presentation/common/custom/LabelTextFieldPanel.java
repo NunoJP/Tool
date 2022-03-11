@@ -44,4 +44,8 @@ public class LabelTextFieldPanel extends JPanel {
     public JTextField getVariableTextField() {
         return variableTextField;
     }
+
+    public boolean isEmpty() {
+        return variableTextField.getText() == null || variableTextField.getText().isEmpty();
+    }
 }

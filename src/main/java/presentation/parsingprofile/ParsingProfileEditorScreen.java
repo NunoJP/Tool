@@ -4,14 +4,17 @@ import domain.entities.common.SeparatorEnum;
 import domain.entities.common.TextClassesEnum;
 import presentation.common.GuiConstants;
 import presentation.common.custom.CellRenderer;
+import presentation.common.custom.LabelLabelPanel;
 import presentation.common.custom.LabelTextFieldPanel;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JTabbedPane;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -39,6 +42,14 @@ public class ParsingProfileEditorScreen extends JDialog {
     private JButton clearButton;
     private JButton saveProfileButton;
     private JButton cancelButton;
+    private LabelTextFieldPanel sampleTextPanel;
+    private LabelLabelPanel datePanel;
+    private LabelLabelPanel timePanel;
+    private LabelLabelPanel idPanel;
+    private LabelLabelPanel levelPanel;
+    private LabelLabelPanel originPanel;
+    private LabelLabelPanel messagePanel;
+    private JButton testButton;
 
     public ParsingProfileEditorScreen(Frame owner) {
         super(owner, GuiConstants.PARSING_PROFILE_EDITOR_SCREEN_TITLE);
@@ -49,16 +60,22 @@ public class ParsingProfileEditorScreen extends JDialog {
 
     private void createMainPanel() {
         this.rootPane.setLayout(new BorderLayout(H_GAP, V_GAP));
+        JTabbedPane tabbedPane = new JTabbedPane();
+        this.rootPane.add(tabbedPane, BorderLayout.CENTER);
+
         basePanel = new JPanel(new GridLayout(6, 1, H_GAP, V_GAP));
         this.setPreferredSize(new Dimension(H_PARSING_PROFILES_EDITOR_SCREEN_SIZE, V_PARSING_PROFILES_EDITOR_SCREEN_SIZE));
-        this.rootPane.add(basePanel, BorderLayout.CENTER);
+        tabbedPane.addTab(GuiConstants.EDIT_PROFILE_TAB, basePanel);
         basePanel.add(createNamePanel());
         basePanel.add(createResultPanel());
         basePanel.add(createTextClassLine());
         basePanel.add(createSpecificFormatLine());
         basePanel.add(createSeparatorLine());
         basePanel.add(createButtonPanel());
+
+        tabbedPane.addTab(GuiConstants.TEST_PROFILE_TAB, createProfileTestPanel());
     }
+
 
     private JPanel createNamePanel() {
         JPanel holder = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, V_GAP));
@@ -127,6 +144,40 @@ public class ParsingProfileEditorScreen extends JDialog {
         buttonPanel.add(saveProfileButton);
         buttonPanel.add(cancelButton);
         return buttonPanel;
+    }
+
+    private JPanel createProfileTestPanel() {
+        JPanel testProfilePanel = new JPanel(new BorderLayout(H_GAP, V_GAP));
+        testProfilePanel.setBorder(BorderFactory.createEmptyBorder(V_GAP, H_GAP, V_GAP, H_GAP));
+        sampleTextPanel = new LabelTextFieldPanel("Sample text:");
+        sampleTextPanel.setTextFieldWidth(GuiConstants.RESULT_FIELD_SIZE);
+        testProfilePanel.add(sampleTextPanel, BorderLayout.NORTH);
+
+        JPanel resultsPanel = new JPanel(new BorderLayout(H_GAP, V_GAP));
+        JPanel resultsInnerPanel = new JPanel(new GridLayout(3, 2, H_GAP, V_GAP));
+        datePanel = new LabelLabelPanel(GuiConstants.DATE_LABEL + ":");
+        timePanel = new LabelLabelPanel(GuiConstants.TIME_LABEL + ":");
+        idPanel = new LabelLabelPanel(GuiConstants.IDENTIFIER_LABEL);
+        levelPanel = new LabelLabelPanel(GuiConstants.LEVEL_LABEL + ":");
+        originPanel = new LabelLabelPanel(GuiConstants.ORIGIN_LABEL + ":");
+
+        resultsInnerPanel.add(datePanel);
+        resultsInnerPanel.add(timePanel);
+        resultsInnerPanel.add(idPanel);
+        resultsInnerPanel.add(levelPanel);
+        resultsInnerPanel.add(originPanel);
+
+        messagePanel = new LabelLabelPanel(GuiConstants.MESSAGE_LABEL + ":");
+        resultsPanel.add(messagePanel, BorderLayout.SOUTH);
+        resultsPanel.add(resultsInnerPanel, BorderLayout.CENTER);
+        testProfilePanel.add(resultsPanel, BorderLayout.CENTER);
+
+
+        testButton = new JButton(GuiConstants.TEST_BUTTON);
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, H_GAP, V_GAP));
+        buttonPanel.add(testButton);
+        testProfilePanel.add(buttonPanel, BorderLayout.SOUTH);
+        return testProfilePanel;
     }
 
     private void setWindowClosingBehavior() {
@@ -209,5 +260,37 @@ public class ParsingProfileEditorScreen extends JDialog {
 
     public JButton getCancelButton() {
         return cancelButton;
+    }
+
+    public LabelTextFieldPanel getSampleTextPanel() {
+        return sampleTextPanel;
+    }
+
+    public LabelLabelPanel getDatePanel() {
+        return datePanel;
+    }
+
+    public LabelLabelPanel getTimePanel() {
+        return timePanel;
+    }
+
+    public LabelLabelPanel getIdPanel() {
+        return idPanel;
+    }
+
+    public LabelLabelPanel getLevelPanel() {
+        return levelPanel;
+    }
+
+    public LabelLabelPanel getOriginPanel() {
+        return originPanel;
+    }
+
+    public LabelLabelPanel getMessagePanel() {
+        return messagePanel;
+    }
+
+    public JButton getTestButton() {
+        return testButton;
     }
 }

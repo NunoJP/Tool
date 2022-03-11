@@ -1,13 +1,17 @@
 package presentation.parsingprofile;
 
+import data.dataaccess.reader.LogFileReaderConsumer;
+import domain.entities.Converter;
 import domain.entities.Validator;
 import domain.entities.common.ParsingProfilePortion;
 import domain.entities.common.SeparatorEnum;
 import domain.entities.common.TextClassesEnum;
 import domain.entities.displayobjects.ParsingProfileDo;
+import domain.entities.domainobjects.LogLine;
 import domain.services.ParsingProfileManagementService;
 import presentation.common.GuiMessages;
 import presentation.common.IViewPresenter;
+import presentation.fileanalysis.FileAnalysisScreenPresenter;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -20,7 +24,7 @@ public class ParsingProfileEditorScreenPresenter implements IViewPresenter {
 
     private final JFrame motherFrame;
     private final ParsingProfileEditorScreen dialogView;
-    private final ParsingProfileManagementService service;
+    private final ParsingProfileManagementService managementService;
     private ParsingProfileDo parsingProfileDo;
     private final ParsingProfileDo existingProfile;
     private final ParsingProfileManagementScreenPresenter callerPresenter;
@@ -31,7 +35,7 @@ public class ParsingProfileEditorScreenPresenter implements IViewPresenter {
         this.existingProfile = existingProfile;
         this.callerPresenter = parsingProfileManagementScreenPresenter;
         dialogView = new ParsingProfileEditorScreen(motherFrame);
-        service = new ParsingProfileManagementService();
+        managementService = new ParsingProfileManagementService();
         parsingProfileDo = existingProfile == null ? new ParsingProfileDo() : new ParsingProfileDo(existingProfile);
         populateViewWithExistingProfile();
         defineViewBehavior();
@@ -126,7 +130,7 @@ public class ParsingProfileEditorScreenPresenter implements IViewPresenter {
                             GuiMessages.PLEASE_CONFIRM_DIALOG_TITLE,
                             JOptionPane.YES_NO_OPTION);
                     if(confirmation == JOptionPane.YES_OPTION) {
-                        boolean updateSuccess = service.updateProfile(parsingProfileDo);
+                        boolean updateSuccess = managementService.updateProfile(parsingProfileDo);
                         if(updateSuccess) {
                             showMessageDialog(GuiMessages.UPDATE_SUCCESSFUL, GuiMessages.SUCCESS_TITLE, JOptionPane.INFORMATION_MESSAGE);
                             callerPresenter.updateViewTable();
@@ -137,7 +141,7 @@ public class ParsingProfileEditorScreenPresenter implements IViewPresenter {
                     // Stop the save procedure
                     return;
                 } else {
-                    service.createProfile(parsingProfileDo);
+                    managementService.createProfile(parsingProfileDo);
                 }
 
                 callerPresenter.updateViewTable();
@@ -159,7 +163,26 @@ public class ParsingProfileEditorScreenPresenter implements IViewPresenter {
             }
         });
 
+        dialogView.getTestButton().addActionListener(actionEvent -> {
+            if(dialogView.getSampleTextPanel().isEmpty()) {
+                showMessageDialog(GuiMessages.SAMPLE_TEXT_FIELD_EMPTY, GuiMessages.WARNING_TITLE, JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                this.parsingProfileDo.finishProfile();
+                LogFileReaderConsumer logFileConsumer = new LogFileReaderConsumer(Converter.toDomainObject(this.parsingProfileDo));
+                logFileConsumer.accept(dialogView.getSampleTextPanel().getVariableLabelText());
+                if(!logFileConsumer.getWarningMessages().isEmpty()) {
+                    StringBuilder msgs = new StringBuilder();
+                    for (String warningMessage : logFileConsumer.getWarningMessages()) {
+                        msgs.append(warningMessage).append(System.lineSeparator());
+                    }
+                    showMessageDialog(msgs.toString(), GuiMessages.WARNING_TITLE, JOptionPane.INFORMATION_MESSAGE);
+                }
+                fillTestLabels(logFileConsumer.getLines());
+            }
+        });
+
     }
+
 
     private void showMessageDialog(String message, String title, int warningMessage) {
         JOptionPane.showMessageDialog(dialogView, message, title, warningMessage);
@@ -201,6 +224,25 @@ public class ParsingProfileEditorScreenPresenter implements IViewPresenter {
 
         // if the window was closed, we need to reset the status of the object
         parsingProfileDo = existingProfile == null ? new ParsingProfileDo() : new ParsingProfileDo(existingProfile);
+    }
+
+
+    private void fillTestLabels(LogLine[] lines) {
+        if (lines.length < 1) {
+            // no lines produced
+            showMessageDialog(GuiMessages.NO_LINES_PRODUCED_MESSAGE, GuiMessages.ERROR_TITLE, JOptionPane.ERROR_MESSAGE);
+        } else if (lines.length > 1) {
+            // more lines than expected
+            showMessageDialog(GuiMessages.MORE_LINES_PRODUCED_MESSAGE, GuiMessages.ERROR_TITLE, JOptionPane.ERROR_MESSAGE);
+        } else {
+            LogLine line = lines[0];
+            dialogView.getDatePanel().setVariableLabelText(FileAnalysisScreenPresenter.getDate(line));
+            dialogView.getTimePanel().setVariableLabelText(FileAnalysisScreenPresenter.getTime(line));
+            dialogView.getIdPanel().setVariableLabelText(line.getIdentifier());
+            dialogView.getLevelPanel().setVariableLabelText(line.getLevel());
+            dialogView.getOriginPanel().setVariableLabelText(line.getOrigin());
+            dialogView.getMessagePanel().setVariableLabelText(line.getMessage());
+        }
     }
 
     @Override
