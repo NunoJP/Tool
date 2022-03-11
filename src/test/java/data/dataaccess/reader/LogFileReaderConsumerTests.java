@@ -40,6 +40,27 @@ public class LogFileReaderConsumerTests {
         assertEquals("MESSAGE MESSAGE MESSAGE", line.getMessage());
     }
 
+
+    @Test
+    public void simpleTestWithDateTimeNoMillis() {
+        // 2021-01-01 12:10:10.0000 LEVEL METHOD MESSAGE
+        LogFileReaderConsumer consumer = setupSimpleParser();
+
+        consumer.accept("2021-01-01 12:10:10 LEVEL METHOD 12 MESSAGE MESSAGE MESSAGE");
+
+        LogLine[] lines = consumer.getLines();
+        assertEquals(1, lines.length);
+        LogLine line = lines[0];
+
+        assertEquals("2021-01-01", dateFormat.format(line.getDate()));
+        assertEquals("12:10:10.000", timeFormat.format(line.getTime()));
+        assertEquals("LEVEL", line.getLevel());
+        assertEquals("METHOD", line.getOrigin());
+        assertEquals("12", line.getIdentifier());
+        assertEquals("MESSAGE MESSAGE MESSAGE", line.getMessage());
+    }
+
+
     @Test
     public void simpleTestWithTimestamp() {
         // 2021-01-01 12:10:10.0000 - LEVEL METHOD MESSAGE

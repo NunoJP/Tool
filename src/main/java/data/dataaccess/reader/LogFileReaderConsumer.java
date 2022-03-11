@@ -20,7 +20,7 @@ public class LogFileReaderConsumer implements Consumer<String> {
     private ArrayList<LogLine> logLines;
     private static final Logger LOGGER = Logger.getLogger(LogFileReaderConsumer.class.getName());
     private LogLine latestValidLine;
-    private ArrayList<String> warningMessages = new ArrayList<>();
+    private final ArrayList<String> warningMessages = new ArrayList<>();
 
     public LogFileReaderConsumer(ParsingProfile parsingProfile) {
         this.parsingProfile = parsingProfile;
@@ -84,6 +84,7 @@ public class LogFileReaderConsumer implements Consumer<String> {
 
             DateFormat dateFormat = new SimpleDateFormat(GuiConstants.DATE_FORMATTER);
             DateFormat timeFormat = new SimpleDateFormat(GuiConstants.TIME_FORMATTER);
+            DateFormat timeFormatNoMillis = new SimpleDateFormat(GuiConstants.TIME_FORMATTER_NO_MILLIS);
             DateFormat timeStampFormat = new SimpleDateFormat(GuiConstants.DATE_TIME_FORMATTER);
 
             if (TextClassesEnum.TIMESTAMP.getName().equals(portion.getPortionName())) {
@@ -100,7 +101,12 @@ public class LogFileReaderConsumer implements Consumer<String> {
                 if (portion.isSpecificFormat()) {
                     timeFormat = new SimpleDateFormat(portion.getSpecificFormat());
                 }
-                line.setTime(timeFormat.parse(subString));
+                try {
+                    line.setTime(timeFormat.parse(subString));
+                } catch (ParseException parseException) {
+                    LOGGER.log(Level.INFO, "Attempting to parse " + subString + " with no millisecond pattern");
+                    line.setTime(timeFormatNoMillis.parse(subString));
+                }
             } else if (TextClassesEnum.LEVEL.getName().equals(portion.getPortionName())) {
                 if (portion.isSpecificFormat()) {
                     subString = String.format(portion.getSpecificFormat(), subString);
