@@ -79,13 +79,13 @@ public class ParsingProfileEditorScreenPresenter implements IViewPresenter {
                 TextClassesEnum selectedItem = (TextClassesEnum) dialogView.getTextClassComboBox().getSelectedItem();
                 if(selectedItem != null) {
                     updateDoAndResultPanel(selectedItem.getName(), selectedItem.getName(), dialogView.getIgnoreButton().isSelected(),
-                            false, dialogView.getSpecificFormatButton().isSelected(), dialogView.getSpecificFormatText());
+                            dialogView.getSpecificFormatButton().isSelected(), dialogView.getSpecificFormatText());
                 }
             } else {
                 TextClassesEnum selectedItem = (TextClassesEnum) dialogView.getTextClassComboBox().getSelectedItem();
                 if(selectedItem != null) {
                     updateDoAndResultPanel(selectedItem.getName(), selectedItem.getName(), dialogView.getIgnoreButton().isSelected(),
-                            false, false, "");
+                            false, "");
                 }
             }
             // Added a Text Class so now it's a Separator
@@ -96,8 +96,8 @@ public class ParsingProfileEditorScreenPresenter implements IViewPresenter {
         dialogView.getSeparatorAddButton().addActionListener(actionEvent -> {
             SeparatorEnum selectedItem = (SeparatorEnum) dialogView.getSeparatorClassComboBox().getSelectedItem();
             if(selectedItem != null) {
-                updateDoAndResultPanel(selectedItem.getName(), selectedItem.getSymbol(), false, true,
-                        false, "");
+                updateDoAndResultPanel(selectedItem.getName(), selectedItem.getSymbol(),
+                        (Integer) dialogView.getNumberOfSkipsInput().getValue());
             }
             // Added a Separator so now it's a Text Class
             changeTextClassSeparatorStates(false);
@@ -188,15 +188,22 @@ public class ParsingProfileEditorScreenPresenter implements IViewPresenter {
         JOptionPane.showMessageDialog(dialogView, message, title, warningMessage);
     }
 
+    private void updateDoAndResultPanel(String name, String symbol, Integer numberOfSkips) {
+        dialogView.setResultPanelText(parsingProfileDo.addPortionAndGetProfile(
+                name, symbol, false, true, false, "", numberOfSkips
+        ));
+
+    }
+
     private void updateDoAndResultPanel(String name, String symbol, boolean isIgnore,
-                                        boolean isSeparator, boolean isSpecificFormat, String specificFormatText) {
+                                        boolean isSpecificFormat, String specificFormatText) {
         if(isSpecificFormat) {
             dialogView.setResultPanelText(parsingProfileDo.addPortionAndGetProfile(
-                    name, symbol, isIgnore, isSeparator, true, specificFormatText
+                    name, symbol, isIgnore, false, true, specificFormatText
             ));
         } else {
             dialogView.setResultPanelText(parsingProfileDo.addPortionAndGetProfile(
-                    name, symbol, isIgnore, isSeparator, false
+                    name, symbol, isIgnore, false, false, ""
             ));
         }
 

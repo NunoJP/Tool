@@ -20,27 +20,27 @@ public class ParsingProfileDoTests {
         ParsingProfileDo profile = new ParsingProfileDo();
         String sProfile = profile.addPortionAndGetProfile(TextClassesEnum.DATE.getName(), TextClassesEnum.DATE.getName(), true, false, false);
         assertEquals(" Ignore<Date> ", sProfile);
-        sProfile = profile.addPortionAndGetProfile(SeparatorEnum.SPACE.getName(), SeparatorEnum.SPACE.getSymbol(), false, true, false);
-        assertEquals(" Ignore<Date>  \" \" ", sProfile);
+        sProfile = profile.addPortionAndGetProfile(SeparatorEnum.SPACE.getName(), SeparatorEnum.SPACE.getSymbol(), false, true, false, "", 0);
+        assertEquals(" Ignore<Date>  \" \" skips:0", sProfile);
         sProfile = profile.addPortionAndGetProfile(TextClassesEnum.TIMESTAMP.getName(), TextClassesEnum.TIMESTAMP.getName(), false, false, false);
-        assertEquals(" Ignore<Date>  \" \"  Keep<Timestamp> ", sProfile);
+        assertEquals(" Ignore<Date>  \" \" skips:0 Keep<Timestamp> ", sProfile);
     }
 
     @Test
     public void addSpecificFormatPortionAndGetProfile() {
         ParsingProfileDo profile = new ParsingProfileDo();
         profile.addPortionAndGetProfile(TextClassesEnum.DATE.getName(), TextClassesEnum.DATE.getName(), false, false, true, "YYYY-MM-DD");
-        profile.addPortionAndGetProfile(SeparatorEnum.SPACE.getName(), SeparatorEnum.SPACE.getSymbol(), false, true, false);
+        profile.addPortionAndGetProfile(SeparatorEnum.SPACE.getName(), SeparatorEnum.SPACE.getSymbol(), false, true, false, "", 0);
         profile.addPortionAndGetProfile(TextClassesEnum.TIMESTAMP.getName(), TextClassesEnum.TIMESTAMP.getName(), false, false, true, "HH-mm-ss");
         String sProfile = profile.getGuiRepresentation();
-        assertEquals(" KeepSpecific<Date YYYY-MM-DD>  \" \"  KeepSpecific<Timestamp HH-mm-ss> ", sProfile);
+        assertEquals(" KeepSpecific<Date YYYY-MM-DD>  \" \" skips:0 KeepSpecific<Timestamp HH-mm-ss> ", sProfile);
     }
 
     @Test
     public void removeLastPortionAndGetProfile() {
         ParsingProfileDo profile = setup();
         String sProfile = profile.removeLastPortionAndGetProfile();
-        assertEquals(" Ignore<Date>  \" \" ", sProfile);
+        assertEquals(" Ignore<Date>  \" \" skips:0", sProfile);
         sProfile = profile.removeLastPortionAndGetProfile();
         assertEquals(" Ignore<Date> ", sProfile);
     }
@@ -64,20 +64,20 @@ public class ParsingProfileDoTests {
     public void getGuiRepresentation() {
         ParsingProfileDo profile = new ParsingProfileDo();
         profile.addPortionAndGetProfile(TextClassesEnum.DATE.getName(), TextClassesEnum.DATE.getName(), true, false, false);
-        profile.addPortionAndGetProfile(SeparatorEnum.SPACE.getName(), SeparatorEnum.SPACE.getSymbol(), false, true, false);
+        profile.addPortionAndGetProfile(SeparatorEnum.SPACE.getName(), SeparatorEnum.SPACE.getSymbol(), false, true, false, "", 0);
         profile.addPortionAndGetProfile(TextClassesEnum.TIMESTAMP.getName(), TextClassesEnum.TIMESTAMP.getName(), false, false, false);
         String sProfile = profile.getGuiRepresentation();
-        assertEquals(" Ignore<Date>  \" \"  Keep<Timestamp> ", sProfile);
+        assertEquals(" Ignore<Date>  \" \" skips:0 Keep<Timestamp> ", sProfile);
     }
 
     @Test
     public void testFinish(){
         ParsingProfileDo profile = new ParsingProfileDo();
         profile.addPortionAndGetProfile(TextClassesEnum.DATE.getName(), TextClassesEnum.DATE.getName(), true, false, false);
-        profile.addPortionAndGetProfile(SeparatorEnum.SPACE.getName(), SeparatorEnum.SPACE.getSymbol(), false, true, false);
+        profile.addPortionAndGetProfile(SeparatorEnum.SPACE.getName(), SeparatorEnum.SPACE.getSymbol(), false, true, false, "", 0);
         profile.addPortionAndGetProfile(TextClassesEnum.TIMESTAMP.getName(), TextClassesEnum.TIMESTAMP.getName(), false, false, false);
         String sProfile = profile.getGuiRepresentation();
-        assertEquals(" Ignore<Date>  \" \"  Keep<Timestamp> ", sProfile);
+        assertEquals(" Ignore<Date>  \" \" skips:0 Keep<Timestamp> ", sProfile);
         ParsingProfilePortion lastPortion = profile.getPortions().get(2); // get the last portion
         assertFalse(lastPortion.isLast());
         // finish the profile
@@ -90,10 +90,10 @@ public class ParsingProfileDoTests {
     public void testAddElementsAfterFinishAndThenFinish(){
         ParsingProfileDo profile = new ParsingProfileDo();
         profile.addPortionAndGetProfile(TextClassesEnum.DATE.getName(), TextClassesEnum.DATE.getName(), true, false, false);
-        profile.addPortionAndGetProfile(SeparatorEnum.SPACE.getName(), SeparatorEnum.SPACE.getSymbol(), false, true, false);
+        profile.addPortionAndGetProfile(SeparatorEnum.SPACE.getName(), SeparatorEnum.SPACE.getSymbol(), false, true, false, "", 0);
         profile.addPortionAndGetProfile(TextClassesEnum.TIMESTAMP.getName(), TextClassesEnum.TIMESTAMP.getName(), false, false, false);
         String sProfile = profile.getGuiRepresentation();
-        assertEquals(" Ignore<Date>  \" \"  Keep<Timestamp> ", sProfile);
+        assertEquals(" Ignore<Date>  \" \" skips:0 Keep<Timestamp> ", sProfile);
         ParsingProfilePortion lastPortion = profile.getPortions().get(2); // get the last portion
         assertFalse(lastPortion.isLast());
         // finish the profile
@@ -122,7 +122,7 @@ public class ParsingProfileDoTests {
         ParsingProfileDo copy = new ParsingProfileDo(setup);
         // check copy of profileDo
         String sProfile = copy.getGuiRepresentation();
-        assertEquals(" Ignore<Date>  \" \"  Keep<Timestamp> ", sProfile);
+        assertEquals(" Ignore<Date>  \" \" skips:0 Keep<Timestamp> ", sProfile);
         assertEquals(1, copy.getId().intValue());
         assertEquals("name", copy.getName());
         assertEquals("origin", copy.getOriginFile());
@@ -136,7 +136,7 @@ public class ParsingProfileDoTests {
 
         // check original profileDo
         sProfile = setup.getGuiRepresentation();
-        assertEquals(" Ignore<Date>  \" \"  Keep<Timestamp> ", sProfile);
+        assertEquals(" Ignore<Date>  \" \" skips:0 Keep<Timestamp> ", sProfile);
         assertEquals(1, setup.getId().intValue());
         assertEquals("name", setup.getName());
         assertEquals("origin", setup.getOriginFile());
@@ -147,12 +147,12 @@ public class ParsingProfileDoTests {
         ParsingProfileDo profile = new ParsingProfileDo();
         profile.addPortionAndGetProfile(TextClassesEnum.DATE.getName(), TextClassesEnum.DATE.getName(), true, false, false);
         setupSize = 1;
-        profile.addPortionAndGetProfile(SeparatorEnum.SPACE.getName(), SeparatorEnum.SPACE.getSymbol(), false, true, false);
+        profile.addPortionAndGetProfile(SeparatorEnum.SPACE.getName(), SeparatorEnum.SPACE.getSymbol(), false, true, false, "", 0);
         setupSize++;
         profile.addPortionAndGetProfile(TextClassesEnum.TIMESTAMP.getName(), TextClassesEnum.TIMESTAMP.getName(), false, false, false);
         setupSize++;
         String sProfile = profile.getGuiRepresentation();
-        assertEquals(" Ignore<Date>  \" \"  Keep<Timestamp> ", sProfile);
+        assertEquals(" Ignore<Date>  \" \" skips:0 Keep<Timestamp> ", sProfile);
         return profile;
     }
 

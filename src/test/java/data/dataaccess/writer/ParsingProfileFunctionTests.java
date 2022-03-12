@@ -83,9 +83,11 @@ public class ParsingProfileFunctionTests  extends ParsingProfilesCommon {
         ParsingProfile profile = new ParsingProfile();
         profile.setName(VALUE);
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.LEVEL.getName(), TextClassesEnum.LEVEL.getName(), false, false));
-        profile.addPortion(new ParsingProfilePortion(SeparatorEnum.COLON.getName(), SeparatorEnum.COLON.getSymbol(), false, true));
+        ParsingProfilePortion colonPortion = new ParsingProfilePortion(SeparatorEnum.COLON.getName(), SeparatorEnum.COLON.getSymbol(), false, true);
+        profile.addPortion(colonPortion);
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.TIME.getName(), TextClassesEnum.TIME.getName(), true, false));
-        profile.addPortion(new ParsingProfilePortion(SeparatorEnum.HIFEN.getName(), SeparatorEnum.HIFEN.getSymbol(), false, true));
+        ParsingProfilePortion hifenPortion = new ParsingProfilePortion(SeparatorEnum.HIFEN.getName(), SeparatorEnum.HIFEN.getSymbol(), false, true);
+        profile.addPortion(hifenPortion);
 
         // Process
         simulateWriteAndRead(function, consumer, profile);
@@ -98,9 +100,9 @@ public class ParsingProfileFunctionTests  extends ParsingProfilesCommon {
         ArrayList<ParsingProfilePortion> portions = parsedProfile.getPortions();
         assertEquals(4, portions.size());
         validatePortion(portions.get(0), false, false, false, TextClassesEnum.LEVEL.getName());
-        validatePortion(portions.get(1), true, false, false, SeparatorEnum.COLON.getName());
+        validatePortion(portions.get(1), true, false, false, colonPortion.getPortionRepresentation());
         validatePortion(portions.get(2), false, true, false, TextClassesEnum.TIME.getName());
-        validatePortion(portions.get(3), true, false, false, SeparatorEnum.HIFEN.getName());
+        validatePortion(portions.get(3), true, false, false, hifenPortion.getPortionRepresentation());
     }
 
 
@@ -113,13 +115,15 @@ public class ParsingProfileFunctionTests  extends ParsingProfilesCommon {
         parsingProfilePortion.setSpecificFormat(GuiConstants.DATE_FORMATTER);
         profile.addPortion(parsingProfilePortion);
 
-        profile.addPortion(new ParsingProfilePortion(SeparatorEnum.COLON.getName(), SeparatorEnum.COLON.getSymbol(), false, true));
+        ParsingProfilePortion colonPortion = new ParsingProfilePortion(SeparatorEnum.COLON.getName(), SeparatorEnum.COLON.getSymbol(), false, true);
+        profile.addPortion(colonPortion);
 
         ParsingProfilePortion parsingProfilePortion2 = new ParsingProfilePortion(TextClassesEnum.TIME.getName(), TextClassesEnum.TIME.getName(), false, false, true);
         parsingProfilePortion2.setSpecificFormat(GuiConstants.DATE_TIME_FORMATTER);
         profile.addPortion(parsingProfilePortion2);
 
-        profile.addPortion(new ParsingProfilePortion(SeparatorEnum.HIFEN.getName(), SeparatorEnum.HIFEN.getSymbol(), false, true));
+        ParsingProfilePortion hyphenPortion = new ParsingProfilePortion(SeparatorEnum.HIFEN.getName(), SeparatorEnum.HIFEN.getSymbol(), false, true);
+        profile.addPortion(hyphenPortion);
 
         // Process
         simulateWriteAndRead(function, consumer, profile);
@@ -133,10 +137,10 @@ public class ParsingProfileFunctionTests  extends ParsingProfilesCommon {
         assertEquals(4, portions.size());
         validatePortion(portions.get(0), false, false, true, TextClassesEnum.DATE.getName() + " " + portions.get(0).getSpecificFormat());
         assertEquals(GuiConstants.DATE_FORMATTER, portions.get(0).getSpecificFormat());
-        validatePortion(portions.get(1), true, false, false, SeparatorEnum.COLON.getName());
+        validatePortion(portions.get(1), true, false, false, colonPortion.getPortionRepresentation());
         validatePortion(portions.get(2), false, false, true, TextClassesEnum.TIME.getName() + " " + portions.get(2).getSpecificFormat());
         assertEquals(GuiConstants.DATE_TIME_FORMATTER, portions.get(2).getSpecificFormat());
-        validatePortion(portions.get(3), true, false, false, SeparatorEnum.HIFEN.getName());
+        validatePortion(portions.get(3), true, false, false, hyphenPortion.getPortionRepresentation());
     }
 
     @Test
@@ -144,8 +148,10 @@ public class ParsingProfileFunctionTests  extends ParsingProfilesCommon {
         // setup
         ParsingProfile profile = new ParsingProfile();
         profile.setName(VALUE);
-        profile.addPortion(new ParsingProfilePortion(SeparatorEnum.COLON.getName(), SeparatorEnum.COLON.getSymbol(), false, true));
-        profile.addPortion(new ParsingProfilePortion(SeparatorEnum.HIFEN.getName(), SeparatorEnum.HIFEN.getSymbol(), false, true));
+        ParsingProfilePortion colonPortion = new ParsingProfilePortion(SeparatorEnum.COLON.getName(), SeparatorEnum.COLON.getSymbol(), false, true);
+        profile.addPortion(colonPortion);
+        ParsingProfilePortion hyphenPortion = new ParsingProfilePortion(SeparatorEnum.HIFEN.getName(), SeparatorEnum.HIFEN.getSymbol(), false, true);
+        profile.addPortion(hyphenPortion);
 
         // Process
         simulateWriteAndRead(function, consumer, profile);
@@ -157,8 +163,8 @@ public class ParsingProfileFunctionTests  extends ParsingProfilesCommon {
         assertEquals(profile.getName(), parsedProfile.getName());
         ArrayList<ParsingProfilePortion> portions = parsedProfile.getPortions();
         assertEquals(2, portions.size());
-        validatePortion(portions.get(0), true, false, false, SeparatorEnum.COLON.getName());
-        validatePortion(portions.get(1), true, false, false, SeparatorEnum.HIFEN.getName());
+        validatePortion(portions.get(0), true, false, false, colonPortion.getPortionRepresentation());
+        validatePortion(portions.get(1), true, false, false, hyphenPortion.getPortionRepresentation());
     }
 
     @Test
@@ -210,13 +216,15 @@ public class ParsingProfileFunctionTests  extends ParsingProfilesCommon {
         parsingProfilePortion.setSpecificFormat("");
         profile.addPortion(parsingProfilePortion);
 
-        profile.addPortion(new ParsingProfilePortion(SeparatorEnum.COLON.getName(), SeparatorEnum.COLON.getSymbol(), false, true));
+        ParsingProfilePortion colonPortion = new ParsingProfilePortion(SeparatorEnum.COLON.getName(), SeparatorEnum.COLON.getSymbol(), false, true);
+        profile.addPortion(colonPortion);
 
         ParsingProfilePortion parsingProfilePortion2 = new ParsingProfilePortion(TextClassesEnum.TIME.getName(), TextClassesEnum.TIME.getName(), false, false, true);
         parsingProfilePortion2.setSpecificFormat("");
         profile.addPortion(parsingProfilePortion2);
 
-        profile.addPortion(new ParsingProfilePortion(SeparatorEnum.HIFEN.getName(), SeparatorEnum.HIFEN.getSymbol(), false, true));
+        ParsingProfilePortion hyphenPortion = new ParsingProfilePortion(SeparatorEnum.HIFEN.getName(), SeparatorEnum.HIFEN.getSymbol(), false, true);
+        profile.addPortion(hyphenPortion);
 
         // Process
         simulateWriteAndRead(function, consumer, profile);
@@ -228,8 +236,8 @@ public class ParsingProfileFunctionTests  extends ParsingProfilesCommon {
         assertEquals(profile.getName(), parsedProfile.getName());
         ArrayList<ParsingProfilePortion> portions = parsedProfile.getPortions();
         assertEquals(2, portions.size());
-        validatePortion(portions.get(0), true, false, false, SeparatorEnum.COLON.getName());
-        validatePortion(portions.get(1), true, false, false, SeparatorEnum.HIFEN.getName());
+        validatePortion(portions.get(0), true, false, false, colonPortion.getPortionRepresentation());
+        validatePortion(portions.get(1), true, false, false, hyphenPortion.getPortionRepresentation());
     }
 
 
@@ -304,7 +312,8 @@ public class ParsingProfileFunctionTests  extends ParsingProfilesCommon {
         parsingProfilePortion.setSpecificFormat(GuiConstants.DATE_FORMATTER);
         profile.addPortion(parsingProfilePortion);
 
-        profile.addPortion(new ParsingProfilePortion(SeparatorEnum.COLON.getName(), SeparatorEnum.COLON.getSymbol(), false, true));
+        ParsingProfilePortion portion = new ParsingProfilePortion(SeparatorEnum.COLON.getName(), SeparatorEnum.COLON.getSymbol(), false, true);
+        profile.addPortion(portion);
 
         // Process
         simulateWriteAndRead(function, consumer, profile);
@@ -318,7 +327,7 @@ public class ParsingProfileFunctionTests  extends ParsingProfilesCommon {
         assertEquals(2, portions.size());
         validatePortion(portions.get(0), false, true, false, TextClassesEnum.DATE.getName());
         assertEquals(ParsingProfilePortion.NO_SPECIFIC_FORMAT, portions.get(0).getSpecificFormat());
-        validatePortion(portions.get(1), true, false, false, SeparatorEnum.COLON.getName());
+        validatePortion(portions.get(1), true, false, false, portion.getPortionRepresentation());
     }
 
 }

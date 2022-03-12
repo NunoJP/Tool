@@ -37,7 +37,14 @@ public class LogFileReaderConsumer implements Consumer<String> {
         try {
             for (ParsingProfilePortion portion : parsingProfile.getPortions()) {
                 if (portion.isSeparator()) {
-                    int endIndex = s.indexOf(portion.getPortionSymbol());
+                    int numberOfSkips = portion.getNumberOfSkips();
+                    int endIndex = -1;
+                    while(numberOfSkips >= 0) {
+                        // we need to move the index further or we will hit the same character
+                        endIndex = s.indexOf(portion.getPortionSymbol(), endIndex + 1);
+                        numberOfSkips--;
+                    }
+
                     // the separator was not found, so the line is not standard
                     if(endIndex < 0) {
                         validLine = false;

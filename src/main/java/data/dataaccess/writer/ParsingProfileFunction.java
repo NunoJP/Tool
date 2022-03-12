@@ -13,6 +13,7 @@ import static data.dataaccess.common.ParsingProfileReadWriteConstants.IGNORE_TOK
 import static data.dataaccess.common.ParsingProfileReadWriteConstants.KEEP_SPECIFIC_TOKEN;
 import static data.dataaccess.common.ParsingProfileReadWriteConstants.KEEP_TOKEN;
 import static data.dataaccess.common.ParsingProfileReadWriteConstants.PORTION_SEPARATOR;
+import static data.dataaccess.common.ParsingProfileReadWriteConstants.SKIP_TOKEN;
 
 public class ParsingProfileFunction implements Function<ParsingProfile, String> {
 
@@ -43,7 +44,7 @@ public class ParsingProfileFunction implements Function<ParsingProfile, String> 
         if(portion.isIgnore()){
             return createIgnoreString(portion.getPortionName());
         } else if(portion.isSeparator()) {
-            return createSeparatorString(portion.getPortionSymbol());
+            return createSeparatorString(portion.getPortionSymbol(), portion.getNumberOfSkips());
         } else if(portion.isSpecificFormat()) {
             return createKeepSpecificFormatString(portion.getPortionName(), portion.getSpecificFormat());
         } else {
@@ -55,8 +56,8 @@ public class ParsingProfileFunction implements Function<ParsingProfile, String> 
         return TextClassesEnum.getParsingStringByName(portion) + PORTION_SEPARATOR + IGNORE_TOKEN;
     }
 
-    private String createSeparatorString(String portion) {
-        return SeparatorEnum.getParsingStringBySymbol(portion);
+    private String createSeparatorString(String portion, int numberOfSkips) {
+        return SeparatorEnum.getParsingStringBySymbol(portion) + PORTION_SEPARATOR + SKIP_TOKEN + PORTION_SEPARATOR + numberOfSkips;
     }
 
     private String createKeepSpecificFormatString(String portion, String specificFormat) {

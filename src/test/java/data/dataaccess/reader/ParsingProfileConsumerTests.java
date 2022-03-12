@@ -16,6 +16,7 @@ import static data.dataaccess.common.ParsingProfileReadWriteConstants.KEEP_SPECI
 import static data.dataaccess.common.ParsingProfileReadWriteConstants.KEEP_TOKEN;
 import static data.dataaccess.common.ParsingProfileReadWriteConstants.NO_NAME_PROVIDED;
 import static data.dataaccess.common.ParsingProfileReadWriteConstants.PORTION_SEPARATOR;
+import static data.dataaccess.common.ParsingProfileReadWriteConstants.SKIP_TOKEN;
 import static org.junit.Assert.assertEquals;
 
 public class ParsingProfileConsumerTests extends ParsingProfilesCommon {
@@ -84,9 +85,9 @@ public class ParsingProfileConsumerTests extends ParsingProfilesCommon {
         consumer.accept(ParsingProfileReadWriteConstants.NAME_TOKEN + PORTION_SEPARATOR + VALUE);
         consumer.accept(ParsingProfileReadWriteConstants.START_PROFILE_TOKEN);
         consumer.accept(TextClassesEnum.LEVEL + PORTION_SEPARATOR + KEEP_TOKEN);
-        consumer.accept(SeparatorEnum.COLON.getParsingString());
+        consumer.accept(SeparatorEnum.COLON.getParsingString() + PORTION_SEPARATOR + SKIP_TOKEN + PORTION_SEPARATOR + 0);
         consumer.accept(TextClassesEnum.TIME + PORTION_SEPARATOR + IGNORE_TOKEN);
-        consumer.accept(SeparatorEnum.HIFEN.getParsingString());
+        consumer.accept(SeparatorEnum.HIFEN.getParsingString() + PORTION_SEPARATOR + SKIP_TOKEN + PORTION_SEPARATOR + 0);
         consumer.accept(ParsingProfileReadWriteConstants.END_PROFILE_TOKEN);
 
         // validations
@@ -97,9 +98,9 @@ public class ParsingProfileConsumerTests extends ParsingProfilesCommon {
         ArrayList<ParsingProfilePortion> portions = profile.getPortions();
         assertEquals(4, portions.size());
         validatePortion(portions.get(0), false, false, false, TextClassesEnum.LEVEL.getName());
-        validatePortion(portions.get(1), true, false, false, SeparatorEnum.COLON.getName());
+        validatePortion(portions.get(1), true, false, false, SeparatorEnum.COLON.getName() + " skips:0");
         validatePortion(portions.get(2), false, true, false, TextClassesEnum.TIME.getName());
-        validatePortion(portions.get(3), true, false, false, SeparatorEnum.HIFEN.getName());
+        validatePortion(portions.get(3), true, false, false, SeparatorEnum.HIFEN.getName() + " skips:0");
     }
 
 
@@ -113,9 +114,9 @@ public class ParsingProfileConsumerTests extends ParsingProfilesCommon {
         consumer.accept(ParsingProfileReadWriteConstants.NAME_TOKEN + PORTION_SEPARATOR + VALUE);
         consumer.accept(ParsingProfileReadWriteConstants.START_PROFILE_TOKEN);
         consumer.accept(TextClassesEnum.LEVEL + PORTION_SEPARATOR + KEEP_TOKEN);
-        consumer.accept(SeparatorEnum.COLON.getParsingString() + GARBAGE);
+        consumer.accept(SeparatorEnum.COLON.getParsingString() + PORTION_SEPARATOR + SKIP_TOKEN + PORTION_SEPARATOR + 0 + PORTION_SEPARATOR + GARBAGE);
         consumer.accept(TextClassesEnum.TIME + PORTION_SEPARATOR + IGNORE_TOKEN);
-        consumer.accept(SeparatorEnum.HIFEN.getParsingString() + GARBAGE);
+        consumer.accept(SeparatorEnum.HIFEN.getParsingString() + PORTION_SEPARATOR + SKIP_TOKEN + PORTION_SEPARATOR + 0 + PORTION_SEPARATOR + GARBAGE);
         consumer.accept(ParsingProfileReadWriteConstants.END_PROFILE_TOKEN);
 
         // validations
@@ -126,9 +127,9 @@ public class ParsingProfileConsumerTests extends ParsingProfilesCommon {
         ArrayList<ParsingProfilePortion> portions = profile.getPortions();
         assertEquals(4, portions.size());
         validatePortion(portions.get(0), false, false, false, TextClassesEnum.LEVEL.getName());
-        validatePortion(portions.get(1), true, false, false, SeparatorEnum.COLON.getName());
+        validatePortion(portions.get(1), true, false, false, SeparatorEnum.COLON.getName() + " skips:0");
         validatePortion(portions.get(2), false, true, false, TextClassesEnum.TIME.getName());
-        validatePortion(portions.get(3), true, false, false, SeparatorEnum.HIFEN.getName());
+        validatePortion(portions.get(3), true, false, false, SeparatorEnum.HIFEN.getName() + " skips:0");
     }
 
 
@@ -142,9 +143,9 @@ public class ParsingProfileConsumerTests extends ParsingProfilesCommon {
         consumer.accept(ParsingProfileReadWriteConstants.NAME_TOKEN + PORTION_SEPARATOR + VALUE);
         consumer.accept(ParsingProfileReadWriteConstants.START_PROFILE_TOKEN);
         consumer.accept(TextClassesEnum.DATE + PORTION_SEPARATOR + KEEP_SPECIFIC_TOKEN + PORTION_SEPARATOR + GuiConstants.DATE_FORMATTER);
-        consumer.accept(SeparatorEnum.COLON.getParsingString() + GARBAGE);
+        consumer.accept(SeparatorEnum.COLON.getParsingString()  + PORTION_SEPARATOR + SKIP_TOKEN + PORTION_SEPARATOR + 0 + PORTION_SEPARATOR + GARBAGE);
         consumer.accept(TextClassesEnum.TIME + PORTION_SEPARATOR + KEEP_SPECIFIC_TOKEN + PORTION_SEPARATOR + GuiConstants.DATE_TIME_FORMATTER);
-        consumer.accept(SeparatorEnum.HIFEN.getParsingString() + GARBAGE);
+        consumer.accept(SeparatorEnum.HIFEN.getParsingString()  + PORTION_SEPARATOR + SKIP_TOKEN + PORTION_SEPARATOR + 0 + PORTION_SEPARATOR + GARBAGE);
         consumer.accept(ParsingProfileReadWriteConstants.END_PROFILE_TOKEN);
 
         // validations
@@ -156,10 +157,10 @@ public class ParsingProfileConsumerTests extends ParsingProfilesCommon {
         assertEquals(4, portions.size());
         validatePortion(portions.get(0), false, false, true, TextClassesEnum.DATE.getName() + " " + portions.get(0).getSpecificFormat());
         assertEquals(GuiConstants.DATE_FORMATTER, portions.get(0).getSpecificFormat());
-        validatePortion(portions.get(1), true, false, false, SeparatorEnum.COLON.getName());
+        validatePortion(portions.get(1), true, false, false, SeparatorEnum.COLON.getName()  + " skips:0");
         validatePortion(portions.get(2), false, false, true, TextClassesEnum.TIME.getName() + " " + portions.get(2).getSpecificFormat());
         assertEquals(GuiConstants.DATE_TIME_FORMATTER, portions.get(2).getSpecificFormat());
-        validatePortion(portions.get(3), true, false, false, SeparatorEnum.HIFEN.getName());
+        validatePortion(portions.get(3), true, false, false, SeparatorEnum.HIFEN.getName()  + " skips:0");
     }
 
     @Test
@@ -171,8 +172,8 @@ public class ParsingProfileConsumerTests extends ParsingProfilesCommon {
         consumer.accept(EXPECTED_FIRST_LINE);
         consumer.accept(ParsingProfileReadWriteConstants.NAME_TOKEN + PORTION_SEPARATOR + VALUE);
         consumer.accept(ParsingProfileReadWriteConstants.START_PROFILE_TOKEN);
-        consumer.accept(SeparatorEnum.COLON.getParsingString());
-        consumer.accept(SeparatorEnum.HIFEN.getParsingString());
+        consumer.accept(SeparatorEnum.COLON.getParsingString() + PORTION_SEPARATOR + SKIP_TOKEN + PORTION_SEPARATOR + 0);
+        consumer.accept(SeparatorEnum.HIFEN.getParsingString() + PORTION_SEPARATOR + SKIP_TOKEN + PORTION_SEPARATOR + 0);
         consumer.accept(ParsingProfileReadWriteConstants.END_PROFILE_TOKEN);
 
         // validations
@@ -182,8 +183,8 @@ public class ParsingProfileConsumerTests extends ParsingProfilesCommon {
         assertEquals(VALUE, profile.getName());
         ArrayList<ParsingProfilePortion> portions = profile.getPortions();
         assertEquals(2, portions.size());
-        validatePortion(portions.get(0), true, false, false, SeparatorEnum.COLON.getName());
-        validatePortion(portions.get(1), true, false, false, SeparatorEnum.HIFEN.getName());
+        validatePortion(portions.get(0), true, false, false, SeparatorEnum.COLON.getName() + " skips:0");
+        validatePortion(portions.get(1), true, false, false, SeparatorEnum.HIFEN.getName() + " skips:0");
     }
 
     @Test
@@ -377,9 +378,9 @@ public class ParsingProfileConsumerTests extends ParsingProfilesCommon {
         consumer.accept(ParsingProfileReadWriteConstants.NAME_TOKEN + PORTION_SEPARATOR + VALUE);
         consumer.accept(ParsingProfileReadWriteConstants.START_PROFILE_TOKEN);
         consumer.accept(TextClassesEnum.DATE + PORTION_SEPARATOR + KEEP_SPECIFIC_TOKEN + PORTION_SEPARATOR);
-        consumer.accept(SeparatorEnum.COLON.getParsingString() + GARBAGE);
+        consumer.accept(SeparatorEnum.COLON.getParsingString() + PORTION_SEPARATOR + SKIP_TOKEN + PORTION_SEPARATOR + 0 + PORTION_SEPARATOR + GARBAGE);
         consumer.accept(TextClassesEnum.TIME + PORTION_SEPARATOR + KEEP_SPECIFIC_TOKEN + PORTION_SEPARATOR);
-        consumer.accept(SeparatorEnum.HIFEN.getParsingString() + GARBAGE);
+        consumer.accept(SeparatorEnum.HIFEN.getParsingString() + PORTION_SEPARATOR + SKIP_TOKEN + PORTION_SEPARATOR + 0 + PORTION_SEPARATOR + GARBAGE);
         consumer.accept(ParsingProfileReadWriteConstants.END_PROFILE_TOKEN);
 
         // validations
@@ -389,8 +390,8 @@ public class ParsingProfileConsumerTests extends ParsingProfilesCommon {
         assertEquals(VALUE, profile.getName());
         ArrayList<ParsingProfilePortion> portions = profile.getPortions();
         assertEquals(2, portions.size());
-        validatePortion(portions.get(0), true, false, false, SeparatorEnum.COLON.getName());
-        validatePortion(portions.get(1), true, false, false, SeparatorEnum.HIFEN.getName());
+        validatePortion(portions.get(0), true, false, false, SeparatorEnum.COLON.getName()  + " skips:0");
+        validatePortion(portions.get(1), true, false, false, SeparatorEnum.HIFEN.getName()  + " skips:0");
     }
 
 

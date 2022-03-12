@@ -2,17 +2,19 @@ package domain.entities.common;
 
 public class ParsingProfilePortion {
     public static final String NO_SPECIFIC_FORMAT = "NoFormat";
+    private static final int DEFAULT_NUMBER_OF_SKIPS = 0;
 
     private String portionName;
     private String portionSymbol;
     private boolean ignore;
     private boolean isSeparator;
     private String specificFormat;
+    private final int numberOfSkips;
     private boolean isSpecificFormat;
     private boolean isLast = false;
 
     public ParsingProfilePortion(String portionName, String portionSymbol, boolean ignore, boolean isSeparator) {
-        this(portionName, portionSymbol, ignore, isSeparator, false);
+        this(portionName, portionSymbol, ignore, isSeparator, false, NO_SPECIFIC_FORMAT, DEFAULT_NUMBER_OF_SKIPS);
     }
 
     public ParsingProfilePortion(String portionName, String portionSymbol, boolean ignore, boolean isSeparator, boolean specificFormat) {
@@ -20,15 +22,23 @@ public class ParsingProfilePortion {
     }
 
     public ParsingProfilePortion(String portionName, String portionSymbol, boolean isIgnore, boolean isSeparator, boolean isSpecificFormat, String specificFormat) {
+        this(portionName, portionSymbol, isIgnore, isSeparator, isSpecificFormat, specificFormat, DEFAULT_NUMBER_OF_SKIPS);
+    }
+
+    public ParsingProfilePortion(String portionName, String portionSymbol, boolean isIgnore, boolean isSeparator, boolean isSpecificFormat, String specificFormat, int numberOfSkips) {
         this.portionName = portionName;
         this.portionSymbol = portionSymbol;
         this.ignore = isIgnore;
         this.isSeparator = isSeparator;
         this.isSpecificFormat = isSpecificFormat;
         this.specificFormat = specificFormat;
+        this.numberOfSkips = numberOfSkips;
     }
 
     public String getPortionRepresentation() {
+        if(isSeparator) {
+          return portionName + " skips:" + numberOfSkips;
+        }
         return isSpecificFormat ? portionName + " " + specificFormat : portionName;
     }
 
@@ -86,5 +96,9 @@ public class ParsingProfilePortion {
 
     public void setLast(boolean last) {
         isLast = last;
+    }
+
+    public int getNumberOfSkips() {
+        return numberOfSkips;
     }
 }

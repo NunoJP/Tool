@@ -94,10 +94,10 @@ public class ConverterTests {
     private ArrayList<ParsingProfilePortion> setupParsingProfilePortions() {
         ParsingProfileDo profile = new ParsingProfileDo();
         profile.addPortionAndGetProfile(TextClassesEnum.DATE.getName(), TextClassesEnum.DATE.getName(), true, false, false);
-        profile.addPortionAndGetProfile(SeparatorEnum.SPACE.getName(), SeparatorEnum.SPACE.getSymbol(), false, true, false);
+        profile.addPortionAndGetProfile(SeparatorEnum.SPACE.getName(), SeparatorEnum.SPACE.getSymbol(), false, true, false, "", 0);
         profile.addPortionAndGetProfile(TextClassesEnum.TIMESTAMP.getName(), TextClassesEnum.TIMESTAMP.getName(), false, false, false);
         String sProfile = profile.getGuiRepresentation();
-        assertEquals(" Ignore<Date>  \" \"  Keep<Timestamp> ", sProfile);
+        assertEquals(" Ignore<Date>  \" \" skips:0 Keep<Timestamp> ", sProfile);
         return profile.getPortions();
     }
 

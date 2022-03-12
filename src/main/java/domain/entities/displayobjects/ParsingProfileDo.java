@@ -69,12 +69,20 @@ public class ParsingProfileDo {
         return getGuiRepresentation();
     }
 
-    public String addPortionAndGetProfile(String portionName, String portionSymbol, boolean isIgnore, boolean isSeparator, boolean isSpecificFormat){
-       return addPortionAndGetProfile(portionName, portionSymbol, isIgnore, isSeparator, isSpecificFormat, "");
+    public String addPortionAndGetProfile(String portionName, String portionSymbol, boolean isIgnore, boolean isSeparator,
+                                          boolean isSpecificFormat){
+       return addPortionAndGetProfile(portionName, portionSymbol, isIgnore, isSeparator, isSpecificFormat, "", -1);
     }
 
-    public String addPortionAndGetProfile(String portionName, String portionSymbol, boolean isIgnore, boolean isSeparator, boolean isSpecificFormat, String specificFormat) {
-        portions.add(new ParsingProfilePortion(portionName, portionSymbol, isIgnore, isSeparator, isSpecificFormat, specificFormat));
+    public String addPortionAndGetProfile(String portionName, String portionSymbol, boolean isIgnore, boolean isSeparator,
+                                          boolean isSpecificFormat, String specificFormat) {
+        return addPortionAndGetProfile(portionName, portionSymbol, isIgnore, isSeparator, isSpecificFormat, specificFormat, -1);
+    }
+
+    public String addPortionAndGetProfile(String portionName, String portionSymbol, boolean isIgnore, boolean isSeparator,
+                                          boolean isSpecificFormat, String specificFormat, Integer numberOfSkips) {
+        portions.add(new ParsingProfilePortion(portionName, portionSymbol, isIgnore, isSeparator, isSpecificFormat,
+                specificFormat, numberOfSkips));
         return getGuiRepresentation();
     }
 
@@ -127,7 +135,7 @@ public class ParsingProfileDo {
     }
 
     private String createSeparatorString(String portion) {
-        return " " + portion + " ";
+        return " " + portion;
     }
 
     private String createKeepString(String portion) {

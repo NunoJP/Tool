@@ -20,7 +20,7 @@ public class ParsingProfileTests {
         parsingProfile.addPortion(new ParsingProfilePortion(TextClassesEnum.TIMESTAMP.getName(), TextClassesEnum.TIMESTAMP.getName(), false, false, false));
         ArrayList<ParsingProfilePortion> portions = parsingProfile.getPortions();
         assertEquals(3, portions.size());
-        assertEquals(" Ignore<Date>  \" \"  Keep<Timestamp> ", Converter.toDisplayObject(parsingProfile).getDescription());
+        assertEquals(" Ignore<Date>  \" \" skips:0 Keep<Timestamp> ", Converter.toDisplayObject(parsingProfile).getDescription());
     }
 
     @Test
@@ -31,7 +31,7 @@ public class ParsingProfileTests {
         parsingProfile.addPortion(new ParsingProfilePortion(TextClassesEnum.TIMESTAMP.getName(), TextClassesEnum.TIMESTAMP.getName(), false, false, true, "HH-mm-ss"));
         ArrayList<ParsingProfilePortion> portions = parsingProfile.getPortions();
         assertEquals(3, portions.size());
-        assertEquals(" KeepSpecific<Date YYYY-MM-DD>  \" \"  KeepSpecific<Timestamp HH-mm-ss> ", Converter.toDisplayObject(parsingProfile).getDescription());
+        assertEquals(" KeepSpecific<Date YYYY-MM-DD>  \" \" skips:0 KeepSpecific<Timestamp HH-mm-ss> ", Converter.toDisplayObject(parsingProfile).getDescription());
     }
 
 }

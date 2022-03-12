@@ -14,6 +14,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -33,6 +34,7 @@ public class ParsingProfileEditorScreen extends JDialog {
     private LabelTextFieldPanel resultPanel;
     private JComboBox<TextClassesEnum> textClassComboBox;
     private JComboBox<SeparatorEnum> separatorClassComboBox;
+    private JSpinner numberOfSkipsInput;
     private JRadioButton ignoreButton;
     private JButton textClassAddButton;
     private JRadioButton specificFormatButton;
@@ -127,6 +129,11 @@ public class ParsingProfileEditorScreen extends JDialog {
         separatorClassComboBox.setRenderer(new CellRenderer());
         separatorClassComboBox.setSelectedIndex(0);
         separatorPanel.add(separatorClassComboBox);
+        numberOfSkipsInput = new JSpinner();
+        JSpinner.DefaultEditor editor = (JSpinner.DefaultEditor) (numberOfSkipsInput.getEditor());
+        editor.getTextField().setColumns(4);
+        numberOfSkipsInput.setValue(0);
+        separatorPanel.add(numberOfSkipsInput);
         separatorAddButton = new JButton(GuiConstants.ADD_BUTTON);
         separatorPanel.add(separatorAddButton);
         enableSeparator(false);
@@ -228,6 +235,10 @@ public class ParsingProfileEditorScreen extends JDialog {
 
     public JComboBox<SeparatorEnum> getSeparatorClassComboBox() {
         return separatorClassComboBox;
+    }
+
+    public JSpinner getNumberOfSkipsInput() {
+        return numberOfSkipsInput;
     }
 
     public JRadioButton getIgnoreButton() {
