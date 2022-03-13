@@ -13,6 +13,14 @@ public class ParsingProfilePortion {
     private boolean isSpecificFormat;
     private boolean isLast = false;
 
+    public static ParsingProfilePortion createSeparator(String portionName, String portionSymbol, int numberOfSkips) {
+        return new ParsingProfilePortion(portionName, portionSymbol, false, true, false, "", numberOfSkips);
+    }
+
+    public static ParsingProfilePortion createSeparator(String portionName, String portionSymbol) {
+        return new ParsingProfilePortion(portionName, portionSymbol, false, true, false, "", DEFAULT_NUMBER_OF_SKIPS);
+    }
+
     public ParsingProfilePortion(String portionName, String portionSymbol, boolean ignore, boolean isSeparator) {
         this(portionName, portionSymbol, ignore, isSeparator, false, NO_SPECIFIC_FORMAT, DEFAULT_NUMBER_OF_SKIPS);
     }
