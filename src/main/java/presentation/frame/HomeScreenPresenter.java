@@ -25,7 +25,7 @@ public class HomeScreenPresenter implements IPresenter {
     private void defineViewBehavior() {
         fileAnalysisSetupScreenPresenter = new FileAnalysisSetupScreenPresenter(view.getFrame());
         view.getBasePanel().addTab(GuiConstants.ANALYSIS_TAB, fileAnalysisSetupScreenPresenter.getView());
-        monitoringSetupScreenPresenter = new MonitoringSetupScreenPresenter();
+        monitoringSetupScreenPresenter = new MonitoringSetupScreenPresenter(view.getFrame());
         view.getBasePanel().addTab(GuiConstants.MONITORING_TAB, monitoringSetupScreenPresenter.getView());
         parsingProfileManagementScreenPresenter = new ParsingProfileManagementScreenPresenter(this::applyCrossScreenChanges);
         view.getBasePanel().addTab(GuiConstants.PARSING_PROFILES_TAB, parsingProfileManagementScreenPresenter.getView());
