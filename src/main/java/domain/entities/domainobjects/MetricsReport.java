@@ -39,6 +39,10 @@ public class MetricsReport {
         this(metricsProfile, data, new String[0]);
     }
 
+    public LogLine[] getData() {
+        return data;
+    }
+
     public String[][] getKwdThresholdData() {
         HashMap<String, Integer> occs = new HashMap<>();
         int total = 0;

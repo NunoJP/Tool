@@ -151,6 +151,10 @@ public class LogFileReaderConsumer implements Consumer<String> {
         return logLines.toArray(new LogLine[0]);
     }
 
+    public void clearLines() {
+        logLines = new ArrayList<>();
+    }
+
     public ArrayList<String> getWarningMessages() {
         return warningMessages;
     }

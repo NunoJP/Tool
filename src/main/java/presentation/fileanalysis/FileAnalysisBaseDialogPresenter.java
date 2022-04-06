@@ -37,8 +37,7 @@ public class FileAnalysisBaseDialogPresenter {
     private void setupPresenters() {
         fileAnalysisService = new FileAnalysisService(selectedFile, Converter.toDomainObject(parsingProfile),
                 Converter.toDomainObject(metricsProfile));
-        fileAnalysisMetricsScreenPresenter = new FileAnalysisMetricsScreenPresenter(selectedFile, parsingProfile,
-                metricsProfile, fileAnalysisService);
+        fileAnalysisMetricsScreenPresenter = new FileAnalysisMetricsScreenPresenter(metricsProfile, fileAnalysisService);
         fileAnalysisScreenPresenter = new FileAnalysisScreenPresenter(selectedFile, parsingProfile,
                 metricsProfile, fileAnalysisService);
     }
