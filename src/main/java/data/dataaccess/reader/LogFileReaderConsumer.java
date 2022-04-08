@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 
 public class LogFileReaderConsumer implements Consumer<String> {
     private ParsingProfile parsingProfile;
-    private ArrayList<LogLine> logLines;
+    protected ArrayList<LogLine> logLines;
     private static final Logger LOGGER = Logger.getLogger(LogFileReaderConsumer.class.getName());
     private LogLine latestValidLine;
     private final ArrayList<String> warningMessages = new ArrayList<>();

@@ -66,7 +66,9 @@ public class MetricsMonitoringScreen extends JDialog {
 
     private void createComponents() {
         namePanel = new LabelLabelPanel(GuiConstants.NAME_LABEL);
-        this.add(namePanel, BorderLayout.NORTH);
+        JPanel nameSpacer = new JPanel(new BorderLayout(H_GAP, V_GAP));
+        nameSpacer.add(namePanel, BorderLayout.CENTER);
+        this.add(nameSpacer, BorderLayout.NORTH);
         stopButton = new JButton(GuiConstants.STOP_BUTTON);
         JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, H_GAP, V_GAP));
         southPanel.add(stopButton);

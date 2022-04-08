@@ -44,6 +44,8 @@ public class MetricsMonitoringScreenPresenter implements IPresenter {
     }
 
     private void defineViewBehavior() {
+        view.getNamePanel().setVariableLabelText(selectedFile.getName());
+
         view.getStopButton().addActionListener(actionEvent ->  {
             // Stop the thread
             stop.set(true);
