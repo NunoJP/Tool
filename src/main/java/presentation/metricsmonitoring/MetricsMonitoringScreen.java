@@ -11,11 +11,14 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.GridLayout;
 
+import static presentation.common.GuiConstants.H_FILE_MONITORING_SCREEN_SIZE;
 import static presentation.common.GuiConstants.H_GAP;
+import static presentation.common.GuiConstants.V_FILE_MONITORING_SCREEN_SIZE;
 import static presentation.common.GuiConstants.V_GAP;
 
 public class MetricsMonitoringScreen extends JDialog {
@@ -32,6 +35,7 @@ public class MetricsMonitoringScreen extends JDialog {
     public MetricsMonitoringScreen(Frame owner, String title, MetricsProfileDo metricsProfile) {
         super(owner, title);
         setWindowClosingBehavior();
+        this.setPreferredSize(new Dimension(H_FILE_MONITORING_SCREEN_SIZE, V_FILE_MONITORING_SCREEN_SIZE));
         this.metricsProfile = metricsProfile;
         this.setLayout(new BorderLayout(H_GAP, V_GAP));
         createComponents();
