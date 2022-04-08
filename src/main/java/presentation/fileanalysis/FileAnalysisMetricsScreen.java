@@ -92,6 +92,7 @@ public class FileAnalysisMetricsScreen extends JPanel {
             mostCommonWordsTable = new GeneralTablePanel(GuiConstants.MOST_COMMON_WORDS_LABEL,
                     new String[]{GuiConstants.WORD_COLUMN, GuiConstants.VALUE_COLUMN}, false);
             mostCommonWordsTable.setGeneralSelection(false);
+            mostCommonWordsTable.setIntegerColumnsSort(new int[] { 1 } );
             this.add(mostCommonWordsTable);
         }
         if(metricsProfile.isHasKeywordOverTime()) {

@@ -105,6 +105,7 @@ public class MetricsMonitoringScreen extends JDialog {
             mostCommonWordsTable = new GeneralTablePanel(GuiConstants.MOST_COMMON_WORDS_LABEL,
                     new String[]{GuiConstants.WORD_COLUMN, GuiConstants.VALUE_COLUMN}, false);
             mostCommonWordsTable.setGeneralSelection(false);
+            mostCommonWordsTable.setIntegerColumnsSort(new int[] { 1 } );
             holder.add(mostCommonWordsTable);
         }
 

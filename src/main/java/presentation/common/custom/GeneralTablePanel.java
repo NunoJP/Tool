@@ -19,7 +19,9 @@ import javax.swing.table.TableRowSorter;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.function.ToIntFunction;
 
 import static presentation.common.GuiConstants.H_GAP;
 import static presentation.common.GuiConstants.V_GAP;
@@ -91,6 +93,22 @@ public class GeneralTablePanel extends JPanel {
             column.setMinWidth(columnSizes[i]);
         }
         table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+    }
+    public void setIntegerColumnsSort(int [] cols) {
+        TableRowSorter<DefaultTableModel> rowSorter = (TableRowSorter<DefaultTableModel>) table.getRowSorter();
+
+        for (int col : cols) {
+            rowSorter.setComparator(col, Comparator.comparingInt((ToIntFunction<String>) Integer::parseInt));
+        }
+    }
+
+    public void setDoubleColumnsSort(int [] cols) {
+        TableRowSorter<DefaultTableModel> rowSorter = (TableRowSorter<DefaultTableModel>) table.getRowSorter();
+
+        for (int col : cols) {
+            rowSorter.setComparator(col, Comparator.comparingDouble(Double::parseDouble));
+        }
+
     }
 
     public void resizeToMatchContents() {
