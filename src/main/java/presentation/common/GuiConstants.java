@@ -56,6 +56,11 @@ public class GuiConstants {
     public static final String FILE_OPERATIONS_TAB = "File operations";
     public static final String EDIT_PROFILE_TAB = "Edit profile";
     public static final String TEST_PROFILE_TAB = "Test profile";
+    public static final String TABLES_TAB = "Tables";
+    public static final String MOST_COMMON_WORDS_TAB = "Most common words";
+    public static final String KEYWORD_OVER_TIME_TAB = "Keyword over time";
+    public static final String FILE_SIZE_TAB = "File size evolution";
+    public static final String KEYWORD_HISTOGRAM_TAB = "Keyword histogram";
 
     // Buttons
     public static final String ANALYSIS_BUTTON = "Analysis";

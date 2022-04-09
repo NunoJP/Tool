@@ -8,6 +8,7 @@ import presentation.common.custom.KeywordsOverTimePanel;
 import presentation.common.custom.LabelLabelPanel;
 
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -29,8 +30,7 @@ public class FileAnalysisMetricsScreen extends JPanel {
 
     public FileAnalysisMetricsScreen(MetricsProfileDo metricsProfile){
         this.metricsProfile = metricsProfile;
-        int [] rc = calculateRowsAndCols();
-        this.setLayout(new GridLayout(rc[0], rc[1]));
+        this.setLayout(new BorderLayout(H_GAP, V_GAP));
         createComponents();
     }
 
@@ -39,40 +39,49 @@ public class FileAnalysisMetricsScreen extends JPanel {
         if(metricsProfile.isHasFileSize()) {
             numberOfItems++;
         }
-        if(metricsProfile.isHasKeywordHistogram()) {
-            numberOfItems++;
-        }
-        if(metricsProfile.isHasKeywordOverTime()) {
-            numberOfItems++;
-        }
         if(metricsProfile.isHasKeywordThreshold()) {
             numberOfItems++;
         }
         if(metricsProfile.isHasMostCommonWords()) {
             numberOfItems++;
         }
-        if(numberOfItems >= 5) {
-            return new int[] { 2, 3 };
-        } else if(numberOfItems >= 3) {
+
+        if(numberOfItems >= 3) {
             return new int[] { 2, 2 };
         } else {
-            return new int[]{ 1, numberOfItems};
+            return new int[]{ numberOfItems, 1 };
         }
     }
 
     private void createComponents() {
-        JPanel holder;
+        JTabbedPane tabbedPane = new JTabbedPane();
+        this.add(tabbedPane, BorderLayout.CENTER);
+
+        int[] rowsAndCols = calculateRowsAndCols();
+        JPanel tablesPanel = new JPanel(new GridLayout(rowsAndCols[0], rowsAndCols[1]));
+        tabbedPane.addTab(GuiConstants.TABLES_TAB, tablesPanel);
+
         JPanel statisticsPanel = createStatisticsPanel();
 
+        // Log level tables
         logLevelTable = new GeneralTablePanel(GuiConstants.LOG_LEVEL_DISTRIBUTION_LABEL,
                 new String[]{GuiConstants.LEVEL_COLUMN, GuiConstants.PERCENTAGE_COLUMN}, false);
         logLevelTable.setGeneralSelection(false);
-
-        holder = new JPanel( new BorderLayout(H_GAP, V_GAP) );
+        JPanel holder = new JPanel( new BorderLayout(H_GAP, V_GAP) );
         holder.add(statisticsPanel, BorderLayout.NORTH);
         holder.add(logLevelTable, BorderLayout.CENTER);
-        this.add(holder);
+        tablesPanel.add(holder);
 
+        // Most common words
+        if(metricsProfile.isHasMostCommonWords()) {
+            mostCommonWordsTable = new GeneralTablePanel(GuiConstants.MOST_COMMON_WORDS_LABEL,
+                    new String[]{GuiConstants.WORD_COLUMN, GuiConstants.VALUE_COLUMN}, false);
+            mostCommonWordsTable.setGeneralSelection(false);
+            mostCommonWordsTable.setIntegerColumnsSort(new int[] { 1 } );
+            tablesPanel.add(mostCommonWordsTable);
+        }
+
+        // Keyword Threshold + Warnings
         if(metricsProfile.isHasKeywordThreshold()) {
             kwdThTable = new GeneralTablePanel(GuiConstants.KEYWORD_THRESHOLD_LABEL,
                     new String[]{GuiConstants.KEYWORD_COLUMN, GuiConstants.VALUE_COLUMN}, false);
@@ -80,24 +89,22 @@ public class FileAnalysisMetricsScreen extends JPanel {
             warningsTable = new GeneralTablePanel(GuiConstants.WARNINGS_LABEL,
                     new String[]{GuiConstants.LEVEL_COLUMN, GuiConstants.MESSAGE_COLUMN}, false);
             warningsTable.setGeneralSelection(false);
-            this.add(kwdThTable);
-            this.add(warningsTable);
+            tablesPanel.add(kwdThTable);
+            tablesPanel.add(warningsTable);
         }
 
+
+        // MCW - Tab
         if(metricsProfile.isHasKeywordHistogram()) {
             KeywordHistogramPanel keywordHistogram = new KeywordHistogramPanel();
-            this.add(keywordHistogram);
+            tabbedPane.addTab(GuiConstants.MOST_COMMON_WORDS_TAB, keywordHistogram);
         }
-        if(metricsProfile.isHasMostCommonWords()) {
-            mostCommonWordsTable = new GeneralTablePanel(GuiConstants.MOST_COMMON_WORDS_LABEL,
-                    new String[]{GuiConstants.WORD_COLUMN, GuiConstants.VALUE_COLUMN}, false);
-            mostCommonWordsTable.setGeneralSelection(false);
-            mostCommonWordsTable.setIntegerColumnsSort(new int[] { 1 } );
-            this.add(mostCommonWordsTable);
-        }
+
+
+        // KwdOT - Tab
         if(metricsProfile.isHasKeywordOverTime()) {
             KeywordsOverTimePanel keywordOverTime = new KeywordsOverTimePanel();
-            this.add(keywordOverTime);
+            tabbedPane.addTab(GuiConstants.KEYWORD_OVER_TIME_TAB, keywordOverTime);
         }
     }
 

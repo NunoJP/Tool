@@ -40,23 +40,30 @@ public class FileAnalysisMetricsScreenPresenter implements IViewPresenter {
 
     public void execute(){
         MetricsReport metricsReport = fileAnalysisMetricsService.getMetricsReport();
+
+        // Keyword Threshold + Warnings
         if(metricsProfile.isHasKeywordThreshold()) {
             String[][] kwdThresholdData = metricsReport.getKwdThresholdData();
             view.getKwdThTable().setData(kwdThresholdData);
             view.getKwdThTable().setCellSelectionOnly();
-        }
-        String [][] logLevelData = metricsReport.getLogLevelData();
-        view.getLogLevelTable().setData(logLevelData);
-        view.getLogLevelTable().setCellSelectionOnly();
-        if(metricsProfile.isHasMostCommonWords()) {
-            String[][] mostCommonWordsData = metricsReport.getMostCommonWordsData();
-            view.getMostCommonWordsTable().setData(mostCommonWordsData);
-            view.getMostCommonWordsTable().setCellSelectionOnly();
             String[][] warningsData = PresentationUtils.getMessages(metricsReport.getWarningsData());
             view.getWarningsTable().setData(warningsData);
             view.getWarningsTable().setCellSelectionOnly();
             view.getWarningsTable().setStringColorRenderMap(PresentationUtils.generateDefaultColorMap());
         }
+
+        // Log level tables
+        String [][] logLevelData = metricsReport.getLogLevelData();
+        view.getLogLevelTable().setData(logLevelData);
+        view.getLogLevelTable().setCellSelectionOnly();
+
+        // Most common words
+        if(metricsProfile.isHasMostCommonWords()) {
+            String[][] mostCommonWordsData = metricsReport.getMostCommonWordsData();
+            view.getMostCommonWordsTable().setData(mostCommonWordsData);
+            view.getMostCommonWordsTable().setCellSelectionOnly();
+        }
+
         // File name and dates
         view.getFileNamePanel().setVariableLabelText(metricsReport.getFileName());
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_TIME_FORMATTER);

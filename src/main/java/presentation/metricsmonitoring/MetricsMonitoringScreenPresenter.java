@@ -69,6 +69,10 @@ public class MetricsMonitoringScreenPresenter implements IPresenter {
             String[][] kwdThresholdData = metricsReport.getKwdThresholdData();
             view.getKwdThTable().setData(kwdThresholdData);
             view.getKwdThTable().setCellSelectionOnly();
+            String[][] warningsData = PresentationUtils.getMessages(metricsReport.getWarningsData());
+            view.getWarningsTable().setData(warningsData);
+            view.getWarningsTable().setCellSelectionOnly();
+            view.getWarningsTable().setStringColorRenderMap(PresentationUtils.generateDefaultColorMap());
         }
         // Keyword Histogram
 
@@ -77,10 +81,6 @@ public class MetricsMonitoringScreenPresenter implements IPresenter {
             String[][] mostCommonWordsData = metricsReport.getMostCommonWordsData();
             view.getMostCommonWordsTable().setData(mostCommonWordsData);
             view.getMostCommonWordsTable().setCellSelectionOnly();
-            String[][] warningsData = PresentationUtils.getMessages(metricsReport.getWarningsData());
-            view.getWarningsTable().setData(warningsData);
-            view.getWarningsTable().setCellSelectionOnly();
-            view.getWarningsTable().setStringColorRenderMap(PresentationUtils.generateDefaultColorMap());
         }
 
         // Keywords over time

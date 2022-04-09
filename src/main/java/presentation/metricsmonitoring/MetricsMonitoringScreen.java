@@ -10,6 +10,7 @@ import presentation.common.custom.LabelLabelPanel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -43,65 +44,51 @@ public class MetricsMonitoringScreen extends JDialog {
     }
 
     private int[] calculateRowsAndCols() {
-        numberOfItems = 1;
-        if(metricsProfile.isHasFileSize()) {
-            numberOfItems++;
-        }
-        if(metricsProfile.isHasKeywordHistogram()) {
-            numberOfItems++;
-        }
-        if(metricsProfile.isHasKeywordOverTime()) {
-            numberOfItems++;
-        }
+        numberOfItems = 0;
+
         if(metricsProfile.isHasKeywordThreshold()) {
             numberOfItems++;
         }
         if(metricsProfile.isHasMostCommonWords()) {
             numberOfItems++;
         }
-        if(numberOfItems >= 5) {
-            return new int[] { 2, 3 };
-        } else if(numberOfItems >= 3) {
-            return new int[] { 2, 2 };
-        } else {
-            return new int[]{ 1, numberOfItems};
-        }
+
+        return new int[]{ numberOfItems, 1};
     }
 
     private void createComponents() {
+
+        // NORTH
         namePanel = new LabelLabelPanel(GuiConstants.NAME_LABEL);
         JPanel nameSpacer = new JPanel(new BorderLayout(H_GAP, V_GAP));
         nameSpacer.add(namePanel, BorderLayout.CENTER);
         this.add(nameSpacer, BorderLayout.NORTH);
+
+        // SOUTH
         stopButton = new JButton(GuiConstants.STOP_BUTTON);
         JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, H_GAP, V_GAP));
         southPanel.add(stopButton);
         this.add(southPanel, BorderLayout.SOUTH);
 
+
+        // CENTER
+        JTabbedPane tabbedPane = new JTabbedPane();
+        this.add(tabbedPane, BorderLayout.CENTER);
         int [] rc = calculateRowsAndCols();
         holder = new JPanel(new GridLayout(rc[0], rc[1]));
 
-        // File size chart
-        if(metricsProfile.isHasFileSize()) {
-            holder.add(new JPanel());
-        }
-
         // Keyword Threshold + Warnings
         if(metricsProfile.isHasKeywordThreshold()) {
+            JPanel thPanel = new JPanel(new GridLayout(1, 2));
             kwdThTable = new GeneralTablePanel(GuiConstants.KEYWORD_THRESHOLD_LABEL,
                     new String[]{GuiConstants.KEYWORD_COLUMN, GuiConstants.VALUE_COLUMN}, false);
             kwdThTable.setGeneralSelection(false);
             warningsTable = new GeneralTablePanel(GuiConstants.WARNINGS_LABEL,
                     new String[]{GuiConstants.LEVEL_COLUMN, GuiConstants.MESSAGE_COLUMN}, false);
             warningsTable.setGeneralSelection(false);
-            holder.add(kwdThTable);
-            holder.add(warningsTable);
-        }
-
-        // Keyword Histogram
-        if(metricsProfile.isHasKeywordHistogram()) {
-            KeywordHistogramPanel keywordHistogram = new KeywordHistogramPanel();
-            holder.add(keywordHistogram);
+            thPanel.add(kwdThTable);
+            thPanel.add(warningsTable);
+            holder.add(thPanel);
         }
 
         // Most common words
@@ -113,13 +100,29 @@ public class MetricsMonitoringScreen extends JDialog {
             holder.add(mostCommonWordsTable);
         }
 
+        if(metricsProfile.isHasKeywordThreshold() || metricsProfile.isHasMostCommonWords()) {
+            tabbedPane.addTab(GuiConstants.TABLES_TAB, holder);
+        }
+
+        // File size chart
+        if(metricsProfile.isHasFileSize()) {
+            JPanel jPanel = new JPanel();
+            tabbedPane.addTab(GuiConstants.FILE_SIZE_TAB, jPanel);
+        }
+
+
+        // Keyword Histogram
+        if(metricsProfile.isHasKeywordHistogram()) {
+            KeywordHistogramPanel keywordHistogram = new KeywordHistogramPanel();
+            tabbedPane.addTab(GuiConstants.KEYWORD_HISTOGRAM_TAB, keywordHistogram);
+        }
+
         // Keywords over time
         if(metricsProfile.isHasKeywordOverTime()) {
             KeywordsOverTimePanel keywordOverTime = new KeywordsOverTimePanel();
-            holder.add(keywordOverTime);
+            tabbedPane.addTab(GuiConstants.KEYWORD_OVER_TIME_TAB, keywordOverTime);
         }
 
-        this.add(holder, BorderLayout.CENTER);
     }
 
 
