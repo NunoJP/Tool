@@ -8,12 +8,16 @@ import presentation.common.custom.KeywordsOverTimePanel;
 import presentation.common.custom.LabelLabelPanel;
 
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 
+import static presentation.common.GuiConstants.H_FILE_MONITORING_SCREEN_SIZE;
 import static presentation.common.GuiConstants.H_GAP;
+import static presentation.common.GuiConstants.V_FILE_MONITORING_SCREEN_SIZE;
 import static presentation.common.GuiConstants.V_GAP;
 
 public class FileAnalysisMetricsScreen extends JPanel {
@@ -57,47 +61,13 @@ public class FileAnalysisMetricsScreen extends JPanel {
         JTabbedPane tabbedPane = new JTabbedPane();
         this.add(tabbedPane, BorderLayout.CENTER);
 
-        int[] rowsAndCols = calculateRowsAndCols();
-        JPanel tablesPanel = new JPanel(new GridLayout(rowsAndCols[0], rowsAndCols[1]));
-        tabbedPane.addTab(GuiConstants.TABLES_TAB, tablesPanel);
-
-        JPanel statisticsPanel = createStatisticsPanel();
-
-        // Log level tables
-        logLevelTable = new GeneralTablePanel(GuiConstants.LOG_LEVEL_DISTRIBUTION_LABEL,
-                new String[]{GuiConstants.LEVEL_COLUMN, GuiConstants.PERCENTAGE_COLUMN}, false);
-        logLevelTable.setGeneralSelection(false);
-        JPanel holder = new JPanel( new BorderLayout(H_GAP, V_GAP) );
-        holder.add(statisticsPanel, BorderLayout.NORTH);
-        holder.add(logLevelTable, BorderLayout.CENTER);
-        tablesPanel.add(holder);
-
-        // Most common words
-        if(metricsProfile.isHasMostCommonWords()) {
-            mostCommonWordsTable = new GeneralTablePanel(GuiConstants.MOST_COMMON_WORDS_LABEL,
-                    new String[]{GuiConstants.WORD_COLUMN, GuiConstants.VALUE_COLUMN}, false);
-            mostCommonWordsTable.setGeneralSelection(false);
-            mostCommonWordsTable.setIntegerColumnsSort(new int[] { 1 } );
-            tablesPanel.add(mostCommonWordsTable);
-        }
-
-        // Keyword Threshold + Warnings
-        if(metricsProfile.isHasKeywordThreshold()) {
-            kwdThTable = new GeneralTablePanel(GuiConstants.KEYWORD_THRESHOLD_LABEL,
-                    new String[]{GuiConstants.KEYWORD_COLUMN, GuiConstants.VALUE_COLUMN}, false);
-            kwdThTable.setGeneralSelection(false);
-            warningsTable = new GeneralTablePanel(GuiConstants.WARNINGS_LABEL,
-                    new String[]{GuiConstants.LEVEL_COLUMN, GuiConstants.MESSAGE_COLUMN}, false);
-            warningsTable.setGeneralSelection(false);
-            tablesPanel.add(kwdThTable);
-            tablesPanel.add(warningsTable);
-        }
+        createTablesPanel(tabbedPane);
 
 
         // MCW - Tab
         if(metricsProfile.isHasKeywordHistogram()) {
             KeywordHistogramPanel keywordHistogram = new KeywordHistogramPanel();
-            tabbedPane.addTab(GuiConstants.MOST_COMMON_WORDS_TAB, keywordHistogram);
+            tabbedPane.addTab(GuiConstants.KEYWORD_HISTOGRAM_TAB, keywordHistogram);
         }
 
 
@@ -105,6 +75,70 @@ public class FileAnalysisMetricsScreen extends JPanel {
         if(metricsProfile.isHasKeywordOverTime()) {
             KeywordsOverTimePanel keywordOverTime = new KeywordsOverTimePanel();
             tabbedPane.addTab(GuiConstants.KEYWORD_OVER_TIME_TAB, keywordOverTime);
+        }
+    }
+
+    private void createTablesPanel(JTabbedPane tabbedPane) {
+        JPanel tablesPanel = new JPanel(new BorderLayout());
+        tabbedPane.addTab(GuiConstants.TABLES_TAB, tablesPanel);
+
+        int height = V_FILE_MONITORING_SCREEN_SIZE / 4;
+        int width = H_FILE_MONITORING_SCREEN_SIZE / 4;
+
+        // Log level tables + statistics
+        JPanel statisticsPanel = createStatisticsPanel();
+        logLevelTable = new GeneralTablePanel(GuiConstants.LOG_LEVEL_DISTRIBUTION_LABEL,
+                new String[]{GuiConstants.LEVEL_COLUMN, GuiConstants.PERCENTAGE_COLUMN}, false);
+        logLevelTable.setGeneralSelection(false);
+        JPanel logLevelTable = new JPanel( new BorderLayout(H_GAP, V_GAP) );
+        logLevelTable.add(statisticsPanel, BorderLayout.NORTH);
+        logLevelTable.add(this.logLevelTable, BorderLayout.CENTER);
+        logLevelTable.setMinimumSize(new Dimension(width, height));
+
+        // Most common words
+        if(metricsProfile.isHasMostCommonWords()) {
+            mostCommonWordsTable = new GeneralTablePanel(GuiConstants.MOST_COMMON_WORDS_LABEL,
+                    new String[]{GuiConstants.WORD_COLUMN, GuiConstants.VALUE_COLUMN}, false);
+            mostCommonWordsTable.setGeneralSelection(false);
+            mostCommonWordsTable.setIntegerColumnsSort(new int[] { 1 } );
+            mostCommonWordsTable.setMinimumSize(new Dimension(width, height));
+        }
+
+        // Keyword Threshold + Warnings
+        if(metricsProfile.isHasKeywordThreshold()) {
+            kwdThTable = new GeneralTablePanel(GuiConstants.KEYWORD_THRESHOLD_LABEL,
+                    new String[]{GuiConstants.KEYWORD_COLUMN, GuiConstants.VALUE_COLUMN}, false);
+            kwdThTable.setGeneralSelection(false);
+            kwdThTable.setMinimumSize(new Dimension(width, height));
+            warningsTable = new GeneralTablePanel(GuiConstants.WARNINGS_LABEL,
+                    new String[]{GuiConstants.LEVEL_COLUMN, GuiConstants.MESSAGE_COLUMN}, false);
+            warningsTable.setGeneralSelection(false);
+            warningsTable.setMinimumSize(new Dimension(width, height));
+        }
+
+
+        if(metricsProfile.isHasMostCommonWords() && metricsProfile.isHasKeywordThreshold()) {
+            // two top slots are log level and MCW
+            JSplitPane topSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, logLevelTable, mostCommonWordsTable);
+            topSplitPane.setMinimumSize(new Dimension(width, height));
+            // Bottom slot is for Keyword Threshold + Warnings
+            JSplitPane thSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, kwdThTable, warningsTable);
+            thSplitPane.setMinimumSize(new Dimension(width, height));
+            // Join them
+            JSplitPane verticalSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topSplitPane, thSplitPane);
+            tablesPanel.add(verticalSplit);
+        } else {
+            if(metricsProfile.isHasMostCommonWords()) {
+                // top row is log level, bottom row is MCW
+                JSplitPane verticalSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, logLevelTable, mostCommonWordsTable);
+                tablesPanel.add(verticalSplit);
+            } else if(metricsProfile.isHasKeywordThreshold()) {
+                // top row is log level
+                // bottom row is KwdTh + Warnings
+                JSplitPane thSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, kwdThTable, warningsTable);
+                JSplitPane verticalSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, logLevelTable, thSplitPane);
+                tablesPanel.add(verticalSplit);
+            }
         }
     }
 

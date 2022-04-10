@@ -10,12 +10,12 @@ import presentation.common.custom.LabelLabelPanel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
-import java.awt.GridLayout;
 
 import static presentation.common.GuiConstants.H_FILE_MONITORING_SCREEN_SIZE;
 import static presentation.common.GuiConstants.H_GAP;
@@ -28,9 +28,7 @@ public class MetricsMonitoringScreen extends JDialog {
     private GeneralTablePanel warningsTable;
     private GeneralTablePanel mostCommonWordsTable;
     private MetricsProfileDo metricsProfile;
-    private int numberOfItems;
     private LabelLabelPanel namePanel;
-    private JPanel holder;
     private JButton stopButton;
 
     public MetricsMonitoringScreen(Frame owner, String title, MetricsProfileDo metricsProfile) {
@@ -41,19 +39,6 @@ public class MetricsMonitoringScreen extends JDialog {
         this.setLayout(new BorderLayout(H_GAP, V_GAP));
         createComponents();
         pack();
-    }
-
-    private int[] calculateRowsAndCols() {
-        numberOfItems = 0;
-
-        if(metricsProfile.isHasKeywordThreshold()) {
-            numberOfItems++;
-        }
-        if(metricsProfile.isHasMostCommonWords()) {
-            numberOfItems++;
-        }
-
-        return new int[]{ numberOfItems, 1};
     }
 
     private void createComponents() {
@@ -74,35 +59,8 @@ public class MetricsMonitoringScreen extends JDialog {
         // CENTER
         JTabbedPane tabbedPane = new JTabbedPane();
         this.add(tabbedPane, BorderLayout.CENTER);
-        int [] rc = calculateRowsAndCols();
-        holder = new JPanel(new GridLayout(rc[0], rc[1]));
 
-        // Keyword Threshold + Warnings
-        if(metricsProfile.isHasKeywordThreshold()) {
-            JPanel thPanel = new JPanel(new GridLayout(1, 2));
-            kwdThTable = new GeneralTablePanel(GuiConstants.KEYWORD_THRESHOLD_LABEL,
-                    new String[]{GuiConstants.KEYWORD_COLUMN, GuiConstants.VALUE_COLUMN}, false);
-            kwdThTable.setGeneralSelection(false);
-            warningsTable = new GeneralTablePanel(GuiConstants.WARNINGS_LABEL,
-                    new String[]{GuiConstants.LEVEL_COLUMN, GuiConstants.MESSAGE_COLUMN}, false);
-            warningsTable.setGeneralSelection(false);
-            thPanel.add(kwdThTable);
-            thPanel.add(warningsTable);
-            holder.add(thPanel);
-        }
-
-        // Most common words
-        if(metricsProfile.isHasMostCommonWords()) {
-            mostCommonWordsTable = new GeneralTablePanel(GuiConstants.MOST_COMMON_WORDS_LABEL,
-                    new String[]{GuiConstants.WORD_COLUMN, GuiConstants.VALUE_COLUMN}, false);
-            mostCommonWordsTable.setGeneralSelection(false);
-            mostCommonWordsTable.setIntegerColumnsSort(new int[] { 1 } );
-            holder.add(mostCommonWordsTable);
-        }
-
-        if(metricsProfile.isHasKeywordThreshold() || metricsProfile.isHasMostCommonWords()) {
-            tabbedPane.addTab(GuiConstants.TABLES_TAB, holder);
-        }
+        createTablesPanel(tabbedPane);
 
         // File size chart
         if(metricsProfile.isHasFileSize()) {
@@ -122,6 +80,63 @@ public class MetricsMonitoringScreen extends JDialog {
             KeywordsOverTimePanel keywordOverTime = new KeywordsOverTimePanel();
             tabbedPane.addTab(GuiConstants.KEYWORD_OVER_TIME_TAB, keywordOverTime);
         }
+
+    }
+
+    private void createTablesPanel(JTabbedPane tabbedPane) {
+
+        // neither metric is enabled, so return
+        if(!metricsProfile.isHasKeywordThreshold() && !metricsProfile.isHasMostCommonWords()) {
+            return;
+        }
+
+        // create tables for Keyword Threshold + Warnings
+        if(metricsProfile.isHasKeywordThreshold()) {
+            kwdThTable = new GeneralTablePanel(GuiConstants.KEYWORD_THRESHOLD_LABEL,
+                    new String[]{GuiConstants.KEYWORD_COLUMN, GuiConstants.VALUE_COLUMN}, false);
+            kwdThTable.setGeneralSelection(false);
+            warningsTable = new GeneralTablePanel(GuiConstants.WARNINGS_LABEL,
+                    new String[]{GuiConstants.LEVEL_COLUMN, GuiConstants.MESSAGE_COLUMN}, false);
+            warningsTable.setGeneralSelection(false);
+        }
+
+        // create table for Most common words
+        if(metricsProfile.isHasMostCommonWords()) {
+            mostCommonWordsTable = new GeneralTablePanel(GuiConstants.MOST_COMMON_WORDS_LABEL,
+                    new String[]{GuiConstants.WORD_COLUMN, GuiConstants.VALUE_COLUMN}, false);
+            mostCommonWordsTable.setGeneralSelection(false);
+            mostCommonWordsTable.setIntegerColumnsSort(new int[] { 1 } );
+        }
+
+
+        JPanel holder = new JPanel(new BorderLayout(H_GAP, V_GAP));
+
+        // Both metrics are enabled
+        if(metricsProfile.isHasKeywordThreshold() && metricsProfile.isHasMostCommonWords()) {
+
+            int height = V_FILE_MONITORING_SCREEN_SIZE / 5;
+            int width = H_FILE_MONITORING_SCREEN_SIZE / 5;
+
+            // Keyword Threshold + Warnings
+            JSplitPane thSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, kwdThTable, warningsTable);
+            thSplitPane.setMinimumSize(new Dimension(width, height));
+
+            // Join Keyword Threshold + Warnings and Most common words with vertical split
+            mostCommonWordsTable.setMinimumSize(new Dimension(H_FILE_MONITORING_SCREEN_SIZE, height));
+            holder.add(new JSplitPane(JSplitPane.VERTICAL_SPLIT, mostCommonWordsTable, thSplitPane));
+
+        } else {
+            // Only one of them is enabled
+            if(metricsProfile.isHasKeywordThreshold()) {
+                // Keyword Threshold + Warnings
+                holder.add(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, kwdThTable, warningsTable));
+            } else if(metricsProfile.isHasMostCommonWords()) {
+                // Most common words
+                holder.add(mostCommonWordsTable);
+            }
+        }
+
+        tabbedPane.addTab(GuiConstants.TABLES_TAB, holder);
 
     }
 

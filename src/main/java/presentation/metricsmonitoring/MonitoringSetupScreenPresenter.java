@@ -66,7 +66,7 @@ public class MonitoringSetupScreenPresenter implements IViewPresenter {
                             view.getMotherFrame(), selectedFile, parsingProfile, metricsProfile
                     );
                     metricsScreenPresenter.execute();
-                    startButton.setEnabled(false);
+//                    startButton.setEnabled(false);
                 }
         );
     }
