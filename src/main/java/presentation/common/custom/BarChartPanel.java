@@ -11,8 +11,10 @@ import java.util.Set;
 
 public class BarChartPanel extends JPanel {
 
-    private final int HEAD_SPACE = 30;
+    private static final int ELLIPSIS_SIZE = 3;
+    private final int HEAD_SPACE = 0;
     private final int AXIS_OFFSET = 20;
+    private final int MAX_STRING_SIZE = 10;
     private final Set<String> keySet;
     private final Collection<Integer> values;
     private int chartHeight;
@@ -45,15 +47,19 @@ public class BarChartPanel extends JPanel {
 
         // origin coordinates taking into consideration that the top left corner is the actual 0, 0 we need the
         // relativized 0, 0 coordinates
-        chartZeroX = AXIS_OFFSET;
+        chartZeroX = AXIS_OFFSET * 3;
         chartZeroY = this.getHeight() - AXIS_OFFSET;
     }
 
     private void drawBars(Graphics2D graphics2D) {
         int numberOfBars = keySet.size();
+        String[] strings = keySet.toArray(String[]::new);
 
         // the max has to be a double in order to have a floating point division later on
         double max = values.stream().max(Integer::compareTo).orElse(0);
+
+        graphics2D.setColor(new Color(13, 25, 80));
+        graphics2D.drawString("Max:" + ((int) max ), 0, this.getHeight() - chartZeroY);
 
         int barWidth = chartWidth / numberOfBars;
         int xLeft;
@@ -64,14 +70,16 @@ public class BarChartPanel extends JPanel {
             // between the max value and the height of the canvas
             double height = (value / max) * chartHeight;
             // calculate the x by shifting it counter number of times a bar has been drawn the width of the bar
-            xLeft = AXIS_OFFSET + counter * barWidth;
+            xLeft = chartZeroX + counter * barWidth;
             // the top of the bar is the diff from the y axis "zero" and the calculated height
             yTopLeft = chartZeroY - (int) height;
 
             // draw the rectangle
-            Rectangle rectangle = new Rectangle(xLeft, yTopLeft, barWidth, (int) height);
+            Rectangle rectangle = new Rectangle(xLeft, yTopLeft, barWidth / 2, (int) height);
             graphics2D.setColor(new Color(91, 115, 222));
             graphics2D.fill(rectangle);
+            graphics2D.setColor(new Color(13, 25, 80));
+            graphics2D.drawString(shortenString(strings[counter]), xLeft, chartZeroY + AXIS_OFFSET / 2 + AXIS_OFFSET / 3);
             counter++;
         }
     }
@@ -89,6 +97,16 @@ public class BarChartPanel extends JPanel {
     private void drawLabels(Graphics2D g2) {
     }
 
-
+    private String shortenString(String original) {
+        if(original.length() > MAX_STRING_SIZE + ELLIPSIS_SIZE) {
+            String shortened = original.substring(0, MAX_STRING_SIZE);
+            return shortened + "...";
+        } else if(original.equals("")) {
+            return "\"\"";
+        } else if(original.equals("\t")) {
+            return "\\t";
+        }
+        return original;
+    }
 
 }
