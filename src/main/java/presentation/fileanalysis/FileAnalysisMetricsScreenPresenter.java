@@ -9,6 +9,7 @@ import presentation.common.GuiMessages;
 import presentation.common.IViewPresenter;
 import presentation.common.PresentationUtils;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.text.ParseException;
@@ -25,9 +26,10 @@ public class FileAnalysisMetricsScreenPresenter implements IViewPresenter {
     private final FileAnalysisMetricsService fileAnalysisMetricsService;
     private static final Logger LOGGER = Logger.getLogger(FileAnalysisMetricsScreenPresenter.class.getName());
 
-    public FileAnalysisMetricsScreenPresenter(MetricsProfileDo metricsProfile,
+    public FileAnalysisMetricsScreenPresenter(JFrame motherFrame,
+                                              MetricsProfileDo metricsProfile,
                                               FileAnalysisService fileAnalysisService) {
-        view = new FileAnalysisMetricsScreen(metricsProfile);
+        view = new FileAnalysisMetricsScreen(motherFrame, metricsProfile);
         fileAnalysisService.setLogMessageConsumer(this::messagePopup);
         this.fileAnalysisMetricsService = new FileAnalysisMetricsService(fileAnalysisService, Converter.toDomainObject(metricsProfile));
         this.metricsProfile = metricsProfile;
@@ -85,6 +87,11 @@ public class FileAnalysisMetricsScreenPresenter implements IViewPresenter {
             LOGGER.log(Level.SEVERE, re.getMessage());
             view.getEndDatePanel().setVariableLabelText(GuiMessages.ERROR_TIMESTAMP_DATE_TIME_MISSING);
         }
+
+        if(metricsProfile.isHasKeywordHistogram()) {
+            view.setKeywordHistogramData(metricsReport.getKwdData());
+        }
+
     }
 
 

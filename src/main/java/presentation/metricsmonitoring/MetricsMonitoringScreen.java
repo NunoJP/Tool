@@ -9,6 +9,7 @@ import presentation.common.custom.LabelLabelPanel;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
@@ -30,9 +31,11 @@ public class MetricsMonitoringScreen extends JDialog {
     private MetricsProfileDo metricsProfile;
     private LabelLabelPanel namePanel;
     private JButton stopButton;
+    private JFrame motherFrame;
 
     public MetricsMonitoringScreen(Frame owner, String title, MetricsProfileDo metricsProfile) {
         super(owner, title);
+        this.motherFrame = (JFrame) owner;
         setWindowClosingBehavior();
         this.setPreferredSize(new Dimension(H_FILE_MONITORING_SCREEN_SIZE, V_FILE_MONITORING_SCREEN_SIZE));
         this.metricsProfile = metricsProfile;
@@ -71,7 +74,7 @@ public class MetricsMonitoringScreen extends JDialog {
 
         // Keyword Histogram
         if(metricsProfile.isHasKeywordHistogram()) {
-            KeywordHistogramPanel keywordHistogram = new KeywordHistogramPanel();
+            KeywordHistogramPanel keywordHistogram = new KeywordHistogramPanel(motherFrame);
             tabbedPane.addTab(GuiConstants.KEYWORD_HISTOGRAM_TAB, keywordHistogram);
         }
 

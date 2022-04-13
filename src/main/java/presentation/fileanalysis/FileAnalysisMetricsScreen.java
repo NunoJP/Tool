@@ -7,6 +7,7 @@ import presentation.common.custom.KeywordHistogramPanel;
 import presentation.common.custom.KeywordsOverTimePanel;
 import presentation.common.custom.LabelLabelPanel;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
@@ -14,6 +15,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.util.HashMap;
 
 import static presentation.common.GuiConstants.H_FILE_MONITORING_SCREEN_SIZE;
 import static presentation.common.GuiConstants.H_GAP;
@@ -31,31 +33,16 @@ public class FileAnalysisMetricsScreen extends JPanel {
     private LabelLabelPanel endDatePanel;
     private MetricsProfileDo metricsProfile;
     private int numberOfItems;
+    private JFrame motherFrame;
+    private KeywordHistogramPanel keywordHistogram;
 
-    public FileAnalysisMetricsScreen(MetricsProfileDo metricsProfile){
+    public FileAnalysisMetricsScreen(JFrame motherFrame, MetricsProfileDo metricsProfile){
+        this.motherFrame = motherFrame;
         this.metricsProfile = metricsProfile;
         this.setLayout(new BorderLayout(H_GAP, V_GAP));
         createComponents();
     }
 
-    private int[] calculateRowsAndCols() {
-        numberOfItems = 1;
-        if(metricsProfile.isHasFileSize()) {
-            numberOfItems++;
-        }
-        if(metricsProfile.isHasKeywordThreshold()) {
-            numberOfItems++;
-        }
-        if(metricsProfile.isHasMostCommonWords()) {
-            numberOfItems++;
-        }
-
-        if(numberOfItems >= 3) {
-            return new int[] { 2, 2 };
-        } else {
-            return new int[]{ numberOfItems, 1 };
-        }
-    }
 
     private void createComponents() {
         JTabbedPane tabbedPane = new JTabbedPane();
@@ -66,7 +53,7 @@ public class FileAnalysisMetricsScreen extends JPanel {
 
         // MCW - Tab
         if(metricsProfile.isHasKeywordHistogram()) {
-            KeywordHistogramPanel keywordHistogram = new KeywordHistogramPanel();
+            keywordHistogram = new KeywordHistogramPanel(motherFrame);
             tabbedPane.addTab(GuiConstants.KEYWORD_HISTOGRAM_TAB, keywordHistogram);
         }
 
@@ -180,5 +167,9 @@ public class FileAnalysisMetricsScreen extends JPanel {
 
     public LabelLabelPanel getEndDatePanel() {
         return endDatePanel;
+    }
+
+    public void setKeywordHistogramData(HashMap<String, Integer> barChartData) {
+        this.keywordHistogram.updateChart(barChartData);
     }
 }

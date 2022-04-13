@@ -28,6 +28,8 @@ public class MetricsReport {
     private LogLine[] data;
     private String[] stopWords;
     private ArrayList<Warning> warningMessages = new ArrayList<>();
+    private HashMap<String, Integer> kwdOccs;
+    private int totalNumberOfOccs = 0;
 
     public MetricsReport(MetricsProfile metricsProfile, LogLine[] data, String [] stopWords) {
         this.metricsProfile = metricsProfile;
@@ -43,30 +45,40 @@ public class MetricsReport {
         return data;
     }
 
-    public String[][] getKwdThresholdData() {
-        HashMap<String, Integer> occs = new HashMap<>();
-        int total = 0;
+
+    public HashMap<String, Integer> getKwdData() {
+        if(kwdOccs != null) {
+            return kwdOccs;
+        }
+
+        kwdOccs = new HashMap<>();
+        this.totalNumberOfOccs = 0;
         for (LogLine datum : data) {
             if (datum != null && datum.getMessage() != null) {
                 String[] split = datum.getMessage().split("\\s+|,|\\)|\\(|:");
                 for (String s : split) {
                     if(isNotStopWord(s)) {
-                        int count = occs.getOrDefault(s, 0);
-                        occs.put(s, count + 1);
-                        total++;
+                        int count = kwdOccs.getOrDefault(s, 0);
+                        kwdOccs.put(s, count + 1);
+                        this.totalNumberOfOccs++;
                     }
                 }
             }
         }
+        return kwdOccs;
+    }
+
+    public String[][] getKwdThresholdData() {
+        getKwdData();
 
         ArrayList<String[]> res = new ArrayList<>();
         int idx = 0;
-        for (String s : occs.keySet()) {
+        for (String s : kwdOccs.keySet()) {
             // do the evaluation only if there is a matching keyword
             ArrayList<Keyword> kwds = wordMatchesKeyword(s);
             if(!kwds.isEmpty()) {
                 for (Keyword kwd : kwds) {
-                    Optional<String[]> strings = processResult(evaluate(kwd, occs.get(s), total));
+                    Optional<String[]> strings = processResult(evaluate(kwd, kwdOccs.get(s), totalNumberOfOccs));
                     strings.ifPresent(res::add);
                 }
             }
