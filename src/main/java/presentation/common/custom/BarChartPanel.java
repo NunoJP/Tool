@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
@@ -35,7 +37,6 @@ public class BarChartPanel extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         drawBars(g2);
         drawAxis(g2);
-        drawLabels(g2);
     }
 
 
@@ -58,8 +59,7 @@ public class BarChartPanel extends JPanel {
         // the max has to be a double in order to have a floating point division later on
         double max = values.stream().max(Integer::compareTo).orElse(0);
 
-        graphics2D.setColor(new Color(13, 25, 80));
-        graphics2D.drawString("Max:" + ((int) max ), 0, this.getHeight() - chartZeroY);
+        writeYaxisLabels(graphics2D, numberOfBars, max);
 
         int barWidth = chartWidth / numberOfBars;
         int xLeft;
@@ -84,6 +84,24 @@ public class BarChartPanel extends JPanel {
         }
     }
 
+    private void writeYaxisLabels(Graphics2D graphics2D, int numberOfBars, double max) {
+        BigDecimal maxBigDec = new BigDecimal((int)max);
+
+        graphics2D.setColor(new Color(13, 25, 80));
+        graphics2D.drawString("" + maxBigDec.intValue(), 0, this.getHeight() - chartZeroY);
+
+        BigDecimal maxFraction = maxBigDec.divide(new BigDecimal(numberOfBars), RoundingMode.DOWN);
+        int fractionAccumulator = maxBigDec.intValue();
+
+        if(max <= numberOfBars) {
+            return;
+        }
+        for (int i = 0; i < numberOfBars; i++) {
+            graphics2D.drawString("" + fractionAccumulator  , 0, this.getHeight() - fractionAccumulator);
+            fractionAccumulator -= maxFraction.intValue();
+        }
+    }
+
     private void drawAxis(Graphics2D graphics2D) {
         // calculate the end points for the axis
         int endOfAxisX = chartZeroX + chartWidth;
@@ -94,8 +112,6 @@ public class BarChartPanel extends JPanel {
     }
 
 
-    private void drawLabels(Graphics2D g2) {
-    }
 
     private String shortenString(String original) {
         if(original.length() > MAX_STRING_SIZE + ELLIPSIS_SIZE) {
