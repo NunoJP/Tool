@@ -17,6 +17,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
+import java.util.HashMap;
 
 import static presentation.common.GuiConstants.H_FILE_MONITORING_SCREEN_SIZE;
 import static presentation.common.GuiConstants.H_GAP;
@@ -32,6 +33,9 @@ public class MetricsMonitoringScreen extends JDialog {
     private LabelLabelPanel namePanel;
     private JButton stopButton;
     private JFrame motherFrame;
+    private KeywordHistogramPanel keywordHistogram;
+    private JTabbedPane tabbedPane;
+    private JPanel keywordHistogramPanelHolder;
 
     public MetricsMonitoringScreen(Frame owner, String title, MetricsProfileDo metricsProfile) {
         super(owner, title);
@@ -60,7 +64,7 @@ public class MetricsMonitoringScreen extends JDialog {
 
 
         // CENTER
-        JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane = new JTabbedPane();
         this.add(tabbedPane, BorderLayout.CENTER);
 
         createTablesPanel(tabbedPane);
@@ -74,7 +78,7 @@ public class MetricsMonitoringScreen extends JDialog {
 
         // Keyword Histogram
         if(metricsProfile.isHasKeywordHistogram()) {
-            KeywordHistogramPanel keywordHistogram = new KeywordHistogramPanel(motherFrame);
+            keywordHistogram = new KeywordHistogramPanel(motherFrame);
             tabbedPane.addTab(GuiConstants.KEYWORD_HISTOGRAM_TAB, keywordHistogram);
         }
 
@@ -170,5 +174,12 @@ public class MetricsMonitoringScreen extends JDialog {
 
     public JButton getStopButton() {
         return stopButton;
+    }
+
+    public void setKeywordHistogramData(HashMap<String, Integer> barChartData) {
+        keywordHistogram = null;
+        keywordHistogram = new KeywordHistogramPanel(motherFrame);
+        keywordHistogram.updateChart(barChartData);
+        tabbedPane.setComponentAt(1, keywordHistogram);
     }
 }

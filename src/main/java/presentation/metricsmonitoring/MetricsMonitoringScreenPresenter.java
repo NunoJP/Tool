@@ -75,6 +75,9 @@ public class MetricsMonitoringScreenPresenter implements IPresenter {
             view.getWarningsTable().setStringColorRenderMap(PresentationUtils.generateDefaultColorMap());
         }
         // Keyword Histogram
+        if(metricsProfile.isHasKeywordHistogram()) {
+            view.setKeywordHistogramData(metricsReport.getKwdData());
+        }
 
         // Most common words
         if(metricsProfile.isHasMostCommonWords()) {
