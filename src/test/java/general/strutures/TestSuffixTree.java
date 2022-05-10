@@ -223,7 +223,7 @@ public class TestSuffixTree {
 
         SuffixTree tree = new SuffixTree(t);
 
-        List<Integer> indexes = tree.getIndexes("G", false).stream().sorted().collect(Collectors.toList());
+        List<Integer> indexes = tree.getIndexes("G", true).stream().sorted().collect(Collectors.toList());
 
         assertEquals(3, indexes.size());
         assertEquals(2, indexes.get(0).intValue());
@@ -238,13 +238,13 @@ public class TestSuffixTree {
 
         SuffixTree tree = new SuffixTree(t);
 
-        List<Integer> indexes = tree.getIndexes("CA", false).stream().sorted().collect(Collectors.toList());
+        List<Integer> indexes = tree.getIndexes("CA", true).stream().sorted().collect(Collectors.toList());
 
         assertEquals(2, indexes.size());
         assertEquals(0, indexes.get(0).intValue());
         assertEquals(4, indexes.get(1).intValue());
 
-        indexes = tree.getIndexes("GG", false).stream().sorted().collect(Collectors.toList());
+        indexes = tree.getIndexes("GG", true).stream().sorted().collect(Collectors.toList());
 
         assertEquals(1, indexes.size());
         assertEquals(6, indexes.get(0).intValue());
@@ -256,13 +256,13 @@ public class TestSuffixTree {
 
         SuffixTree tree = new SuffixTree(t);
 
-        List<Integer> indexes = tree.getIndexes("CAG", false).stream().sorted().collect(Collectors.toList());
+        List<Integer> indexes = tree.getIndexes("CAG", true).stream().sorted().collect(Collectors.toList());
 
         assertEquals(2, indexes.size());
         assertEquals(0, indexes.get(0).intValue());
         assertEquals(4, indexes.get(1).intValue());
 
-        indexes = tree.getIndexes("AGG", false).stream().sorted().collect(Collectors.toList());
+        indexes = tree.getIndexes("AGG", true).stream().sorted().collect(Collectors.toList());
 
         assertEquals(1, indexes.size());
         assertEquals(5, indexes.get(0).intValue());
@@ -275,7 +275,7 @@ public class TestSuffixTree {
 
         SuffixTree tree = new SuffixTree(t);
 
-        List<Integer> indexes = tree.getIndexes("G", false).stream().sorted().collect(Collectors.toList());
+        List<Integer> indexes = tree.getIndexes("G", true).stream().sorted().collect(Collectors.toList());
 
         assertEquals(5, indexes.size());
         assertEquals(0, indexes.get(0).intValue());
@@ -291,14 +291,14 @@ public class TestSuffixTree {
 
         SuffixTree tree = new SuffixTree(t);
 
-        List<Integer> indexes = tree.getIndexes("GA", false).stream().sorted().collect(Collectors.toList());
+        List<Integer> indexes = tree.getIndexes("GA", true).stream().sorted().collect(Collectors.toList());
 
         assertEquals(3, indexes.size());
         assertEquals(0, indexes.get(0).intValue());
         assertEquals(5, indexes.get(1).intValue());
         assertEquals(9, indexes.get(2).intValue());
 
-        indexes = tree.getIndexes("FG", false).stream().sorted().collect(Collectors.toList());
+        indexes = tree.getIndexes("FG", true).stream().sorted().collect(Collectors.toList());
 
         assertEquals(1, indexes.size());
         assertEquals(11, indexes.get(0).intValue());
@@ -310,13 +310,13 @@ public class TestSuffixTree {
 
         SuffixTree tree = new SuffixTree(t);
 
-        List<Integer> indexes = tree.getIndexes("GAF", false).stream().sorted().collect(Collectors.toList());
+        List<Integer> indexes = tree.getIndexes("GAF", true).stream().sorted().collect(Collectors.toList());
 
         assertEquals(2, indexes.size());
         assertEquals(5, indexes.get(0).intValue());
         assertEquals(9, indexes.get(1).intValue());
 
-        indexes = tree.getIndexes("AFG", false).stream().sorted().collect(Collectors.toList());
+        indexes = tree.getIndexes("AFG", true).stream().sorted().collect(Collectors.toList());
 
         assertEquals(1, indexes.size());
         assertEquals(10, indexes.get(0).intValue());
@@ -379,7 +379,7 @@ public class TestSuffixTree {
     public void testLargerStringSearchSingleCharNonCaseSensitive() {
         String t = "GAYGEGAFDGAFG";
 
-        SuffixTree tree = new SuffixTree(t);
+        SuffixTree tree = new SuffixTree(t, true);
 
         List<Integer> indexes = tree.getIndexes("G", false).stream().sorted().collect(Collectors.toList());
 
@@ -406,7 +406,7 @@ public class TestSuffixTree {
     public void testLargerStringSearchTwoCharsNonCaseSensitive() {
         String t = "GAYGEGAFDgaFG";
 
-        SuffixTree tree = new SuffixTree(t);
+        SuffixTree tree = new SuffixTree(t, true);
 
         List<Integer> indexes = tree.getIndexes("gA", false).stream().sorted().collect(Collectors.toList());
 
@@ -425,7 +425,7 @@ public class TestSuffixTree {
     public void testLargerStringSearchThreeCharsNonCaseSensitive() {
         String t = "GayGEGafDGAfG";
 
-        SuffixTree tree = new SuffixTree(t);
+        SuffixTree tree = new SuffixTree(t, true);
 
         List<Integer> indexes = tree.getIndexes("Gaf", false).stream().sorted().collect(Collectors.toList());
 
@@ -437,6 +437,60 @@ public class TestSuffixTree {
 
         assertEquals(1, indexes.size());
         assertEquals(10, indexes.get(0).intValue());
+    }
+
+
+    @Test
+    public void testComplexString() {
+        String t = "data.dataaccess.reader.LogFileReaderConsumer accept\n" +
+                "WARNING: Problem parsing:\n" +
+                "java.text.ParseException: Unparseable date: \"NON\"\n" +
+                "\tat java.base/java.text.DateFormat.parse(DateFormat.java:395)\n" +
+                "\tat data.dataaccess.reader.LogFileReaderConsumer.process(LogFileReaderConsumer.java:94)\n" +
+                "\tat data.dataaccess.reader.LogFileReaderConsumer.accept(LogFileReaderConsumer.java:46)\n" +
+                "\tat data.dataaccess.reader.LogFileReaderConsumerTests.firstLineInvalidTest(LogFileReaderConsumerTests.java:398)\n" +
+                "\tat java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n" +
+                "\tat java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\n" +
+                "\tat java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n" +
+                "\tat java.base/java.lang.reflect.Method.invoke(Method.java:566)\n" +
+                "\tat org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)\n" +
+                "\tat org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)\n" +
+                "\tat org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)\n" +
+                "\tat org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)\n" +
+                "\tat org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)\n" +
+                "\tat org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)\n" +
+                "\tat org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)\n" +
+                "\tat org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)\n" +
+                "\tat org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)\n" +
+                "\tat org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)\n" +
+                "\tat org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)\n" +
+                "\tat org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)\n" +
+                "\tat org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)\n" +
+                "\tat org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)\n" +
+                "\tat org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)\n" +
+                "\tat org.junit.runners.ParentRunner.run(ParentRunner.java:413)\n" +
+                "\tat org.junit.runner.JUnitCore.run(JUnitCore.java:137)\n" +
+                "\tat com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:69)\n" +
+                "\tat com.intellij.rt.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:33)\n" +
+                "\tat com.intellij.rt.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:220)\n" +
+                "\tat com.intellij.rt.junit.JUnitStarter.main(JUnitStarter.java:53)";
+
+        SuffixTree tree = new SuffixTree(t);
+
+        List<Integer> indexes = tree.getIndexes("reader", true).stream().sorted().collect(Collectors.toList());
+
+        assertEquals(4, indexes.size());
+
+        indexes = tree.getIndexes("Reader", false).stream().sorted().collect(Collectors.toList());
+
+        assertEquals(0, indexes.size());
+
+        tree.createNonCaseSensitiveTree();
+
+
+        indexes = tree.getIndexes("Reader", false).stream().sorted().collect(Collectors.toList());
+
+        assertEquals(11, indexes.size());
     }
 
 }

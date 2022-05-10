@@ -9,12 +9,25 @@ public class SuffixTree {
 
     private final SfNode head;
     private final SfNode headLowerCase;
+    private final String sourceText;
 
     public SuffixTree(String t) {
+        this(t, false);
+    }
+
+    public SuffixTree(String t, boolean nonCaseSensitiveToo) {
+        headLowerCase = new SfNode(-1, "\0"); // create the head node either way to avoid unnecessary NPE
+        if(nonCaseSensitiveToo) {
+            String originalStringLowerCase = t.toLowerCase();
+            createTree(originalStringLowerCase, headLowerCase);
+        }
         head = new SfNode(-1, "\0");
-        headLowerCase = new SfNode(-1, "\0");
-        String originalStringLowerCase = t.toLowerCase();
         createTree(t, head);
+        sourceText = t;
+    }
+
+    public void createNonCaseSensitiveTree() {
+        String originalStringLowerCase = sourceText.toLowerCase();
         createTree(originalStringLowerCase, headLowerCase);
     }
 
