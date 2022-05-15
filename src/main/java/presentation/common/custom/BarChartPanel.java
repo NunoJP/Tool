@@ -32,6 +32,7 @@ public class BarChartPanel extends JPanel {
 
     @Override
     public void paintComponent(Graphics g) {
+        super.paintComponent(g);
         calculateGraphSize();
 
         Graphics2D g2 = (Graphics2D) g;
@@ -82,6 +83,8 @@ public class BarChartPanel extends JPanel {
             graphics2D.drawString(shortenString(strings[counter]), xLeft, chartZeroY + AXIS_OFFSET / 2 + AXIS_OFFSET / 3);
             counter++;
         }
+
+        graphics2D.dispose();
     }
 
     private void writeYaxisLabels(Graphics2D graphics2D, int numberOfBars, double max) {
