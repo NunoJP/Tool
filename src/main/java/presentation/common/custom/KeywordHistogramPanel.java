@@ -83,7 +83,7 @@ public class KeywordHistogramPanel extends JPanel {
         cardPanel = new JPanel(cardLayout);
         for (HashMap<String, Integer> section : sectionedData) {
             BarChartPanel chartPanel = new BarChartPanel(section);
-            cardPanel.add(chartPanel, numberOfPanels);
+            cardPanel.add(chartPanel, numberOfPanels + "");
             numberOfPanels++;
         }
 
@@ -99,53 +99,18 @@ public class KeywordHistogramPanel extends JPanel {
     }
 
 
-//    public void updateChart(HashMap<String, Integer> barChartData) {
-//        Set<Map.Entry<String, Integer>> entries = barChartData.entrySet();
-//
-//        int numberOfBars = 10;
-//        int numberOfSections = entries.size() / numberOfBars;
-//        List<HashMap<String, Integer>> sectionedData = new ArrayList<>(numberOfSections);
-//        List<Map.Entry<String, Integer>> collect =
-//                entries.stream().sorted((o1, o2) -> o2.getValue() - o1.getValue()).collect(Collectors.toList());
-//        int barCtr = 0;
-//        int sectionIdx = 0;
-//        boolean first = true;
-//        for (Map.Entry<String, Integer> entry : collect) {
-//            if(first) {
-//                sectionedData.add(sectionIdx, new HashMap<>());
-//                first = false;
-//            } else if(barCtr >= numberOfBars) {
-//                barCtr = 0;
-//                sectionIdx++;
-//                sectionedData.add(sectionIdx, new HashMap<>());
-//            }
-//            sectionedData.get(sectionIdx).put(entry.getKey(), entry.getValue());
-//            barCtr++;
-//        }
-//
-//        cardLayout = new CardLayout();
-//        cardPanel = new JPanel(cardLayout);
-//        for (HashMap<String, Integer> section : sectionedData) {
-//            BarChartPanel chartPanel = new BarChartPanel(section);
-//            cardPanel.add(chartPanel);
-//            numberOfPanels++;
-//        }
-//
-//        this.add(cardPanel, BorderLayout.CENTER);
-//    }
-
     private void setBehaviour() {
         this.nextPanelButton.addActionListener(e -> {
             if(currentPanel < numberOfPanels - 1) {
-                cardLayout.next(cardPanel);
                 currentPanel++;
+                cardLayout.show(cardPanel, currentPanel + "");
                 currPageLabel.setText(getCurrPageLabel());
             }
         });
         this.previousPanelButton.addActionListener(e -> {
             if(currentPanel > 0) {
-                cardLayout.previous(cardPanel);
                 currentPanel--;
+                cardLayout.show(cardPanel, currentPanel + "");
                 currPageLabel.setText(getCurrPageLabel());
             }
         });
