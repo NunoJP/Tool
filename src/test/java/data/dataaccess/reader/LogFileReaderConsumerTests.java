@@ -23,10 +23,10 @@ public class LogFileReaderConsumerTests {
 
     @Test
     public void simpleTestWithDateTime() {
-        // 2021-01-01 12:10:10.0000 LEVEL METHOD MESSAGE
+        // 2021-01-01 12:10:10.0000 LEVEL ORIGIN MESSAGE
         LogFileReaderConsumer consumer = setupSimpleParser();
 
-        consumer.accept("2021-01-01 12:10:10.001 LEVEL METHOD 12 MESSAGE MESSAGE MESSAGE");
+        consumer.accept("2021-01-01 12:10:10.001 LEVEL ORIGIN 12 MESSAGE MESSAGE MESSAGE");
 
         LogLine[] lines = consumer.getLines();
         assertEquals(1, lines.length);
@@ -35,7 +35,7 @@ public class LogFileReaderConsumerTests {
         assertEquals("2021-01-01", dateFormat.format(line.getDate()));
         assertEquals("12:10:10.001", timeFormat.format(line.getTime()));
         assertEquals("LEVEL", line.getLevel());
-        assertEquals("METHOD", line.getOrigin());
+        assertEquals("ORIGIN", line.getOrigin());
         assertEquals("12", line.getIdentifier());
         assertEquals("MESSAGE MESSAGE MESSAGE", line.getMessage());
     }
@@ -43,10 +43,10 @@ public class LogFileReaderConsumerTests {
 
     @Test
     public void simpleTestWithDateTimeNoMillis() {
-        // 2021-01-01 12:10:10.0000 LEVEL METHOD MESSAGE
+        // 2021-01-01 12:10:10.0000 LEVEL ORIGIN MESSAGE
         LogFileReaderConsumer consumer = setupSimpleParser();
 
-        consumer.accept("2021-01-01 12:10:10 LEVEL METHOD 12 MESSAGE MESSAGE MESSAGE");
+        consumer.accept("2021-01-01 12:10:10 LEVEL ORIGIN 12 MESSAGE MESSAGE MESSAGE");
 
         LogLine[] lines = consumer.getLines();
         assertEquals(1, lines.length);
@@ -55,7 +55,7 @@ public class LogFileReaderConsumerTests {
         assertEquals("2021-01-01", dateFormat.format(line.getDate()));
         assertEquals("12:10:10.000", timeFormat.format(line.getTime()));
         assertEquals("LEVEL", line.getLevel());
-        assertEquals("METHOD", line.getOrigin());
+        assertEquals("ORIGIN", line.getOrigin());
         assertEquals("12", line.getIdentifier());
         assertEquals("MESSAGE MESSAGE MESSAGE", line.getMessage());
     }
@@ -63,7 +63,7 @@ public class LogFileReaderConsumerTests {
 
     @Test
     public void simpleTestWithTimestamp() {
-        // 2021-01-01 12:10:10.0000 - LEVEL METHOD MESSAGE
+        // 2021-01-01 12:10:10.0000 - LEVEL ORIGIN MESSAGE
         ParsingProfile profile = new ParsingProfile();
         profile.setName(VALUE);
         profile.addPortion(createSeparator(SeparatorEnum.OPEN_BRACKET));
@@ -71,7 +71,7 @@ public class LogFileReaderConsumerTests {
         profile.addPortion(createSeparator(SeparatorEnum.CLOSE_BRACKET));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.LEVEL.getName(), TextClassesEnum.LEVEL.getName(), false, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
-        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.METHOD.getName(), TextClassesEnum.METHOD.getName(), false, false));
+        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.ORIGIN.getName(), TextClassesEnum.ORIGIN.getName(), false, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.ID.getName(), TextClassesEnum.ID.getName(), false, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
@@ -79,7 +79,7 @@ public class LogFileReaderConsumerTests {
         profile.finishProfile();
         LogFileReaderConsumer consumer = new LogFileReaderConsumer(profile);
 
-        consumer.accept("[2021-01-01 12:10:10.001] LEVEL METHOD 12 MESSAGE MESSAGE MESSAGE");
+        consumer.accept("[2021-01-01 12:10:10.001] LEVEL ORIGIN 12 MESSAGE MESSAGE MESSAGE");
 
         LogLine[] lines = consumer.getLines();
         assertEquals(1, lines.length);
@@ -87,13 +87,13 @@ public class LogFileReaderConsumerTests {
 
         assertEquals("2021-01-01 12:10:10.001", timeStampFormat.format(line.getTimestamp()));
         assertEquals("LEVEL", line.getLevel());
-        assertEquals("METHOD", line.getOrigin());
+        assertEquals("ORIGIN", line.getOrigin());
         assertEquals("12", line.getIdentifier());
         assertEquals("MESSAGE MESSAGE MESSAGE", line.getMessage());
     }
     @Test
     public void simpleTestIgnoreSome() {
-        // 2021-01-01 12:10:10.0000 LEVEL METHOD MESSAGE
+        // 2021-01-01 12:10:10.0000 LEVEL ORIGIN MESSAGE
         ParsingProfile profile = new ParsingProfile();
         profile.setName(VALUE);
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.DATE.getName(), TextClassesEnum.DATE.getName(), false, false));
@@ -102,13 +102,13 @@ public class LogFileReaderConsumerTests {
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.LEVEL.getName(), TextClassesEnum.LEVEL.getName(), false, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
-        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.METHOD.getName(), TextClassesEnum.METHOD.getName(), true, false));
+        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.ORIGIN.getName(), TextClassesEnum.ORIGIN.getName(), true, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.MESSAGE.getName(), TextClassesEnum.MESSAGE.getName(), true, false));
         profile.finishProfile();
         LogFileReaderConsumer consumer = new LogFileReaderConsumer(profile);
 
-        consumer.accept("2021-01-01 12:10:10.001 LEVEL METHOD MESSAGE MESSAGE MESSAGE");
+        consumer.accept("2021-01-01 12:10:10.001 LEVEL ORIGIN MESSAGE MESSAGE MESSAGE");
 
         LogLine[] lines = consumer.getLines();
         assertEquals(1, lines.length);
@@ -123,7 +123,7 @@ public class LogFileReaderConsumerTests {
 
     @Test
     public void simpleTestMultipleLines() {
-        // 2021-01-01 12:10:10.0000 LEVEL METHOD MESSAGE
+        // 2021-01-01 12:10:10.0000 LEVEL ORIGIN MESSAGE
         ParsingProfile profile = new ParsingProfile();
         profile.setName(VALUE);
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.DATE.getName(), TextClassesEnum.DATE.getName(), false, false));
@@ -132,22 +132,22 @@ public class LogFileReaderConsumerTests {
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.LEVEL.getName(), TextClassesEnum.LEVEL.getName(), false, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
-        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.METHOD.getName(), TextClassesEnum.METHOD.getName(), false, false));
+        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.ORIGIN.getName(), TextClassesEnum.ORIGIN.getName(), false, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.MESSAGE.getName(), TextClassesEnum.MESSAGE.getName(), false, false));
         profile.finishProfile();
         LogFileReaderConsumer consumer = new LogFileReaderConsumer(profile);
 
         String [] inputs = {
-                "2021-01-01 12:10:10.001 LEVEL METHOD MESSAGE MESSAGE MESSAGE",
-                "2021-01-01 12:10:10.011 LEVEL2 METHOD MESSAGE MESSAGE",
-                "2021-01-01 12:10:10.111 LEVEL3 METHOD MESSAGE "
+                "2021-01-01 12:10:10.001 LEVEL ORIGIN MESSAGE MESSAGE MESSAGE",
+                "2021-01-01 12:10:10.011 LEVEL2 ORIGIN MESSAGE MESSAGE",
+                "2021-01-01 12:10:10.111 LEVEL3 ORIGIN MESSAGE "
         };
 
         String [][] expectedOutput = {
-                {"2021-01-01","12:10:10.001", "LEVEL", "METHOD", "MESSAGE MESSAGE MESSAGE"},
-                {"2021-01-01","12:10:10.011", "LEVEL2", "METHOD", "MESSAGE MESSAGE"},
-                {"2021-01-01","12:10:10.111", "LEVEL3", "METHOD", "MESSAGE"}
+                {"2021-01-01","12:10:10.001", "LEVEL", "ORIGIN", "MESSAGE MESSAGE MESSAGE"},
+                {"2021-01-01","12:10:10.011", "LEVEL2", "ORIGIN", "MESSAGE MESSAGE"},
+                {"2021-01-01","12:10:10.111", "LEVEL3", "ORIGIN", "MESSAGE"}
         };
 
         consumer.accept(inputs[0]);
@@ -169,7 +169,7 @@ public class LogFileReaderConsumerTests {
 
     @Test
     public void simpleTestIgnoreAll() {
-        // 2021-01-01 12:10:10.0000 LEVEL METHOD MESSAGE
+        // 2021-01-01 12:10:10.0000 LEVEL ORIGIN MESSAGE
         ParsingProfile profile = new ParsingProfile();
         profile.setName(VALUE);
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.DATE.getName(), TextClassesEnum.DATE.getName(), true, false));
@@ -178,13 +178,13 @@ public class LogFileReaderConsumerTests {
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.LEVEL.getName(), TextClassesEnum.LEVEL.getName(), true, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
-        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.METHOD.getName(), TextClassesEnum.METHOD.getName(), true, false));
+        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.ORIGIN.getName(), TextClassesEnum.ORIGIN.getName(), true, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.MESSAGE.getName(), TextClassesEnum.MESSAGE.getName(), true, false));
         profile.finishProfile();
         LogFileReaderConsumer consumer = new LogFileReaderConsumer(profile);
 
-        consumer.accept("2021-01-01 12:10:10.001 LEVEL METHOD MESSAGE MESSAGE MESSAGE");
+        consumer.accept("2021-01-01 12:10:10.001 LEVEL ORIGIN MESSAGE MESSAGE MESSAGE");
 
         LogLine[] lines = consumer.getLines();
         assertEquals(1, lines.length);
@@ -199,7 +199,7 @@ public class LogFileReaderConsumerTests {
 
     @Test
     public void simpleTestIgnoreAllSeparators() {
-        // 2021-01-01 12:10:10.0000 LEVEL METHOD MESSAGE
+        // 2021-01-01 12:10:10.0000 LEVEL ORIGIN MESSAGE
         ParsingProfile profile = new ParsingProfile();
         profile.setName(VALUE);
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.DATE.getName(), TextClassesEnum.DATE.getName(), false, false));
@@ -208,13 +208,13 @@ public class LogFileReaderConsumerTests {
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.LEVEL.getName(), TextClassesEnum.LEVEL.getName(), false, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
-        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.METHOD.getName(), TextClassesEnum.METHOD.getName(), false, false));
+        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.ORIGIN.getName(), TextClassesEnum.ORIGIN.getName(), false, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.MESSAGE.getName(), TextClassesEnum.MESSAGE.getName(), false, false));
         profile.finishProfile();
         LogFileReaderConsumer consumer = new LogFileReaderConsumer(profile);
 
-        consumer.accept("2021-01-01 12:10:10.001 LEVEL METHOD MESSAGE MESSAGE MESSAGE");
+        consumer.accept("2021-01-01 12:10:10.001 LEVEL ORIGIN MESSAGE MESSAGE MESSAGE");
 
         LogLine[] lines = consumer.getLines();
         assertEquals(1, lines.length);
@@ -223,13 +223,13 @@ public class LogFileReaderConsumerTests {
         assertEquals("2021-01-01", dateFormat.format(line.getDate()));
         assertEquals("12:10:10.001", timeFormat.format(line.getTime()));
         assertEquals("LEVEL", line.getLevel());
-        assertEquals("METHOD", line.getOrigin());
+        assertEquals("ORIGIN", line.getOrigin());
         assertEquals("MESSAGE MESSAGE MESSAGE", line.getMessage());
     }
 
     @Test
     public void simpleTestIgnoreAllTextClasses() {
-        // 2021-01-01 12:10:10.0000 LEVEL METHOD MESSAGE
+        // 2021-01-01 12:10:10.0000 LEVEL ORIGIN MESSAGE
         ParsingProfile profile = new ParsingProfile();
         profile.setName(VALUE);
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.DATE.getName(), TextClassesEnum.DATE.getName(), true, false));
@@ -238,13 +238,13 @@ public class LogFileReaderConsumerTests {
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.LEVEL.getName(), TextClassesEnum.LEVEL.getName(), true, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
-        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.METHOD.getName(), TextClassesEnum.METHOD.getName(), true, false));
+        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.ORIGIN.getName(), TextClassesEnum.ORIGIN.getName(), true, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.MESSAGE.getName(), TextClassesEnum.MESSAGE.getName(), true, false));
         profile.finishProfile();
         LogFileReaderConsumer consumer = new LogFileReaderConsumer(profile);
 
-        consumer.accept("2021-01-01 12:10:10.001 LEVEL METHOD MESSAGE MESSAGE MESSAGE");
+        consumer.accept("2021-01-01 12:10:10.001 LEVEL ORIGIN MESSAGE MESSAGE MESSAGE");
 
         LogLine[] lines = consumer.getLines();
         assertEquals(1, lines.length);
@@ -259,13 +259,13 @@ public class LogFileReaderConsumerTests {
 
     @Test
     public void emptyProfileTest() {
-        // 2021-01-01 12:10:10.0000 LEVEL METHOD MESSAGE
+        // 2021-01-01 12:10:10.0000 LEVEL ORIGIN MESSAGE
         ParsingProfile profile = new ParsingProfile();
         profile.setName(VALUE);
         profile.finishProfile();
         LogFileReaderConsumer consumer = new LogFileReaderConsumer(profile);
 
-        consumer.accept("2021-01-01 12:10:10.001 LEVEL METHOD 12 MESSAGE MESSAGE MESSAGE");
+        consumer.accept("2021-01-01 12:10:10.001 LEVEL ORIGIN 12 MESSAGE MESSAGE MESSAGE");
 
         LogLine[] lines = consumer.getLines();
         assertEquals(1, lines.length);
@@ -281,11 +281,11 @@ public class LogFileReaderConsumerTests {
 
     @Test
     public void missingValuesInInputTest() {
-        // 2021-01-01 12:10:10.0000 LEVEL METHOD MESSAGE
+        // 2021-01-01 12:10:10.0000 LEVEL ORIGIN MESSAGE
         LogFileReaderConsumer consumer = setupSimpleParser();
 
-        consumer.accept("2021-01-01 LEVEL METHOD MESSAGE MESSAGE MESSAGE");
-        consumer.accept("2021-01-01 12:10:10.001 LEVEL METHOD 12 MESSAGE MESSAGE MESSAGE");
+        consumer.accept("2021-01-01 LEVEL ORIGIN MESSAGE MESSAGE MESSAGE");
+        consumer.accept("2021-01-01 12:10:10.001 LEVEL ORIGIN 12 MESSAGE MESSAGE MESSAGE");
 
         LogLine[] lines = consumer.getLines();
         assertEquals(1, lines.length);
@@ -295,7 +295,7 @@ public class LogFileReaderConsumerTests {
         assertEquals("2021-01-01", dateFormat.format(line.getDate()));
         assertEquals("12:10:10.001", timeFormat.format(line.getTime()));
         assertEquals("LEVEL", line.getLevel());
-        assertEquals("METHOD", line.getOrigin());
+        assertEquals("ORIGIN", line.getOrigin());
         assertEquals("12", line.getIdentifier());
         assertEquals("MESSAGE MESSAGE MESSAGE", line.getMessage());
     }
@@ -314,10 +314,10 @@ public class LogFileReaderConsumerTests {
     @Test
     public void simpleTestWithNonStandardLines() {
         // in the inputs add lines which are not parsable by the pattern
-        // 2021-01-01 12:10:10.0000 LEVEL METHOD MESSAGE
+        // 2021-01-01 12:10:10.0000 LEVEL ORIGIN MESSAGE
         LogFileReaderConsumer consumer = setupSimpleParser();
 
-        consumer.accept("2021-01-01 12:10:10.001 LEVEL METHOD 12 MESSAGE MESSAGE MESSAGE");
+        consumer.accept("2021-01-01 12:10:10.001 LEVEL ORIGIN 12 MESSAGE MESSAGE MESSAGE");
         consumer.accept("NON STANDARD MESSAGE");
 
         LogLine[] lines = consumer.getLines();
@@ -327,7 +327,7 @@ public class LogFileReaderConsumerTests {
         assertEquals("2021-01-01", dateFormat.format(line.getDate()));
         assertEquals("12:10:10.001", timeFormat.format(line.getTime()));
         assertEquals("LEVEL", line.getLevel());
-        assertEquals("METHOD", line.getOrigin());
+        assertEquals("ORIGIN", line.getOrigin());
         assertEquals("12", line.getIdentifier());
         assertEquals("MESSAGE MESSAGE MESSAGE" + System.lineSeparator() + "NON STANDARD MESSAGE", line.getMessage());
     }
@@ -335,10 +335,10 @@ public class LogFileReaderConsumerTests {
     @Test
     public void simpleTestWithMultipleNonStandardLines() {
         // in the inputs add lines which are not parsable by the pattern
-        // 2021-01-01 12:10:10.0000 LEVEL METHOD MESSAGE
+        // 2021-01-01 12:10:10.0000 LEVEL ORIGIN MESSAGE
         LogFileReaderConsumer consumer = setupSimpleParser();
 
-        consumer.accept("2021-01-01 12:10:10.001 LEVEL METHOD 12 MESSAGE MESSAGE MESSAGE");
+        consumer.accept("2021-01-01 12:10:10.001 LEVEL ORIGIN 12 MESSAGE MESSAGE MESSAGE");
         consumer.accept("NON STANDARD MESSAGE");
         consumer.accept("NON STANDARD MESSAGE");
         consumer.accept("NON STANDARD MESSAGE");
@@ -351,7 +351,7 @@ public class LogFileReaderConsumerTests {
         assertEquals("2021-01-01", dateFormat.format(line.getDate()));
         assertEquals("12:10:10.001", timeFormat.format(line.getTime()));
         assertEquals("LEVEL", line.getLevel());
-        assertEquals("METHOD", line.getOrigin());
+        assertEquals("ORIGIN", line.getOrigin());
         assertEquals("12", line.getIdentifier());
         assertEquals("MESSAGE MESSAGE MESSAGE" + System.lineSeparator() + "NON STANDARD MESSAGE"
                         + System.lineSeparator() + "NON STANDARD MESSAGE"
@@ -373,14 +373,14 @@ public class LogFileReaderConsumerTests {
 
     @Test
     public void testSkipOnOneSeparator() {
-        // 2021-01-01 12:10:10.0000 LEVEL METHOD MESSAGE
+        // 2021-01-01 12:10:10.0000 LEVEL ORIGIN MESSAGE
         ParsingProfile profile = new ParsingProfile();
         profile.setName(VALUE);
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.TIMESTAMP.getName(), TextClassesEnum.TIMESTAMP.getName(), false, false));
         profile.addPortion(createSeparator(1, SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.LEVEL.getName(), TextClassesEnum.LEVEL.getName(), false, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
-        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.METHOD.getName(), TextClassesEnum.METHOD.getName(), false, false));
+        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.ORIGIN.getName(), TextClassesEnum.ORIGIN.getName(), false, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.ID.getName(), TextClassesEnum.ID.getName(), false, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
@@ -388,7 +388,7 @@ public class LogFileReaderConsumerTests {
         profile.finishProfile();
         LogFileReaderConsumer consumer = new LogFileReaderConsumer(profile);
 
-        consumer.accept("2021-01-01 12:10:10.001 LEVEL METHOD 12 MESSAGE MESSAGE MESSAGE");
+        consumer.accept("2021-01-01 12:10:10.001 LEVEL ORIGIN 12 MESSAGE MESSAGE MESSAGE");
 
         LogLine[] lines = consumer.getLines();
         assertEquals(1, lines.length);
@@ -396,7 +396,7 @@ public class LogFileReaderConsumerTests {
 
         assertEquals("2021-01-01 12:10:10.001", timeStampFormat.format(line.getTimestamp()));
         assertEquals("LEVEL", line.getLevel());
-        assertEquals("METHOD", line.getOrigin());
+        assertEquals("ORIGIN", line.getOrigin());
         assertEquals("12", line.getIdentifier());
         assertEquals("MESSAGE MESSAGE MESSAGE", line.getMessage());
     }
@@ -404,13 +404,13 @@ public class LogFileReaderConsumerTests {
 
     @Test
     public void testMultipleSkipsOnOneSeparator() {
-        // 2021-01-01 12:10:10.0000 LEVEL METHOD MESSAGE
+        // 2021-01-01 12:10:10.0000 LEVEL ORIGIN MESSAGE
         ParsingProfile profile = new ParsingProfile();
         profile.setName(VALUE);
         profile.addPortion(createSeparator(2, SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.LEVEL.getName(), TextClassesEnum.LEVEL.getName(), false, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
-        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.METHOD.getName(), TextClassesEnum.METHOD.getName(), false, false));
+        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.ORIGIN.getName(), TextClassesEnum.ORIGIN.getName(), false, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.ID.getName(), TextClassesEnum.ID.getName(), false, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
@@ -418,27 +418,27 @@ public class LogFileReaderConsumerTests {
         profile.finishProfile();
         LogFileReaderConsumer consumer = new LogFileReaderConsumer(profile);
 
-        consumer.accept("2021-01-01 12:10:10 001 LEVEL METHOD 12 MESSAGE MESSAGE MESSAGE");
+        consumer.accept("2021-01-01 12:10:10 001 LEVEL ORIGIN 12 MESSAGE MESSAGE MESSAGE");
 
         LogLine[] lines = consumer.getLines();
         assertEquals(1, lines.length);
         LogLine line = lines[0];
 
         assertEquals("LEVEL", line.getLevel());
-        assertEquals("METHOD", line.getOrigin());
+        assertEquals("ORIGIN", line.getOrigin());
         assertEquals("12", line.getIdentifier());
         assertEquals("MESSAGE MESSAGE MESSAGE", line.getMessage());
     }
 
     @Test
     public void testMultipleSkipsOnMultipleSeparators() {
-        // 2021-01-01 12:10:10.0000 LEVEL METHOD MESSAGE
+        // 2021-01-01 12:10:10.0000 LEVEL ORIGIN MESSAGE
         ParsingProfile profile = new ParsingProfile();
         profile.setName(VALUE);
         profile.addPortion(createSeparator(2, SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.LEVEL.getName(), TextClassesEnum.LEVEL.getName(), false, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
-        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.METHOD.getName(), TextClassesEnum.METHOD.getName(), false, false));
+        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.ORIGIN.getName(), TextClassesEnum.ORIGIN.getName(), false, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.ID.getName(), TextClassesEnum.ID.getName(), false, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
@@ -447,14 +447,14 @@ public class LogFileReaderConsumerTests {
         profile.finishProfile();
         LogFileReaderConsumer consumer = new LogFileReaderConsumer(profile);
 
-        consumer.accept("2021-01-01 12:10:10 001 LEVEL METHOD 12 MESSAGE MESSAGE MESSAGE NOT TO USE");
+        consumer.accept("2021-01-01 12:10:10 001 LEVEL ORIGIN 12 MESSAGE MESSAGE MESSAGE NOT TO USE");
 
         LogLine[] lines = consumer.getLines();
         assertEquals(1, lines.length);
         LogLine line = lines[0];
 
         assertEquals("LEVEL", line.getLevel());
-        assertEquals("METHOD", line.getOrigin());
+        assertEquals("ORIGIN", line.getOrigin());
         assertEquals("12", line.getIdentifier());
         assertEquals("MESSAGE MESSAGE MESSAGE", line.getMessage());
     }
@@ -493,7 +493,7 @@ public class LogFileReaderConsumerTests {
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.LEVEL.getName(), TextClassesEnum.LEVEL.getName(), false, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
-        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.METHOD.getName(), TextClassesEnum.METHOD.getName(), false, false));
+        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.ORIGIN.getName(), TextClassesEnum.ORIGIN.getName(), false, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.ID.getName(), TextClassesEnum.ID.getName(), false, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));

@@ -14,7 +14,7 @@ public class TextClassesEnumTests {
         assertEquals(TextClassesEnum.TIME.getParsingString(), TextClassesEnum.getParsingStringByName(TextClassesEnum.TIME.getName()));
         assertEquals(TextClassesEnum.LEVEL.getParsingString(), TextClassesEnum.getParsingStringByName(TextClassesEnum.LEVEL.getName()));
         assertEquals(TextClassesEnum.MESSAGE.getParsingString(), TextClassesEnum.getParsingStringByName(TextClassesEnum.MESSAGE.getName()));
-        assertEquals(TextClassesEnum.METHOD.getParsingString(), TextClassesEnum.getParsingStringByName(TextClassesEnum.METHOD.getName()));
+        assertEquals(TextClassesEnum.ORIGIN.getParsingString(), TextClassesEnum.getParsingStringByName(TextClassesEnum.ORIGIN.getName()));
         assertEquals(TextClassesEnum.ID.getParsingString(), TextClassesEnum.getParsingStringByName(TextClassesEnum.ID.getName()));
     }
 }

@@ -6,11 +6,16 @@ import domain.entities.displayobjects.FileAnalysisFilterDo;
 import domain.entities.domainobjects.LogLine;
 import domain.entities.domainobjects.MetricsProfile;
 import domain.entities.domainobjects.ParsingProfile;
+import general.util.Pair;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class FileAnalysisService {
     protected final File selectedFile;
@@ -35,7 +40,22 @@ public class FileAnalysisService {
         }
         hasLoadedData = true;
         data = logFileReader.read(logMessageConsumer);
+        generateSuffixTrees(data);
         return data;
+    }
+
+    private void generateSuffixTrees(LogLine[] data) {
+        Arrays.stream(data).parallel().forEach(LogLine::calculateSuffixTree);
+    }
+
+    public List<Pair<Integer, ? extends List>> getStringPositionMatches(LogLine[] source, String toFind) {
+        return Arrays.stream(source).parallel().map(logLine -> {
+            List<Integer> indexes = logLine.getSuffixTree().getIndexes(toFind, true);
+            if(!indexes.isEmpty()) {
+                return Pair.of(logLine.getPosition(), indexes);
+            }
+            return Pair.of(-1, Collections.EMPTY_LIST);
+        }).filter(pair -> pair.getLeft() >= 0).collect(Collectors.toList());
     }
 
     public LogLine[] getFilteredData(FileAnalysisFilterDo filterDo) {

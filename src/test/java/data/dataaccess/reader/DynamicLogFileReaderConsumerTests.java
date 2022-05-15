@@ -25,7 +25,7 @@ public class DynamicLogFileReaderConsumerTests {
 
     @Test
     public void simpleTestWithDateTime() {
-        // 2021-01-01 12:10:10.0000 LEVEL METHOD MESSAGE
+        // 2021-01-01 12:10:10.0000 LEVEL ORIGIN MESSAGE
         DynamicLogFileReaderConsumer consumer = setupSimpleParser(metricsReport -> {
             LogLine[] lines = metricsReport.getData();
             assertEquals(1, lines.length);
@@ -34,13 +34,13 @@ public class DynamicLogFileReaderConsumerTests {
             assertEquals("2021-01-01", dateFormat.format(line.getDate()));
             assertEquals("12:10:10.001", timeFormat.format(line.getTime()));
             assertEquals("LEVEL", line.getLevel());
-            assertEquals("METHOD", line.getOrigin());
+            assertEquals("ORIGIN", line.getOrigin());
             assertEquals("12", line.getIdentifier());
             assertEquals("MESSAGE MESSAGE MESSAGE", line.getMessage());
 
         });
 
-        consumer.accept("2021-01-01 12:10:10.001 LEVEL METHOD 12 MESSAGE MESSAGE MESSAGE");
+        consumer.accept("2021-01-01 12:10:10.001 LEVEL ORIGIN 12 MESSAGE MESSAGE MESSAGE");
     }
 
 
@@ -54,16 +54,16 @@ public class DynamicLogFileReaderConsumerTests {
             assertEquals("2021-01-01", dateFormat.format(line.getDate()));
             assertEquals("12:10:10.000", timeFormat.format(line.getTime()));
             assertEquals("LEVEL", line.getLevel());
-            assertEquals("METHOD", line.getOrigin());
+            assertEquals("ORIGIN", line.getOrigin());
             assertEquals("12", line.getIdentifier());
             assertEquals("MESSAGE MESSAGE MESSAGE", line.getMessage());
         });
-        consumer.accept("2021-01-01 12:10:10 LEVEL METHOD 12 MESSAGE MESSAGE MESSAGE");
+        consumer.accept("2021-01-01 12:10:10 LEVEL ORIGIN 12 MESSAGE MESSAGE MESSAGE");
     }
 
     @Test
     public void simpleTestWithTimestamp() {
-        // 2021-01-01 12:10:10.0000 - LEVEL METHOD MESSAGE
+        // 2021-01-01 12:10:10.0000 - LEVEL ORIGIN MESSAGE
 
         ParsingProfile profile = new ParsingProfile();
         profile.setName(VALUE);
@@ -72,7 +72,7 @@ public class DynamicLogFileReaderConsumerTests {
         profile.addPortion(createSeparator(SeparatorEnum.CLOSE_BRACKET));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.LEVEL.getName(), TextClassesEnum.LEVEL.getName(), false, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
-        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.METHOD.getName(), TextClassesEnum.METHOD.getName(), false, false));
+        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.ORIGIN.getName(), TextClassesEnum.ORIGIN.getName(), false, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.ID.getName(), TextClassesEnum.ID.getName(), false, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
@@ -85,17 +85,17 @@ public class DynamicLogFileReaderConsumerTests {
 
             assertEquals("2021-01-01 12:10:10.001", timeStampFormat.format(line.getTimestamp()));
             assertEquals("LEVEL", line.getLevel());
-            assertEquals("METHOD", line.getOrigin());
+            assertEquals("ORIGIN", line.getOrigin());
             assertEquals("12", line.getIdentifier());
             assertEquals("MESSAGE MESSAGE MESSAGE", line.getMessage());
         }, profile, new MetricsProfile());
 
-        consumer.accept("[2021-01-01 12:10:10.001] LEVEL METHOD 12 MESSAGE MESSAGE MESSAGE");
+        consumer.accept("[2021-01-01 12:10:10.001] LEVEL ORIGIN 12 MESSAGE MESSAGE MESSAGE");
     }
 
     @Test
     public void simpleTestIgnoreSome() {
-        // 2021-01-01 12:10:10.0000 LEVEL METHOD MESSAGE
+        // 2021-01-01 12:10:10.0000 LEVEL ORIGIN MESSAGE
         ParsingProfile profile = new ParsingProfile();
         profile.setName(VALUE);
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.DATE.getName(), TextClassesEnum.DATE.getName(), false, false));
@@ -104,7 +104,7 @@ public class DynamicLogFileReaderConsumerTests {
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.LEVEL.getName(), TextClassesEnum.LEVEL.getName(), false, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
-        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.METHOD.getName(), TextClassesEnum.METHOD.getName(), true, false));
+        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.ORIGIN.getName(), TextClassesEnum.ORIGIN.getName(), true, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.MESSAGE.getName(), TextClassesEnum.MESSAGE.getName(), true, false));
         profile.finishProfile();
@@ -121,13 +121,13 @@ public class DynamicLogFileReaderConsumerTests {
             assertNull(line.getMessage());
         }, profile, new MetricsProfile());
 
-        consumer.accept("2021-01-01 12:10:10.001 LEVEL METHOD MESSAGE MESSAGE MESSAGE");
+        consumer.accept("2021-01-01 12:10:10.001 LEVEL ORIGIN MESSAGE MESSAGE MESSAGE");
     }
 
 
     @Test
     public void simpleTestMultipleLines() {
-        // 2021-01-01 12:10:10.0000 LEVEL METHOD MESSAGE
+        // 2021-01-01 12:10:10.0000 LEVEL ORIGIN MESSAGE
         ParsingProfile profile = new ParsingProfile();
         profile.setName(VALUE);
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.DATE.getName(), TextClassesEnum.DATE.getName(), false, false));
@@ -136,20 +136,20 @@ public class DynamicLogFileReaderConsumerTests {
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.LEVEL.getName(), TextClassesEnum.LEVEL.getName(), false, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
-        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.METHOD.getName(), TextClassesEnum.METHOD.getName(), false, false));
+        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.ORIGIN.getName(), TextClassesEnum.ORIGIN.getName(), false, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.MESSAGE.getName(), TextClassesEnum.MESSAGE.getName(), false, false));
         profile.finishProfile();
         String [] inputs = {
-                "2021-01-01 12:10:10.001 LEVEL METHOD MESSAGE MESSAGE MESSAGE",
-                "2021-01-01 12:10:10.011 LEVEL2 METHOD MESSAGE MESSAGE",
-                "2021-01-01 12:10:10.111 LEVEL3 METHOD MESSAGE "
+                "2021-01-01 12:10:10.001 LEVEL ORIGIN MESSAGE MESSAGE MESSAGE",
+                "2021-01-01 12:10:10.011 LEVEL2 ORIGIN MESSAGE MESSAGE",
+                "2021-01-01 12:10:10.111 LEVEL3 ORIGIN MESSAGE "
         };
 
         String [][] expectedOutput = {
-                {"2021-01-01","12:10:10.001", "LEVEL", "METHOD", "MESSAGE MESSAGE MESSAGE"},
-                {"2021-01-01","12:10:10.011", "LEVEL2", "METHOD", "MESSAGE MESSAGE"},
-                {"2021-01-01","12:10:10.111", "LEVEL3", "METHOD", "MESSAGE"}
+                {"2021-01-01","12:10:10.001", "LEVEL", "ORIGIN", "MESSAGE MESSAGE MESSAGE"},
+                {"2021-01-01","12:10:10.011", "LEVEL2", "ORIGIN", "MESSAGE MESSAGE"},
+                {"2021-01-01","12:10:10.111", "LEVEL3", "ORIGIN", "MESSAGE"}
         };
 
         DynamicLogFileReaderConsumer consumer =  new DynamicLogFileReaderConsumer(metricsReport -> {
@@ -173,7 +173,7 @@ public class DynamicLogFileReaderConsumerTests {
 
     @Test
     public void simpleTestIgnoreAll() {
-        // 2021-01-01 12:10:10.0000 LEVEL METHOD MESSAGE
+        // 2021-01-01 12:10:10.0000 LEVEL ORIGIN MESSAGE
         ParsingProfile profile = new ParsingProfile();
         profile.setName(VALUE);
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.DATE.getName(), TextClassesEnum.DATE.getName(), true, false));
@@ -182,7 +182,7 @@ public class DynamicLogFileReaderConsumerTests {
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.LEVEL.getName(), TextClassesEnum.LEVEL.getName(), true, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
-        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.METHOD.getName(), TextClassesEnum.METHOD.getName(), true, false));
+        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.ORIGIN.getName(), TextClassesEnum.ORIGIN.getName(), true, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.MESSAGE.getName(), TextClassesEnum.MESSAGE.getName(), true, false));
         profile.finishProfile();
@@ -200,13 +200,13 @@ public class DynamicLogFileReaderConsumerTests {
             assertNull(line.getMessage());
         }, profile, new MetricsProfile());
 
-        consumer.accept("2021-01-01 12:10:10.001 LEVEL METHOD MESSAGE MESSAGE MESSAGE");
+        consumer.accept("2021-01-01 12:10:10.001 LEVEL ORIGIN MESSAGE MESSAGE MESSAGE");
     }
 
 
     @Test
     public void simpleTestIgnoreAllSeparators() {
-        // 2021-01-01 12:10:10.0000 LEVEL METHOD MESSAGE
+        // 2021-01-01 12:10:10.0000 LEVEL ORIGIN MESSAGE
         ParsingProfile profile = new ParsingProfile();
         profile.setName(VALUE);
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.DATE.getName(), TextClassesEnum.DATE.getName(), false, false));
@@ -215,7 +215,7 @@ public class DynamicLogFileReaderConsumerTests {
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.LEVEL.getName(), TextClassesEnum.LEVEL.getName(), false, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
-        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.METHOD.getName(), TextClassesEnum.METHOD.getName(), false, false));
+        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.ORIGIN.getName(), TextClassesEnum.ORIGIN.getName(), false, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.MESSAGE.getName(), TextClassesEnum.MESSAGE.getName(), false, false));
         profile.finishProfile();
@@ -228,17 +228,17 @@ public class DynamicLogFileReaderConsumerTests {
             assertEquals("2021-01-01", dateFormat.format(line.getDate()));
             assertEquals("12:10:10.001", timeFormat.format(line.getTime()));
             assertEquals("LEVEL", line.getLevel());
-            assertEquals("METHOD", line.getOrigin());
+            assertEquals("ORIGIN", line.getOrigin());
             assertEquals("MESSAGE MESSAGE MESSAGE", line.getMessage());
         }, profile, new MetricsProfile());
 
-        consumer.accept("2021-01-01 12:10:10.001 LEVEL METHOD MESSAGE MESSAGE MESSAGE");
+        consumer.accept("2021-01-01 12:10:10.001 LEVEL ORIGIN MESSAGE MESSAGE MESSAGE");
     }
 
 
     @Test
     public void simpleTestIgnoreAllTextClasses() {
-        // 2021-01-01 12:10:10.0000 LEVEL METHOD MESSAGE
+        // 2021-01-01 12:10:10.0000 LEVEL ORIGIN MESSAGE
         ParsingProfile profile = new ParsingProfile();
         profile.setName(VALUE);
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.DATE.getName(), TextClassesEnum.DATE.getName(), true, false));
@@ -247,7 +247,7 @@ public class DynamicLogFileReaderConsumerTests {
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.LEVEL.getName(), TextClassesEnum.LEVEL.getName(), true, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
-        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.METHOD.getName(), TextClassesEnum.METHOD.getName(), true, false));
+        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.ORIGIN.getName(), TextClassesEnum.ORIGIN.getName(), true, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.MESSAGE.getName(), TextClassesEnum.MESSAGE.getName(), true, false));
         profile.finishProfile();
@@ -264,12 +264,12 @@ public class DynamicLogFileReaderConsumerTests {
             assertNull(line.getMessage());
         }, profile, new MetricsProfile());
 
-        consumer.accept("2021-01-01 12:10:10.001 LEVEL METHOD MESSAGE MESSAGE MESSAGE");
+        consumer.accept("2021-01-01 12:10:10.001 LEVEL ORIGIN MESSAGE MESSAGE MESSAGE");
     }
 
     @Test
     public void emptyProfileTest() {
-        // 2021-01-01 12:10:10.0000 LEVEL METHOD MESSAGE
+        // 2021-01-01 12:10:10.0000 LEVEL ORIGIN MESSAGE
         ParsingProfile profile = new ParsingProfile();
         profile.setName(VALUE);
         profile.finishProfile();
@@ -287,13 +287,13 @@ public class DynamicLogFileReaderConsumerTests {
             assertNull(line.getMessage());
         }, profile, new MetricsProfile());
 
-        consumer.accept("2021-01-01 12:10:10.001 LEVEL METHOD 12 MESSAGE MESSAGE MESSAGE");
+        consumer.accept("2021-01-01 12:10:10.001 LEVEL ORIGIN 12 MESSAGE MESSAGE MESSAGE");
     }
 
 
     @Test
     public void missingValuesInInputTest() {
-        // 2021-01-01 12:10:10.0000 LEVEL METHOD MESSAGE
+        // 2021-01-01 12:10:10.0000 LEVEL ORIGIN MESSAGE
         DynamicLogFileReaderConsumer consumer = setupSimpleParser(metricsReport -> {
                 LogLine[] lines = metricsReport.getData();
                 if(lines.length != 0) {
@@ -303,15 +303,15 @@ public class DynamicLogFileReaderConsumerTests {
                     assertEquals("2021-01-01", dateFormat.format(line.getDate()));
                     assertEquals("12:10:10.001", timeFormat.format(line.getTime()));
                     assertEquals("LEVEL", line.getLevel());
-                    assertEquals("METHOD", line.getOrigin());
+                    assertEquals("ORIGIN", line.getOrigin());
                     assertEquals("12", line.getIdentifier());
                     assertEquals("MESSAGE MESSAGE MESSAGE", line.getMessage());
                 }
             }
         );
 
-        consumer.accept("2021-01-01 LEVEL METHOD MESSAGE MESSAGE MESSAGE");
-        consumer.accept("2021-01-01 12:10:10.001 LEVEL METHOD 12 MESSAGE MESSAGE MESSAGE");
+        consumer.accept("2021-01-01 LEVEL ORIGIN MESSAGE MESSAGE MESSAGE");
+        consumer.accept("2021-01-01 12:10:10.001 LEVEL ORIGIN 12 MESSAGE MESSAGE MESSAGE");
     }
 
     @Test
@@ -329,10 +329,10 @@ public class DynamicLogFileReaderConsumerTests {
     @Test
     public void simpleTestWithNonStandardLines() {
         // in the inputs add lines which are not parsable by the pattern
-        // 2021-01-01 12:10:10.0000 LEVEL METHOD MESSAGE
+        // 2021-01-01 12:10:10.0000 LEVEL ORIGIN MESSAGE
         DynamicLogFileReaderConsumer consumer = setupSimpleParser(metricsReport -> {});
 
-        consumer.accept("2021-01-01 12:10:10.001 LEVEL METHOD 12 MESSAGE MESSAGE MESSAGE");
+        consumer.accept("2021-01-01 12:10:10.001 LEVEL ORIGIN 12 MESSAGE MESSAGE MESSAGE");
         consumer.accept("NON STANDARD MESSAGE");
 
         LogLine[] lines = consumer.getLines();
@@ -342,7 +342,7 @@ public class DynamicLogFileReaderConsumerTests {
         assertEquals("2021-01-01", dateFormat.format(line.getDate()));
         assertEquals("12:10:10.001", timeFormat.format(line.getTime()));
         assertEquals("LEVEL", line.getLevel());
-        assertEquals("METHOD", line.getOrigin());
+        assertEquals("ORIGIN", line.getOrigin());
         assertEquals("12", line.getIdentifier());
         assertEquals("MESSAGE MESSAGE MESSAGE" + System.lineSeparator() + "NON STANDARD MESSAGE", line.getMessage());
     }
@@ -350,10 +350,10 @@ public class DynamicLogFileReaderConsumerTests {
     @Test
     public void simpleTestWithMultipleNonStandardLines() {
         // in the inputs add lines which are not parsable by the pattern
-        // 2021-01-01 12:10:10.0000 LEVEL METHOD MESSAGE
+        // 2021-01-01 12:10:10.0000 LEVEL ORIGIN MESSAGE
         DynamicLogFileReaderConsumer consumer = setupSimpleParser(metricsReport -> {});
 
-        consumer.accept("2021-01-01 12:10:10.001 LEVEL METHOD 12 MESSAGE MESSAGE MESSAGE");
+        consumer.accept("2021-01-01 12:10:10.001 LEVEL ORIGIN 12 MESSAGE MESSAGE MESSAGE");
         consumer.accept("NON STANDARD MESSAGE");
         consumer.accept("NON STANDARD MESSAGE");
         consumer.accept("NON STANDARD MESSAGE");
@@ -367,7 +367,7 @@ public class DynamicLogFileReaderConsumerTests {
         assertEquals("2021-01-01", dateFormat.format(line.getDate()));
         assertEquals("12:10:10.001", timeFormat.format(line.getTime()));
         assertEquals("LEVEL", line.getLevel());
-        assertEquals("METHOD", line.getOrigin());
+        assertEquals("ORIGIN", line.getOrigin());
         assertEquals("12", line.getIdentifier());
         assertEquals("MESSAGE MESSAGE MESSAGE" + System.lineSeparator() + "NON STANDARD MESSAGE"
                         + System.lineSeparator() + "NON STANDARD MESSAGE"
@@ -396,7 +396,7 @@ public class DynamicLogFileReaderConsumerTests {
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.LEVEL.getName(), TextClassesEnum.LEVEL.getName(), false, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
-        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.METHOD.getName(), TextClassesEnum.METHOD.getName(), false, false));
+        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.ORIGIN.getName(), TextClassesEnum.ORIGIN.getName(), false, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.ID.getName(), TextClassesEnum.ID.getName(), false, false));
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));

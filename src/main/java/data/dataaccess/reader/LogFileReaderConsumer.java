@@ -21,10 +21,12 @@ public class LogFileReaderConsumer implements Consumer<String> {
     private static final Logger LOGGER = Logger.getLogger(LogFileReaderConsumer.class.getName());
     private LogLine latestValidLine;
     private final ArrayList<String> warningMessages = new ArrayList<>();
+    int position;
 
     public LogFileReaderConsumer(ParsingProfile parsingProfile) {
         this.parsingProfile = parsingProfile;
         logLines = new ArrayList<>();
+        this.position = 0;
     }
 
     @Override
@@ -67,6 +69,8 @@ public class LogFileReaderConsumer implements Consumer<String> {
 
         if(validLine) {
             latestValidLine = line;
+            line.setPosition(position);
+            position++;
             logLines.add(line);
         } else {
             if(latestValidLine != null) {
@@ -129,7 +133,7 @@ public class LogFileReaderConsumer implements Consumer<String> {
                     subString = String.format(portion.getSpecificFormat(), subString);
                 }
                 line.setIdentifier(subString);
-            } else if (TextClassesEnum.METHOD.getName().equals(portion.getPortionName())) {
+            } else if (TextClassesEnum.ORIGIN.getName().equals(portion.getPortionName())) {
                 if (portion.isSpecificFormat()) {
                     subString = String.format(portion.getSpecificFormat(), subString);
                 }
@@ -153,6 +157,7 @@ public class LogFileReaderConsumer implements Consumer<String> {
 
     public void clearLines() {
         logLines = new ArrayList<>();
+        this.position = 0;
     }
 
     public ArrayList<String> getWarningMessages() {

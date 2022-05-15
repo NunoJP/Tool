@@ -70,7 +70,7 @@ public class LogFileFunction implements Function<LogLine, String> {
                 return String.format(portion.getSpecificFormat(), logLine.getIdentifier());
             }
             return logLine.getIdentifier();
-        } else if(TextClassesEnum.METHOD.getName().equals(portion.getPortionName())) {
+        } else if(TextClassesEnum.ORIGIN.getName().equals(portion.getPortionName())) {
             if(portion.isSpecificFormat()) {
                 return String.format(portion.getSpecificFormat(), logLine.getOrigin());
             }

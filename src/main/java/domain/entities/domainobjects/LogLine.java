@@ -1,5 +1,7 @@
 package domain.entities.domainobjects;
 
+import general.strutures.SuffixTree;
+
 import java.util.Date;
 
 public class LogLine {
@@ -10,6 +12,8 @@ public class LogLine {
     private String origin;
     private String message;
     private String identifier;
+    private SuffixTree suffixTree;
+    private int position;
 
     public LogLine() {
     }
@@ -68,5 +72,33 @@ public class LogLine {
 
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
+    }
+
+    /**
+     * The position field is the absolute position of the log line within the source file
+     * excluding special lines which are aggregated in the message field.
+     */
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public void calculateSuffixTree() {
+        this.suffixTree = new SuffixTree(this.message);
+    }
+
+    public void calculateSuffixTreeNonCaseSensitive() {
+        if(suffixTree == null) {
+            this.suffixTree = new SuffixTree(this.message, true);
+        } else {
+            this.suffixTree.createNonCaseSensitiveTree();
+        }
+    }
+
+    public SuffixTree getSuffixTree() {
+        return suffixTree;
     }
 }

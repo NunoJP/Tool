@@ -98,8 +98,8 @@ public class ParsingProfileConsumer implements Consumer<String> {
             parseSpecifically(s, TextClassesEnum.LEVEL, currentProfile);
         } else if(s.startsWith(TextClassesEnum.MESSAGE.getParsingString())) {
             parseSpecifically(s, TextClassesEnum.MESSAGE, currentProfile);
-        } else if(s.startsWith(TextClassesEnum.METHOD.getParsingString())) {
-            parseSpecifically(s, TextClassesEnum.METHOD, currentProfile);
+        } else if(s.startsWith(TextClassesEnum.ORIGIN.getParsingString())) {
+            parseSpecifically(s, TextClassesEnum.ORIGIN, currentProfile);
         } else if(s.startsWith(TextClassesEnum.ID.getParsingString())) {
             parseSpecifically(s, TextClassesEnum.ID, currentProfile);
         } else if(s.startsWith(SeparatorEnum.SPACE.getParsingString())) {

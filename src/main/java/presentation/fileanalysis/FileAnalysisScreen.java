@@ -65,8 +65,8 @@ public class FileAnalysisScreen extends JPanel {
         // From Date/Time, Origin, Level
         JPanel firstRow = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, 0));
         fromDateComponent = new DateComponent(GuiConstants.FROM_LABEL);
-        identifier = new LabelTextFieldPanel(GuiConstants.IDENTIFIER_LABEL, GuiConstants.METHOD_FIELD_SIZE);
-        origin = new LabelTextFieldPanel(GuiConstants.ORIGIN_LABEL, GuiConstants.METHOD_FIELD_SIZE);
+        identifier = new LabelTextFieldPanel(GuiConstants.IDENTIFIER_LABEL, GuiConstants.ORIGIN_FIELD_SIZE);
+        origin = new LabelTextFieldPanel(GuiConstants.ORIGIN_LABEL, GuiConstants.ORIGIN_FIELD_SIZE);
         level = new LabelTextFieldPanel(GuiConstants.LEVEL_LABEL, GuiConstants.LEVEL_FIELD_SIZE);
         firstRow.add(fromDateComponent);
         firstRow.add(identifier);

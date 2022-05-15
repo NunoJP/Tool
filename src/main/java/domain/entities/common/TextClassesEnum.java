@@ -6,7 +6,7 @@ public enum TextClassesEnum {
     TIME("Time", "TIME"),
     LEVEL("Level", "LEVEL"),
     MESSAGE("Message", "MESSAGE"),
-    METHOD("Method", "METHOD"),
+    ORIGIN("Origin", "ORIGIN"),
     ID("ID", "ID");
 
     public static String getParsingStringByName(String portion) {
@@ -20,8 +20,8 @@ public enum TextClassesEnum {
             return LEVEL.parsingString;
         } else if(MESSAGE.getName().equalsIgnoreCase(portion)){
             return MESSAGE.parsingString;
-        } else if(METHOD.getName().equalsIgnoreCase(portion)){
-            return METHOD.parsingString;
+        } else if(ORIGIN.getName().equalsIgnoreCase(portion)){
+            return ORIGIN.parsingString;
         } else if(ID.getName().equalsIgnoreCase(portion)){
             return ID.parsingString;
         }
