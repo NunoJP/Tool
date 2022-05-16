@@ -1,6 +1,7 @@
 package presentation.common.custom;
 
 import presentation.common.GuiConstants;
+import presentation.common.custom.graphs.BarChartPanel;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;

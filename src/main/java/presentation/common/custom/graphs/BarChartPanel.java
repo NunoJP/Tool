@@ -1,8 +1,6 @@
-package presentation.common.custom;
+package presentation.common.custom.graphs;
 
-import javax.swing.JPanel;
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.math.BigDecimal;
@@ -11,18 +9,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
 
-public class BarChartPanel extends JPanel {
-
-    private static final int ELLIPSIS_SIZE = 3;
-    private final int HEAD_SPACE = 0;
-    private final int AXIS_OFFSET = 20;
-    private final int MAX_STRING_SIZE = 10;
+public class BarChartPanel extends BaseGraphPanel {
     private final Set<String> keySet;
     private final Collection<Integer> values;
-    private int chartHeight;
-    private int chartWidth;
-    private int chartZeroX;
-    private int chartZeroY;
+
 
     public BarChartPanel(HashMap<String, Integer> occs) {
         this.keySet = occs.keySet();
@@ -30,30 +20,7 @@ public class BarChartPanel extends JPanel {
     }
 
 
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        calculateGraphSize();
-
-        Graphics2D g2 = (Graphics2D) g;
-        drawBars(g2);
-        drawAxis(g2);
-    }
-
-
-    private void calculateGraphSize() {
-
-        // area size
-        chartWidth = this.getWidth() - 2 * AXIS_OFFSET;
-        chartHeight = this.getHeight() - 2 * AXIS_OFFSET - HEAD_SPACE;
-
-        // origin coordinates taking into consideration that the top left corner is the actual 0, 0 we need the
-        // relativized 0, 0 coordinates
-        chartZeroX = AXIS_OFFSET * 3;
-        chartZeroY = this.getHeight() - AXIS_OFFSET;
-    }
-
-    private void drawBars(Graphics2D graphics2D) {
+    protected void drawContents(Graphics2D graphics2D) {
         int numberOfBars = keySet.size();
         String[] strings = keySet.toArray(String[]::new);
 
@@ -83,8 +50,6 @@ public class BarChartPanel extends JPanel {
             graphics2D.drawString(shortenString(strings[counter]), xLeft, chartZeroY + AXIS_OFFSET / 2 + AXIS_OFFSET / 3);
             counter++;
         }
-
-        graphics2D.dispose();
     }
 
     private void writeYaxisLabels(Graphics2D graphics2D, int numberOfBars, double max) {
@@ -105,27 +70,5 @@ public class BarChartPanel extends JPanel {
         }
     }
 
-    private void drawAxis(Graphics2D graphics2D) {
-        // calculate the end points for the axis
-        int endOfAxisX = chartZeroX + chartWidth;
-        int endOfAxisY = chartZeroY - chartHeight;
-
-        graphics2D.drawLine(chartZeroX, chartZeroY, endOfAxisX, chartZeroY);
-        graphics2D.drawLine(chartZeroX, chartZeroY, chartZeroX, endOfAxisY);
-    }
-
-
-
-    private String shortenString(String original) {
-        if(original.length() > MAX_STRING_SIZE + ELLIPSIS_SIZE) {
-            String shortened = original.substring(0, MAX_STRING_SIZE);
-            return shortened + "...";
-        } else if(original.equals("")) {
-            return "\"\"";
-        } else if(original.equals("\t")) {
-            return "\\t";
-        }
-        return original;
-    }
 
 }

@@ -1,11 +1,13 @@
 package presentation.metricsmonitoring;
 
 import domain.entities.displayobjects.MetricsProfileDo;
+import general.util.Pair;
 import presentation.common.GuiConstants;
 import presentation.common.custom.GeneralTablePanel;
 import presentation.common.custom.KeywordHistogramPanel;
 import presentation.common.custom.KeywordsOverTimePanel;
 import presentation.common.custom.LabelLabelPanel;
+import presentation.common.custom.graphs.PointPlotChartPanel;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -17,7 +19,10 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import static presentation.common.GuiConstants.H_FILE_MONITORING_SCREEN_SIZE;
 import static presentation.common.GuiConstants.H_GAP;
@@ -36,6 +41,7 @@ public class MetricsMonitoringScreen extends JDialog {
     private KeywordHistogramPanel keywordHistogram;
     private JTabbedPane tabbedPane;
     private JPanel keywordHistogramPanelHolder;
+    private PointPlotChartPanel fileSizePanel;
 
     public MetricsMonitoringScreen(Frame owner, String title, MetricsProfileDo metricsProfile) {
         super(owner, title);
@@ -71,10 +77,46 @@ public class MetricsMonitoringScreen extends JDialog {
 
         // File size chart
         if(metricsProfile.isHasFileSize()) {
-            JPanel jPanel = new JPanel();
-            tabbedPane.addTab(GuiConstants.FILE_SIZE_TAB, jPanel);
+            List<Pair<Long, Date>> values = new ArrayList<>();
+            values.add(Pair.of(1L, new Date()));
+            values.add(Pair.of(30L, new Date()));
+            values.add(Pair.of(50L, new Date()));
+            values.add(Pair.of(60L, new Date()));
+            values.add(Pair.of(100L, new Date()));
+            values.add(Pair.of(150L, new Date()));
+            values.add(Pair.of(190L, new Date()));
+            values.add(Pair.of(290L, new Date()));
+            values.add(Pair.of(390L, new Date()));
+            values.add(Pair.of(490L, new Date()));
+            values.add(Pair.of(590L, new Date()));
+            values.add(Pair.of(690L, new Date()));
+            values.add(Pair.of(890L, new Date()));
+            values.add(Pair.of(1190L, new Date()));
+            values.add(Pair.of(1290L, new Date()));
+            values.add(Pair.of(1390L, new Date()));
+            values.add(Pair.of(1590L, new Date()));
+            values.add(Pair.of(1690L, new Date()));
+            values.add(Pair.of(2190L, new Date()));
+            values.add(Pair.of(2290L, new Date()));
+            values.add(Pair.of(2390L, new Date()));
+            values.add(Pair.of(2590L, new Date()));
+            values.add(Pair.of(2690L, new Date()));
+            values.add(Pair.of(3490L, new Date()));
+            values.add(Pair.of(4650L, new Date()));
+            values.add(Pair.of(5590L, new Date()));
+            values.add(Pair.of(5520L, new Date()));
+            values.add(Pair.of(4490L, new Date()));
+            values.add(Pair.of(4390L, new Date()));
+            values.add(Pair.of(3390L, new Date()));
+            values.add(Pair.of(2290L, new Date()));
+            values.add(Pair.of(2590L, new Date()));
+            values.add(Pair.of(1290L, new Date()));
+            values.add(Pair.of(1590L, new Date()));
+            values.add(Pair.of(1690L, new Date()));
+            values.add(Pair.of(1790L, new Date()));
+            fileSizePanel = new PointPlotChartPanel(values);
+            tabbedPane.addTab(GuiConstants.FILE_SIZE_TAB, fileSizePanel);
         }
-
 
         // Keyword Histogram
         if(metricsProfile.isHasKeywordHistogram()) {
@@ -180,6 +222,6 @@ public class MetricsMonitoringScreen extends JDialog {
         keywordHistogram = null;
         keywordHistogram = new KeywordHistogramPanel(motherFrame);
         keywordHistogram.updateChart(barChartData);
-        tabbedPane.setComponentAt(1, keywordHistogram);
+        tabbedPane.setComponentAt(2, keywordHistogram);
     }
 }
