@@ -7,6 +7,7 @@ import domain.entities.domainobjects.LogLine;
 import domain.entities.domainobjects.MetricsProfile;
 import domain.entities.domainobjects.MetricsReport;
 import domain.entities.domainobjects.ParsingProfile;
+import general.util.Pair;
 import org.junit.Test;
 import presentation.common.GuiConstants;
 
@@ -40,7 +41,7 @@ public class DynamicLogFileReaderConsumerTests {
 
         });
 
-        consumer.accept("2021-01-01 12:10:10.001 LEVEL ORIGIN 12 MESSAGE MESSAGE MESSAGE");
+        consumer.accept(Pair.of("2021-01-01 12:10:10.001 LEVEL ORIGIN 12 MESSAGE MESSAGE MESSAGE", 1L));
     }
 
 
@@ -58,7 +59,7 @@ public class DynamicLogFileReaderConsumerTests {
             assertEquals("12", line.getIdentifier());
             assertEquals("MESSAGE MESSAGE MESSAGE", line.getMessage());
         });
-        consumer.accept("2021-01-01 12:10:10 LEVEL ORIGIN 12 MESSAGE MESSAGE MESSAGE");
+        consumer.accept(Pair.of("2021-01-01 12:10:10 LEVEL ORIGIN 12 MESSAGE MESSAGE MESSAGE", 1L));
     }
 
     @Test
@@ -90,7 +91,7 @@ public class DynamicLogFileReaderConsumerTests {
             assertEquals("MESSAGE MESSAGE MESSAGE", line.getMessage());
         }, profile, new MetricsProfile());
 
-        consumer.accept("[2021-01-01 12:10:10.001] LEVEL ORIGIN 12 MESSAGE MESSAGE MESSAGE");
+        consumer.accept(Pair.of("[2021-01-01 12:10:10.001] LEVEL ORIGIN 12 MESSAGE MESSAGE MESSAGE", 1L));
     }
 
     @Test
@@ -121,7 +122,7 @@ public class DynamicLogFileReaderConsumerTests {
             assertNull(line.getMessage());
         }, profile, new MetricsProfile());
 
-        consumer.accept("2021-01-01 12:10:10.001 LEVEL ORIGIN MESSAGE MESSAGE MESSAGE");
+        consumer.accept(Pair.of("2021-01-01 12:10:10.001 LEVEL ORIGIN MESSAGE MESSAGE MESSAGE", 1L));
     }
 
 
@@ -140,11 +141,11 @@ public class DynamicLogFileReaderConsumerTests {
         profile.addPortion(createSeparator(SeparatorEnum.SPACE));
         profile.addPortion(new ParsingProfilePortion(TextClassesEnum.MESSAGE.getName(), TextClassesEnum.MESSAGE.getName(), false, false));
         profile.finishProfile();
-        String [] inputs = {
-                "2021-01-01 12:10:10.001 LEVEL ORIGIN MESSAGE MESSAGE MESSAGE",
-                "2021-01-01 12:10:10.011 LEVEL2 ORIGIN MESSAGE MESSAGE",
-                "2021-01-01 12:10:10.111 LEVEL3 ORIGIN MESSAGE "
-        };
+        Pair<String, Long> [] inputs = new Pair[3];
+        inputs[0] = Pair.of("2021-01-01 12:10:10.001 LEVEL ORIGIN MESSAGE MESSAGE MESSAGE", 1L);
+        inputs[1] = Pair.of("2021-01-01 12:10:10.011 LEVEL2 ORIGIN MESSAGE MESSAGE", 1L);
+        inputs[2] = Pair.of("2021-01-01 12:10:10.111 LEVEL3 ORIGIN MESSAGE ", 1L);
+
 
         String [][] expectedOutput = {
                 {"2021-01-01","12:10:10.001", "LEVEL", "ORIGIN", "MESSAGE MESSAGE MESSAGE"},
@@ -200,7 +201,7 @@ public class DynamicLogFileReaderConsumerTests {
             assertNull(line.getMessage());
         }, profile, new MetricsProfile());
 
-        consumer.accept("2021-01-01 12:10:10.001 LEVEL ORIGIN MESSAGE MESSAGE MESSAGE");
+        consumer.accept(Pair.of("2021-01-01 12:10:10.001 LEVEL ORIGIN MESSAGE MESSAGE MESSAGE", 1L));
     }
 
 
@@ -232,7 +233,7 @@ public class DynamicLogFileReaderConsumerTests {
             assertEquals("MESSAGE MESSAGE MESSAGE", line.getMessage());
         }, profile, new MetricsProfile());
 
-        consumer.accept("2021-01-01 12:10:10.001 LEVEL ORIGIN MESSAGE MESSAGE MESSAGE");
+        consumer.accept(Pair.of("2021-01-01 12:10:10.001 LEVEL ORIGIN MESSAGE MESSAGE MESSAGE", 1L));
     }
 
 
@@ -264,7 +265,7 @@ public class DynamicLogFileReaderConsumerTests {
             assertNull(line.getMessage());
         }, profile, new MetricsProfile());
 
-        consumer.accept("2021-01-01 12:10:10.001 LEVEL ORIGIN MESSAGE MESSAGE MESSAGE");
+        consumer.accept(Pair.of("2021-01-01 12:10:10.001 LEVEL ORIGIN MESSAGE MESSAGE MESSAGE", 1L));
     }
 
     @Test
@@ -287,7 +288,7 @@ public class DynamicLogFileReaderConsumerTests {
             assertNull(line.getMessage());
         }, profile, new MetricsProfile());
 
-        consumer.accept("2021-01-01 12:10:10.001 LEVEL ORIGIN 12 MESSAGE MESSAGE MESSAGE");
+        consumer.accept(Pair.of("2021-01-01 12:10:10.001 LEVEL ORIGIN 12 MESSAGE MESSAGE MESSAGE", 1L));
     }
 
 
@@ -310,8 +311,8 @@ public class DynamicLogFileReaderConsumerTests {
             }
         );
 
-        consumer.accept("2021-01-01 LEVEL ORIGIN MESSAGE MESSAGE MESSAGE");
-        consumer.accept("2021-01-01 12:10:10.001 LEVEL ORIGIN 12 MESSAGE MESSAGE MESSAGE");
+        consumer.accept(Pair.of("2021-01-01 LEVEL ORIGIN MESSAGE MESSAGE MESSAGE", 1L));
+        consumer.accept(Pair.of("2021-01-01 12:10:10.001 LEVEL ORIGIN 12 MESSAGE MESSAGE MESSAGE", 1L));
     }
 
     @Test
@@ -323,7 +324,7 @@ public class DynamicLogFileReaderConsumerTests {
                 }
         );
 
-        consumer.accept("WARNING :place() Test Message");
+        consumer.accept(Pair.of("WARNING :place() Test Message", 1L));
     }
 
     @Test
@@ -332,8 +333,8 @@ public class DynamicLogFileReaderConsumerTests {
         // 2021-01-01 12:10:10.0000 LEVEL ORIGIN MESSAGE
         DynamicLogFileReaderConsumer consumer = setupSimpleParser(metricsReport -> {});
 
-        consumer.accept("2021-01-01 12:10:10.001 LEVEL ORIGIN 12 MESSAGE MESSAGE MESSAGE");
-        consumer.accept("NON STANDARD MESSAGE");
+        consumer.accept(Pair.of("2021-01-01 12:10:10.001 LEVEL ORIGIN 12 MESSAGE MESSAGE MESSAGE", 1L));
+        consumer.accept(Pair.of("NON STANDARD MESSAGE", 1L));
 
         LogLine[] lines = consumer.getLines();
         assertEquals(1, lines.length);
@@ -353,11 +354,11 @@ public class DynamicLogFileReaderConsumerTests {
         // 2021-01-01 12:10:10.0000 LEVEL ORIGIN MESSAGE
         DynamicLogFileReaderConsumer consumer = setupSimpleParser(metricsReport -> {});
 
-        consumer.accept("2021-01-01 12:10:10.001 LEVEL ORIGIN 12 MESSAGE MESSAGE MESSAGE");
-        consumer.accept("NON STANDARD MESSAGE");
-        consumer.accept("NON STANDARD MESSAGE");
-        consumer.accept("NON STANDARD MESSAGE");
-        consumer.accept("NON STANDARD MESSAGE");
+        consumer.accept(Pair.of("2021-01-01 12:10:10.001 LEVEL ORIGIN 12 MESSAGE MESSAGE MESSAGE", 1L));
+        consumer.accept(Pair.of("NON STANDARD MESSAGE", 1L));
+        consumer.accept(Pair.of("NON STANDARD MESSAGE", 1L));
+        consumer.accept(Pair.of("NON STANDARD MESSAGE", 1L));
+        consumer.accept(Pair.of("NON STANDARD MESSAGE", 1L));
 
 
         LogLine[] lines = consumer.getLines();
@@ -383,7 +384,7 @@ public class DynamicLogFileReaderConsumerTests {
             LogLine[] lines = metricsReport.getData();
             assertEquals(0, lines.length);
         });
-        consumer.accept("NON STANDARD MESSAGE");
+        consumer.accept(Pair.of("NON STANDARD MESSAGE", 1L));
     }
 
 

@@ -19,7 +19,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -42,6 +41,10 @@ public class MetricsMonitoringScreen extends JDialog {
     private JTabbedPane tabbedPane;
     private JPanel keywordHistogramPanelHolder;
     private PointPlotChartPanel fileSizePanel;
+    private int fileSizeTabPosition = 1;
+    private int keywordHistogramTabPosition = 2;
+    private int keywordsOverTimeTabPosition = 3;
+
 
     public MetricsMonitoringScreen(Frame owner, String title, MetricsProfileDo metricsProfile) {
         super(owner, title);
@@ -55,7 +58,7 @@ public class MetricsMonitoringScreen extends JDialog {
     }
 
     private void createComponents() {
-
+        int panelIndex = 0;
         // NORTH
         namePanel = new LabelLabelPanel(GuiConstants.NAME_LABEL);
         JPanel nameSpacer = new JPanel(new BorderLayout(H_GAP, V_GAP));
@@ -77,57 +80,26 @@ public class MetricsMonitoringScreen extends JDialog {
 
         // File size chart
         if(metricsProfile.isHasFileSize()) {
-            List<Pair<Long, Date>> values = new ArrayList<>();
-            values.add(Pair.of(1L, new Date()));
-            values.add(Pair.of(30L, new Date()));
-            values.add(Pair.of(50L, new Date()));
-            values.add(Pair.of(60L, new Date()));
-            values.add(Pair.of(100L, new Date()));
-            values.add(Pair.of(150L, new Date()));
-            values.add(Pair.of(190L, new Date()));
-            values.add(Pair.of(290L, new Date()));
-            values.add(Pair.of(390L, new Date()));
-            values.add(Pair.of(490L, new Date()));
-            values.add(Pair.of(590L, new Date()));
-            values.add(Pair.of(690L, new Date()));
-            values.add(Pair.of(890L, new Date()));
-            values.add(Pair.of(1190L, new Date()));
-            values.add(Pair.of(1290L, new Date()));
-            values.add(Pair.of(1390L, new Date()));
-            values.add(Pair.of(1590L, new Date()));
-            values.add(Pair.of(1690L, new Date()));
-            values.add(Pair.of(2190L, new Date()));
-            values.add(Pair.of(2290L, new Date()));
-            values.add(Pair.of(2390L, new Date()));
-            values.add(Pair.of(2590L, new Date()));
-            values.add(Pair.of(2690L, new Date()));
-            values.add(Pair.of(3490L, new Date()));
-            values.add(Pair.of(4650L, new Date()));
-            values.add(Pair.of(5590L, new Date()));
-            values.add(Pair.of(5520L, new Date()));
-            values.add(Pair.of(4490L, new Date()));
-            values.add(Pair.of(4390L, new Date()));
-            values.add(Pair.of(3390L, new Date()));
-            values.add(Pair.of(2290L, new Date()));
-            values.add(Pair.of(2590L, new Date()));
-            values.add(Pair.of(1290L, new Date()));
-            values.add(Pair.of(1590L, new Date()));
-            values.add(Pair.of(1690L, new Date()));
-            values.add(Pair.of(1790L, new Date()));
-            fileSizePanel = new PointPlotChartPanel(values);
+            fileSizePanel = new PointPlotChartPanel();
             tabbedPane.addTab(GuiConstants.FILE_SIZE_TAB, fileSizePanel);
+            panelIndex++;
+            fileSizeTabPosition = panelIndex;
         }
 
         // Keyword Histogram
         if(metricsProfile.isHasKeywordHistogram()) {
             keywordHistogram = new KeywordHistogramPanel(motherFrame);
             tabbedPane.addTab(GuiConstants.KEYWORD_HISTOGRAM_TAB, keywordHistogram);
+            panelIndex++;
+            keywordHistogramTabPosition = panelIndex;
         }
 
         // Keywords over time
         if(metricsProfile.isHasKeywordOverTime()) {
             KeywordsOverTimePanel keywordOverTime = new KeywordsOverTimePanel();
             tabbedPane.addTab(GuiConstants.KEYWORD_OVER_TIME_TAB, keywordOverTime);
+            panelIndex++;
+            keywordsOverTimeTabPosition = panelIndex;
         }
 
     }
@@ -222,6 +194,13 @@ public class MetricsMonitoringScreen extends JDialog {
         keywordHistogram = null;
         keywordHistogram = new KeywordHistogramPanel(motherFrame);
         keywordHistogram.updateChart(barChartData);
-        tabbedPane.setComponentAt(2, keywordHistogram);
+        tabbedPane.setComponentAt(keywordHistogramTabPosition, keywordHistogram);
     }
+
+    public void setFileSizeData(List<Pair<Long, Date>> fileSizeData) {
+        fileSizePanel = null;
+        fileSizePanel = new PointPlotChartPanel(fileSizeData);
+        tabbedPane.setComponentAt(fileSizeTabPosition, fileSizePanel);
+    }
+
 }

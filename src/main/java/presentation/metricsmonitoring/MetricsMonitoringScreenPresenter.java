@@ -63,6 +63,9 @@ public class MetricsMonitoringScreenPresenter implements IPresenter {
 
     public boolean updateView(MetricsReport metricsReport) {
         // File size chart
+        if(metricsProfile.isHasFileSize()) {
+            view.setFileSizeData(metricsReport.getFileSizeData());
+        }
 
         // Keyword Threshold + Warnings
         if(metricsProfile.isHasKeywordThreshold()) {

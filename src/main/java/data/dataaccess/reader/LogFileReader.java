@@ -2,6 +2,7 @@ package data.dataaccess.reader;
 
 import domain.entities.domainobjects.LogLine;
 import domain.entities.domainobjects.ParsingProfile;
+import general.util.Pair;
 import presentation.common.GuiMessages;
 
 import java.io.BufferedReader;
@@ -51,7 +52,7 @@ public class LogFileReader {
             String line = null;
             while (keepReading.get()) {
                 while ((line = br.readLine()) != null) {
-                    logLineConsumer.accept(line);
+                    logLineConsumer.accept(Pair.of(line, selectedFile.length()));
                 }
             }
             LOGGER.log(Level.INFO, GuiMessages.LOG_INFO_READER_FINISHED_PROCESSING + selectedFile.getName());

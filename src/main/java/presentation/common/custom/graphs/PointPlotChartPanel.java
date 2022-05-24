@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +24,10 @@ public class PointPlotChartPanel extends BaseGraphPanel {
 
     public PointPlotChartPanel(List<Pair<Long, Date>> mapping) {
         this.mapping = mapping;
+    }
+
+    public PointPlotChartPanel() {
+        this.mapping = new ArrayList<>();
     }
 
     @Override
