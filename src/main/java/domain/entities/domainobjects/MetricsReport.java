@@ -55,44 +55,7 @@ public class MetricsReport {
 
 
     public List<Pair<Long, Date>> getFileSizeData() {
-        List<Pair<Long, Date>> values = new ArrayList<>();
-        values.add(Pair.of(1L, new Date()));
-        values.add(Pair.of(30L, new Date()));
-        values.add(Pair.of(50L, new Date()));
-        values.add(Pair.of(60L, new Date()));
-        values.add(Pair.of(100L, new Date()));
-        values.add(Pair.of(150L, new Date()));
-        values.add(Pair.of(190L, new Date()));
-        values.add(Pair.of(290L, new Date()));
-        values.add(Pair.of(390L, new Date()));
-        values.add(Pair.of(490L, new Date()));
-        values.add(Pair.of(590L, new Date()));
-        values.add(Pair.of(690L, new Date()));
-        values.add(Pair.of(890L, new Date()));
-        values.add(Pair.of(1190L, new Date()));
-        values.add(Pair.of(1290L, new Date()));
-        values.add(Pair.of(1390L, new Date()));
-        values.add(Pair.of(1590L, new Date()));
-        values.add(Pair.of(1690L, new Date()));
-        values.add(Pair.of(2190L, new Date()));
-        values.add(Pair.of(2290L, new Date()));
-        values.add(Pair.of(2390L, new Date()));
-        values.add(Pair.of(2590L, new Date()));
-        values.add(Pair.of(2690L, new Date()));
-        values.add(Pair.of(3490L, new Date()));
-        values.add(Pair.of(4650L, new Date()));
-        values.add(Pair.of(5590L, new Date()));
-        values.add(Pair.of(5520L, new Date()));
-        values.add(Pair.of(4490L, new Date()));
-        values.add(Pair.of(4390L, new Date()));
-        values.add(Pair.of(3390L, new Date()));
-        values.add(Pair.of(2290L, new Date()));
-        values.add(Pair.of(2590L, new Date()));
-        values.add(Pair.of(1290L, new Date()));
-        values.add(Pair.of(1590L, new Date()));
-        values.add(Pair.of(1690L, new Date()));
-        values.add(Pair.of(1790L, new Date()));
-        return values;
+        return fileSizeData;
     }
 
     public HashMap<String, Integer> getKwdData() {

@@ -52,7 +52,9 @@ public class LogFileReader {
             String line = null;
             while (keepReading.get()) {
                 while ((line = br.readLine()) != null) {
-                    logLineConsumer.accept(Pair.of(line, selectedFile.length()));
+                    if(!line.isEmpty()) {
+                        logLineConsumer.accept(Pair.of(line, selectedFile.length()));
+                    }
                 }
             }
             LOGGER.log(Level.INFO, GuiMessages.LOG_INFO_READER_FINISHED_PROCESSING + selectedFile.getName());
