@@ -3,8 +3,6 @@ package presentation.common.custom.graphs;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
@@ -52,23 +50,6 @@ public class BarChartPanel extends BaseGraphPanel {
         }
     }
 
-    private void writeYaxisLabels(Graphics2D graphics2D, int numberOfBars, double max) {
-        BigDecimal maxBigDec = new BigDecimal((int)max);
-
-        graphics2D.setColor(new Color(13, 25, 80));
-        graphics2D.drawString("" + maxBigDec.intValue(), 0, this.getHeight() - chartZeroY);
-
-        BigDecimal maxFraction = maxBigDec.divide(new BigDecimal(numberOfBars), RoundingMode.DOWN);
-        int fractionAccumulator = maxBigDec.intValue();
-
-        if(max <= numberOfBars) {
-            return;
-        }
-        for (int i = 0; i < numberOfBars; i++) {
-            graphics2D.drawString("" + fractionAccumulator  , 0, this.getHeight() - fractionAccumulator);
-            fractionAccumulator -= maxFraction.intValue();
-        }
-    }
 
 
 }

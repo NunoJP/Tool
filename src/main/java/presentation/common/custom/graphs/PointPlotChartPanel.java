@@ -3,12 +3,9 @@ package presentation.common.custom.graphs;
 import general.util.Pair;
 import presentation.common.GuiConstants;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,10 +14,8 @@ import java.util.List;
 
 public class PointPlotChartPanel extends BaseGraphPanel {
 
-
     public static final int POINT_SIZE = 4;
-    private List<Pair<Long, Date>> mapping;
-    private final int MAX_Y_LABELS = 20;
+    private final List<Pair<Long, Date>> mapping;
 
     public PointPlotChartPanel(List<Pair<Long, Date>> mapping) {
         this.mapping = mapping;
@@ -45,8 +40,6 @@ public class PointPlotChartPanel extends BaseGraphPanel {
         boolean shouldSkipEntries = numberOfPoints > (totalAllowedPoints * 2);
         int pointSpacing = chartWidth / (Math.min(numberOfPoints, totalAllowedPoints));
 
-        int xLeft;
-        int yTopLeft;
         int counter = 0;
         for (Pair<Long, Date> pair : mapping) {
 
@@ -91,23 +84,6 @@ public class PointPlotChartPanel extends BaseGraphPanel {
     private String convertToString(Date instant) {
         DateFormat timeStampFormat = new SimpleDateFormat(GuiConstants.DATE_TIME_FORMATTER);
         return timeStampFormat.format(instant);
-    }
-
-    private void writeYaxisLabels(Graphics2D graphics2D, int numberOfPoints, double max) {
-        BigDecimal maxBigDec = new BigDecimal((int)max);
-
-        int numberOfLabels = Math.min(numberOfPoints, MAX_Y_LABELS);
-        BigDecimal maxFraction = maxBigDec.divide(new BigDecimal(numberOfLabels), RoundingMode.DOWN);
-
-        graphics2D.setColor(new Color(13, 25, 80));
-        int fractionAccumulator = 0;
-
-        for (int i = 0; i < numberOfLabels +1; i++) {
-            double height = (fractionAccumulator / max) * chartHeight;
-            int yTopLeft = chartZeroY - (int) height;
-            graphics2D.drawString("" + fractionAccumulator  , 0, yTopLeft);
-            fractionAccumulator += maxFraction.intValue();
-        }
     }
 
 

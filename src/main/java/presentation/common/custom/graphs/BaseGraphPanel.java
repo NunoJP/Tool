@@ -1,8 +1,11 @@
 package presentation.common.custom.graphs;
 
 import javax.swing.JPanel;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public abstract class BaseGraphPanel extends JPanel {
     protected int chartHeight;
@@ -13,6 +16,7 @@ public abstract class BaseGraphPanel extends JPanel {
     protected final int AXIS_OFFSET = 20;
     protected final int MAX_STRING_SIZE = 10;
     protected static final int ELLIPSIS_SIZE = 3;
+    private static final int MAX_Y_LABELS = 20;
 
     @Override
     public void paintComponent(Graphics g) {
@@ -61,5 +65,22 @@ public abstract class BaseGraphPanel extends JPanel {
             return "\\t";
         }
         return original;
+    }
+
+    protected void writeYaxisLabels(Graphics2D graphics2D, int numberOfPoints, double max) {
+        BigDecimal maxBigDec = new BigDecimal((int)max);
+
+        int numberOfLabels = Math.min(numberOfPoints, MAX_Y_LABELS);
+        BigDecimal maxFraction = maxBigDec.divide(new BigDecimal(numberOfLabels), RoundingMode.DOWN);
+
+        graphics2D.setColor(new Color(13, 25, 80));
+        int fractionAccumulator = 0;
+
+        for (int i = 0; i < numberOfLabels +1; i++) {
+            double height = (fractionAccumulator / max) * chartHeight;
+            int yTopLeft = chartZeroY - (int) height;
+            graphics2D.drawString("" + fractionAccumulator  , 0, yTopLeft);
+            fractionAccumulator += maxFraction.intValue();
+        }
     }
 }
