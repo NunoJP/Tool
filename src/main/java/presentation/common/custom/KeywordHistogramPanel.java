@@ -13,6 +13,7 @@ import java.awt.CardLayout;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -61,24 +62,28 @@ public class KeywordHistogramPanel extends JPanel {
 
         int numberOfBars = 10;
         int numberOfSections = entries.size() / numberOfBars;
-        List<HashMap<String, Integer>> sectionedData = new ArrayList<>(numberOfSections);
+
+        List<LinkedHashMap<String, Integer>> sectionedData = new ArrayList<>(numberOfSections);
         List<Map.Entry<String, Integer>> collect =
                 entries.stream().sorted((o1, o2) -> o2.getValue() - o1.getValue()).collect(Collectors.toList());
+
         int barCtr = 0;
         int sectionIdx = 0;
         boolean first = true;
         for (Map.Entry<String, Integer> entry : collect) {
             if(first) {
-                sectionedData.add(sectionIdx, new HashMap<>());
+                sectionedData.add(sectionIdx, new LinkedHashMap<>());
                 first = false;
             } else if(barCtr >= numberOfBars) {
                 barCtr = 0;
                 sectionIdx++;
-                sectionedData.add(sectionIdx, new HashMap<>());
+                sectionedData.add(sectionIdx, new LinkedHashMap<>());
             }
             sectionedData.get(sectionIdx).put(entry.getKey(), entry.getValue());
             barCtr++;
         }
+
+
 
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
