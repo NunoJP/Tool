@@ -89,7 +89,7 @@ public class FileAnalysisMetricsScreenPresenter implements IViewPresenter {
         }
 
         if(metricsProfile.isHasKeywordHistogram()) {
-            view.setKeywordHistogramData(metricsReport.getKwdData());
+            view.setKeywordHistogramData(metricsReport.getKwdOccurrences());
         }
 
     }

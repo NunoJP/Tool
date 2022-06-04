@@ -79,7 +79,7 @@ public class MetricsMonitoringScreenPresenter implements IPresenter {
         }
         // Keyword Histogram
         if(metricsProfile.isHasKeywordHistogram()) {
-            view.setKeywordHistogramData(metricsReport.getKwdData());
+            view.setKeywordHistogramData(metricsReport.getKwdOccurrences());
         }
 
         // Most common words

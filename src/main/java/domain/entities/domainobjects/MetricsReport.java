@@ -3,6 +3,7 @@ package domain.entities.domainobjects;
 import domain.entities.common.Keyword;
 import domain.entities.common.ThresholdUnitEnum;
 import domain.entities.common.Warning;
+import general.strutures.SuffixTree;
 import general.util.DateTimeUtils;
 import general.util.Pair;
 import presentation.common.GuiConstants;
@@ -30,8 +31,8 @@ public class MetricsReport {
     private LogLine[] data;
     private String[] stopWords;
     private ArrayList<Warning> warningMessages = new ArrayList<>();
-    private HashMap<String, Integer> kwdOccs;
-    private int totalNumberOfOccs = 0;
+    private HashMap<String, Integer> wordsFromMessages;
+    private int totalNumberOfNonStopWords = 0;
     private List<Pair<Long, Date>> fileSizeData;
 
     public MetricsReport(MetricsProfile metricsProfile, LogLine[] data, String [] stopWords) {
@@ -58,43 +59,41 @@ public class MetricsReport {
         return fileSizeData;
     }
 
-    public HashMap<String, Integer> getKwdData() {
-        if(kwdOccs != null) {
-            return kwdOccs;
+    public HashMap<String, Integer> getKwdOccurrences() {
+        if(wordsFromMessages != null) {
+            return wordsFromMessages;
         }
 
-        kwdOccs = new HashMap<>();
-        this.totalNumberOfOccs = 0;
+        wordsFromMessages = new HashMap<>();
+        this.totalNumberOfNonStopWords = 0;
         for (LogLine datum : data) {
             if (datum != null && datum.getMessage() != null) {
-                String[] split = datum.getMessage().split("\\s+|,|\\)|\\(|:");
-                for (String s : split) {
-                    if(isNotStopWord(s)) {
-                        int count = kwdOccs.getOrDefault(s, 0);
-                        kwdOccs.put(s, count + 1);
-                        this.totalNumberOfOccs++;
-                    }
+                SuffixTree st = new SuffixTree(datum.getMessage(), true);
+                for (Keyword extractedKwd : metricsProfile.getKeywords()) {
+                    int size = st.getIndexes(extractedKwd.getKeywordText(), extractedKwd.isCaseSensitive()).size();
+                    int count = wordsFromMessages.getOrDefault(extractedKwd.getKeywordText(), 0);
+                    wordsFromMessages.put(extractedKwd.getKeywordText(), count + size);
                 }
+                this.totalNumberOfNonStopWords++;
             }
         }
-        return kwdOccs;
+        return wordsFromMessages;
     }
 
     public String[][] getKwdThresholdData() {
-        getKwdData();
+        getKwdOccurrences();
 
         ArrayList<String[]> res = new ArrayList<>();
-        int idx = 0;
-        for (String s : kwdOccs.keySet()) {
+
+        for (String s : wordsFromMessages.keySet()) {
             // do the evaluation only if there is a matching keyword
             ArrayList<Keyword> kwds = wordMatchesKeyword(s);
             if(!kwds.isEmpty()) {
                 for (Keyword kwd : kwds) {
-                    Optional<String[]> strings = processResult(evaluate(kwd, kwdOccs.get(s), totalNumberOfOccs));
+                    Optional<String[]> strings = processResult(evaluate(kwd, wordsFromMessages.get(s), totalNumberOfNonStopWords));
                     strings.ifPresent(res::add);
                 }
             }
-            idx++;
         }
 
         return res.toArray(String[][]::new);
@@ -186,6 +185,12 @@ public class MetricsReport {
             return i2 - i1;
         }).toArray(String[][]::new);
     }
+
+
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // Utils
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 
     private boolean isNotStopWord(String s) {
         for (String stopWord : stopWords) {
