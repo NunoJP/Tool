@@ -1,8 +1,5 @@
 package presentation.common.custom;
 
-import presentation.common.GuiConstants;
-
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
@@ -15,8 +12,6 @@ public class KeywordsOverTimePanel extends JPanel {
     public KeywordsOverTimePanel() {
         this.setLayout(new BorderLayout(H_GAP, V_GAP));
         this.setBorder(new EmptyBorder(V_GAP, H_GAP, V_GAP, H_GAP));
-        JLabel titleLabel = new JLabel(GuiConstants.KEYWORD_OVER_TIME_LABEL);
-        this.add(titleLabel, BorderLayout.NORTH);
     }
 
 }

@@ -71,15 +71,15 @@ public abstract class BaseGraphPanel extends JPanel {
         BigDecimal maxBigDec = new BigDecimal((int)max);
 
         int numberOfLabels = Math.min(numberOfPoints, MAX_Y_LABELS);
-        BigDecimal maxFraction = maxBigDec.divide(new BigDecimal(numberOfLabels), RoundingMode.DOWN);
+        BigDecimal maxFraction = maxBigDec.divide(new BigDecimal(numberOfLabels), RoundingMode.HALF_UP);
 
         graphics2D.setColor(new Color(13, 25, 80));
         int fractionAccumulator = 0;
 
-        for (int i = 0; i < numberOfLabels +1; i++) {
+        for (int i = 0; i < numberOfLabels + 1; i++) {
             double height = (fractionAccumulator / max) * chartHeight;
             int yTopLeft = chartZeroY - (int) height;
-            graphics2D.drawString("" + fractionAccumulator  , 0, yTopLeft);
+            graphics2D.drawString("" + fractionAccumulator, 0, yTopLeft);
             fractionAccumulator += maxFraction.intValue();
         }
     }
