@@ -48,5 +48,6 @@ public class HomeScreenPresenter implements IPresenter {
 
     private void applyCrossScreenChanges() {
         fileAnalysisSetupScreenPresenter.refreshComboBoxes();
+        monitoringSetupScreenPresenter.refreshComboBoxes();
     }
 }
