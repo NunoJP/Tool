@@ -6,32 +6,27 @@ import domain.entities.common.Warning;
 import general.strutures.SuffixTree;
 import general.util.DateTimeUtils;
 import general.util.Pair;
-import presentation.common.GuiConstants;
 import presentation.common.GuiMessages;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class MetricsReport {
 
-    private DateFormat dateFormat = new SimpleDateFormat(GuiConstants.DATE_FORMATTER);
-    private DateFormat timeFormat = new SimpleDateFormat(GuiConstants.TIME_FORMATTER);
-    private DateFormat timeStampFormat = new SimpleDateFormat(GuiConstants.DATE_TIME_FORMATTER);
-    private MetricsProfile metricsProfile;
-    private LogLine[] data;
-    private String[] stopWords;
-    private ArrayList<Warning> warningMessages = new ArrayList<>();
-    private HashMap<String, Integer> wordsFromMessages;
+    private final MetricsProfile metricsProfile;
+    private final LogLine[] data;
+    private final String[] stopWords;
+    private final ArrayList<Warning> warningMessages = new ArrayList<>();
+    private HashMap<Keyword, Integer> wordsFromMessages;
     private int totalNumberOfNonStopWords = 0;
     private List<Pair<Long, Date>> fileSizeData;
 
@@ -59,7 +54,7 @@ public class MetricsReport {
         return fileSizeData;
     }
 
-    public HashMap<String, Integer> getKwdOccurrences() {
+    public HashMap<Keyword, Integer> getKwdOccurrences() {
         if(wordsFromMessages != null) {
             return wordsFromMessages;
         }
@@ -71,8 +66,8 @@ public class MetricsReport {
                 SuffixTree st = new SuffixTree(datum.getMessage(), true);
                 for (Keyword extractedKwd : metricsProfile.getKeywords()) {
                     int size = st.getIndexes(extractedKwd.getKeywordText(), extractedKwd.isCaseSensitive()).size();
-                    int count = wordsFromMessages.getOrDefault(extractedKwd.getKeywordText(), 0);
-                    wordsFromMessages.put(extractedKwd.getKeywordText(), count + size);
+                    int count = wordsFromMessages.getOrDefault(extractedKwd, 0);
+                    wordsFromMessages.put(extractedKwd, count + size);
                 }
                 this.totalNumberOfNonStopWords++;
             }
@@ -81,19 +76,14 @@ public class MetricsReport {
     }
 
     public String[][] getKwdThresholdData() {
-        getKwdOccurrences();
+        HashMap<Keyword, Integer> kwdOccurrences = getKwdOccurrences();
 
         ArrayList<String[]> res = new ArrayList<>();
 
-        for (String s : wordsFromMessages.keySet()) {
-            // do the evaluation only if there is a matching keyword
-            ArrayList<Keyword> kwds = wordMatchesKeyword(s);
-            if(!kwds.isEmpty()) {
-                for (Keyword kwd : kwds) {
-                    Optional<String[]> strings = processResult(evaluate(kwd, wordsFromMessages.get(s), totalNumberOfNonStopWords));
-                    strings.ifPresent(res::add);
-                }
-            }
+        for (Map.Entry<Keyword, Integer> keywordIntegerEntry : kwdOccurrences.entrySet()) {
+            Optional<String[]> strings = processResult(evaluate(keywordIntegerEntry.getKey(),
+                    keywordIntegerEntry.getValue(), totalNumberOfNonStopWords));
+            strings.ifPresent(res::add);
         }
 
         return res.toArray(String[][]::new);
@@ -115,22 +105,6 @@ public class MetricsReport {
         Keyword standard = result.getStandard();
         return String.format(GuiMessages.THRESHOLD_VALUE_BASE, standard.getKeywordText(),
                 standard.getThresholdValue(), result.actualValue());
-    }
-
-    private ArrayList<Keyword> wordMatchesKeyword(String s) {
-        ArrayList<Keyword> matches = new ArrayList<>();
-        for (Keyword keyword : metricsProfile.getKeywords()) {
-            if(keyword.isCaseSensitive()) {
-                if(keyword.getKeywordText().equals(s)) {
-                    matches.add(keyword);
-                }
-            } else {
-                if(keyword.getKeywordText().equalsIgnoreCase(s)) {
-                    matches.add(keyword);
-                }
-            }
-        }
-        return matches;
     }
 
     public String[][] getLogLevelData() {

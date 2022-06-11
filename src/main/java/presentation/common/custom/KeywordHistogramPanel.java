@@ -1,5 +1,6 @@
 package presentation.common.custom;
 
+import domain.entities.common.Keyword;
 import presentation.common.custom.graphs.BarChartPanel;
 
 import javax.swing.JButton;
@@ -30,6 +31,7 @@ public class KeywordHistogramPanel extends JPanel {
     private int currentPanel = 0;
     private CardLayout cardLayout;
     private JPanel cardPanel;
+    public static final int NUMBER_OF_BARS = 5;
 
     public KeywordHistogramPanel(JFrame frame) {
         this.setLayout(new BorderLayout(H_GAP, V_GAP));
@@ -53,25 +55,24 @@ public class KeywordHistogramPanel extends JPanel {
         return "   " + (currentPanel + 1) + "/" + numberOfPanels + "   ";
     }
 
-    public void updateChart(HashMap<String, Integer> barChartData) {
+    public void updateChart(HashMap<Keyword, Integer> barChartData) {
         reset();
-        Set<Map.Entry<String, Integer>> entries = barChartData.entrySet();
+        Set<Map.Entry<Keyword, Integer>> entries = barChartData.entrySet();
 
-        int numberOfBars = 10;
-        int numberOfSections = entries.size() / numberOfBars;
+        int numberOfSections = entries.size() / NUMBER_OF_BARS;
 
-        List<LinkedHashMap<String, Integer>> sectionedData = new ArrayList<>(numberOfSections);
-        List<Map.Entry<String, Integer>> collect =
+        List<LinkedHashMap<Keyword, Integer>> sectionedData = new ArrayList<>(numberOfSections);
+        List<Map.Entry<Keyword, Integer>> collect =
                 entries.stream().sorted((o1, o2) -> o2.getValue() - o1.getValue()).collect(Collectors.toList());
 
         int barCtr = 0;
         int sectionIdx = 0;
         boolean first = true;
-        for (Map.Entry<String, Integer> entry : collect) {
+        for (Map.Entry<Keyword, Integer> entry : collect) {
             if(first) {
                 sectionedData.add(sectionIdx, new LinkedHashMap<>());
                 first = false;
-            } else if(barCtr >= numberOfBars) {
+            } else if(barCtr >= NUMBER_OF_BARS) {
                 barCtr = 0;
                 sectionIdx++;
                 sectionedData.add(sectionIdx, new LinkedHashMap<>());
@@ -82,7 +83,7 @@ public class KeywordHistogramPanel extends JPanel {
 
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
-        for (HashMap<String, Integer> section : sectionedData) {
+        for (HashMap<Keyword, Integer> section : sectionedData) {
             BarChartPanel chartPanel = new BarChartPanel(section);
             cardPanel.add(chartPanel, numberOfPanels + "");
             numberOfPanels++;

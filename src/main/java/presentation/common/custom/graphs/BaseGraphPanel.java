@@ -14,7 +14,7 @@ public abstract class BaseGraphPanel extends JPanel {
     protected int chartZeroY;
     protected final int HEAD_SPACE = 0;
     protected final int AXIS_OFFSET = 20;
-    protected final int MAX_STRING_SIZE = 10;
+    protected final int MAX_STRING_SIZE = 20;
     protected static final int ELLIPSIS_SIZE = 3;
     private static final int MAX_Y_LABELS = 20;
 

@@ -1,18 +1,22 @@
 package presentation.common.custom.graphs;
 
+import domain.entities.common.Keyword;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class BarChartPanel extends BaseGraphPanel {
-    private final Set<String> keySet;
+    private final Set<Keyword> keySet;
     private final Collection<Integer> values;
 
 
-    public BarChartPanel(HashMap<String, Integer> occs) {
+    public BarChartPanel(HashMap<Keyword, Integer> occs) {
         this.keySet = occs.keySet();
         this.values = occs.values();
     }
@@ -20,7 +24,7 @@ public class BarChartPanel extends BaseGraphPanel {
 
     protected void drawContents(Graphics2D graphics2D) {
         int numberOfBars = keySet.size();
-        String[] strings = keySet.toArray(String[]::new);
+        List<String> strings = keySet.stream().map(Keyword::getKeywordText).collect(Collectors.toList());
 
         // the max has to be a double in order to have a floating point division later on
         double max = values.stream().max(Integer::compareTo).orElse(0);
@@ -45,7 +49,7 @@ public class BarChartPanel extends BaseGraphPanel {
             graphics2D.setColor(new Color(91, 115, 222));
             graphics2D.fill(rectangle);
             graphics2D.setColor(new Color(13, 25, 80));
-            graphics2D.drawString(shortenString(strings[counter]), xLeft, chartZeroY + AXIS_OFFSET / 2 + AXIS_OFFSET / 3);
+            graphics2D.drawString(shortenString(strings.get(counter)), xLeft, chartZeroY + AXIS_OFFSET / 2 + AXIS_OFFSET / 3);
             counter++;
         }
     }

@@ -1,5 +1,6 @@
 package presentation.fileanalysis;
 
+import domain.entities.common.Keyword;
 import domain.entities.displayobjects.MetricsProfileDo;
 import presentation.common.GuiConstants;
 import presentation.common.custom.GeneralTablePanel;
@@ -169,7 +170,7 @@ public class FileAnalysisMetricsScreen extends JPanel {
         return endDatePanel;
     }
 
-    public void setKeywordHistogramData(HashMap<String, Integer> barChartData) {
+    public void setKeywordHistogramData(HashMap<Keyword, Integer> barChartData) {
         this.keywordHistogram.updateChart(barChartData);
     }
 }

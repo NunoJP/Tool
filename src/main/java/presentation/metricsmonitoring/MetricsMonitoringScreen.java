@@ -1,5 +1,6 @@
 package presentation.metricsmonitoring;
 
+import domain.entities.common.Keyword;
 import domain.entities.displayobjects.MetricsProfileDo;
 import general.util.Pair;
 import presentation.common.GuiConstants;
@@ -190,7 +191,7 @@ public class MetricsMonitoringScreen extends JDialog {
         return stopButton;
     }
 
-    public void setKeywordHistogramData(HashMap<String, Integer> barChartData) {
+    public void setKeywordHistogramData(HashMap<Keyword, Integer> barChartData) {
         keywordHistogram = null;
         keywordHistogram = new KeywordHistogramPanel(motherFrame);
         keywordHistogram.updateChart(barChartData);
