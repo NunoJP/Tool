@@ -128,4 +128,8 @@ public class FileAnalysisService {
         LogFileWriter writer = new LogFileWriter();
         return writer.write(data, exportFile, parsingProfile);
     }
+
+    public void stopReader() {
+        logFileReader.stop();
+    }
 }

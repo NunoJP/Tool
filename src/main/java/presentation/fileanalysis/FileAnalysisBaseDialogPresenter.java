@@ -45,7 +45,7 @@ public class FileAnalysisBaseDialogPresenter {
 
     private void setupComponents() {
         fileAnalysisBaseDialog = new FileAnalysisBaseDialog(motherFrame,
-                GuiConstants.FILE_ANALYSIS_SCREEN_TITLE + selectedFile.getName());
+                GuiConstants.FILE_ANALYSIS_SCREEN_TITLE + selectedFile.getName(), () -> fileAnalysisService.stopReader());
         fileAnalysisBaseDialog.addTab(GuiConstants.FILE_METRICS_TAB, fileAnalysisMetricsScreenPresenter.getView());
         fileAnalysisBaseDialog.addTab(GuiConstants.FILE_OPERATIONS_TAB, fileAnalysisScreenPresenter.getView());
     }

@@ -20,6 +20,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +40,7 @@ public class MetricsMonitoringScreen extends JDialog {
     private LabelLabelPanel namePanel;
     private JButton stopButton;
     private JFrame motherFrame;
+    private Runnable stopReaderAndThread;
     private KeywordHistogramPanel keywordHistogram;
     private JTabbedPane tabbedPane;
     private JPanel keywordHistogramPanelHolder;
@@ -47,9 +50,10 @@ public class MetricsMonitoringScreen extends JDialog {
     private int keywordsOverTimeTabPosition = 3;
 
 
-    public MetricsMonitoringScreen(Frame owner, String title, MetricsProfileDo metricsProfile) {
+    public MetricsMonitoringScreen(Frame owner, String title, MetricsProfileDo metricsProfile, Runnable stopReaderAndThread) {
         super(owner, title);
         this.motherFrame = (JFrame) owner;
+        this.stopReaderAndThread = stopReaderAndThread;
         setWindowClosingBehavior();
         this.setPreferredSize(new Dimension(H_FILE_MONITORING_SCREEN_SIZE, V_FILE_MONITORING_SCREEN_SIZE));
         this.metricsProfile = metricsProfile;
@@ -165,6 +169,13 @@ public class MetricsMonitoringScreen extends JDialog {
 
     private void setWindowClosingBehavior() {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                stopReaderAndThread.run();
+            }
+        });
     }
 
     public GeneralTablePanel getKwdThTable() {

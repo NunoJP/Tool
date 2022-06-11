@@ -6,6 +6,8 @@ import javax.swing.JTabbedPane;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import static presentation.common.GuiConstants.H_FILE_ANALYSIS_SCREEN_SIZE;
 import static presentation.common.GuiConstants.H_GAP;
@@ -15,9 +17,11 @@ import static presentation.common.GuiConstants.V_GAP;
 public class FileAnalysisBaseDialog extends JDialog {
 
     private JTabbedPane tabbedPane;
+    private Runnable stopReaderAndThread;
 
-    public FileAnalysisBaseDialog(Frame owner, String title) {
+    public FileAnalysisBaseDialog(Frame owner, String title, Runnable stopReaderAndThread) {
         super(owner, title);
+        this.stopReaderAndThread = stopReaderAndThread;
         setWindowClosingBehavior();
         createTabbedPane();
         this.pack();
@@ -34,6 +38,13 @@ public class FileAnalysisBaseDialog extends JDialog {
 
     private void setWindowClosingBehavior() {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                stopReaderAndThread.run();
+            }
+        });
     }
 
     public void addTab(String name, JPanel panel){

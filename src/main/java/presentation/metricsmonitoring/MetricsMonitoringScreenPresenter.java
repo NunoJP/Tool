@@ -32,7 +32,8 @@ public class MetricsMonitoringScreenPresenter implements IPresenter {
 
     public MetricsMonitoringScreenPresenter(JFrame motherFrame, File selectedFile, ParsingProfileDo parsingProfile, MetricsProfileDo metricsProfile) {
         this.motherFrame = motherFrame;
-        this.view = new MetricsMonitoringScreen(motherFrame, GuiConstants.METRICS_MONITORING_SCREEN_TITLE, metricsProfile);
+        this.view = new MetricsMonitoringScreen(motherFrame, GuiConstants.METRICS_MONITORING_SCREEN_TITLE,
+                metricsProfile, () -> stopThreadAndReader());
         this.selectedFile = selectedFile;
         this.parsingProfile = parsingProfile;
         this.metricsProfile = metricsProfile;
@@ -48,9 +49,13 @@ public class MetricsMonitoringScreenPresenter implements IPresenter {
 
         view.getStopButton().addActionListener(actionEvent ->  {
             // Stop the thread
-            stop.set(true);
-            metricsMonitoringService.stop();
+            stopThreadAndReader();
         });
+    }
+
+    private void stopThreadAndReader() {
+        stop.set(true);
+        metricsMonitoringService.stop();
     }
 
     @Override

@@ -32,7 +32,7 @@ public class LogFileReader {
     public LogLine[] read(Consumer<String> logMessageConsumer) {
         try (BufferedReader br = new BufferedReader(new FileReader(selectedFile))) {
             String line;
-            while ((line = br.readLine()) != null) {
+            while (keepReading.get() && (line = br.readLine()) != null) {
                 consumer.accept(line);
             }
             LOGGER.log(Level.INFO, GuiMessages.LOG_INFO_READER_FINISHED_PROCESSING + selectedFile.getName());
