@@ -88,7 +88,7 @@ public class MetricsReport {
 
         for (Map.Entry<Keyword, Integer> keywordIntegerEntry : kwdOccurrences.entrySet()) {
             Optional<String[]> strings = processResult(evaluate(keywordIntegerEntry.getKey(),
-                    keywordIntegerEntry.getValue(), keywordOccurrencesConsumer.getTotalNumberOfNonStopWords()));
+                    keywordIntegerEntry.getValue(), wordsInMessageOccurrencesConsumer.getTotalNumberOfNonStopWords()));
             strings.ifPresent(res::add);
         }
 

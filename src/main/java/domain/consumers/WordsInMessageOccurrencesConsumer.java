@@ -7,7 +7,7 @@ import java.util.HashMap;
 public class WordsInMessageOccurrencesConsumer implements IMetricsReportConsumer{
 
     private final String[] stopWords;
-    private HashMap<String, Integer> wordsOccs = new HashMap<>();
+    private final HashMap<String, Integer> wordsOccs = new HashMap<>();
     private int totalNumberOfOccs = 0;
 
     public WordsInMessageOccurrencesConsumer(String [] stopWords) {
@@ -39,5 +39,9 @@ public class WordsInMessageOccurrencesConsumer implements IMetricsReportConsumer
             }
         }
         return true;
+    }
+
+    public int getTotalNumberOfNonStopWords() {
+        return totalNumberOfOccs;
     }
 }

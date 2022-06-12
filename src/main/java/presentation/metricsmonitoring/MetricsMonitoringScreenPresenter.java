@@ -33,7 +33,7 @@ public class MetricsMonitoringScreenPresenter implements IPresenter {
     public MetricsMonitoringScreenPresenter(JFrame motherFrame, File selectedFile, ParsingProfileDo parsingProfile, MetricsProfileDo metricsProfile) {
         this.motherFrame = motherFrame;
         this.view = new MetricsMonitoringScreen(motherFrame, GuiConstants.METRICS_MONITORING_SCREEN_TITLE,
-                metricsProfile, () -> stopThreadAndReader());
+                metricsProfile, this::stopThreadAndReader);
         this.selectedFile = selectedFile;
         this.parsingProfile = parsingProfile;
         this.metricsProfile = metricsProfile;
