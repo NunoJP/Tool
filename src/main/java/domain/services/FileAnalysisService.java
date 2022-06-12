@@ -2,6 +2,8 @@ package domain.services;
 
 import data.dataaccess.reader.LogFileReader;
 import data.dataaccess.writer.LogFileWriter;
+import domain.entities.common.ParsingProfilePortion;
+import domain.entities.common.TextClassesEnum;
 import domain.entities.displayobjects.FileAnalysisFilterDo;
 import domain.entities.domainobjects.LogLine;
 import domain.entities.domainobjects.MetricsProfile;
@@ -15,6 +17,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class FileAnalysisService {
@@ -25,6 +29,7 @@ public class FileAnalysisService {
     private boolean hasLoadedData;
     private LogLine[] data;
     private Consumer<String> logMessageConsumer = s -> {};
+    private static final Logger LOGGER = Logger.getLogger(FileAnalysisService.class.getName());
 
     public FileAnalysisService(File selectedFile, ParsingProfile parsingProfile, MetricsProfile metricsProfile) {
         this.selectedFile = selectedFile;
@@ -45,7 +50,26 @@ public class FileAnalysisService {
     }
 
     private void generateSuffixTrees(LogLine[] data) {
-        Arrays.stream(data).parallel().forEach(LogLine::calculateSuffixTree);
+        if(!isMessageIgnored()) {
+            Arrays.stream(data).parallel().forEach(LogLine::calculateSuffixTree);
+        }
+
+    }
+
+    private boolean isMessageIgnored() {
+        if(parsingProfile == null) {
+            LOGGER.log(Level.WARNING, "Parsing profile was null");
+            return true;
+        }
+
+        for (ParsingProfilePortion portion : parsingProfile.getPortions()) {
+            if(!portion.isSeparator()) {
+                if(portion.getPortionName().equals(TextClassesEnum.MESSAGE.getName())) {
+                    return portion.isIgnore();
+                }
+            }
+        }
+        return true;
     }
 
     public List<Pair<Integer, ? extends List>> getStringPositionMatches(LogLine[] source, String toFind) {

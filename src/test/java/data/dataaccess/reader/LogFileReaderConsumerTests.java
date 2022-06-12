@@ -91,6 +91,7 @@ public class LogFileReaderConsumerTests {
         assertEquals("12", line.getIdentifier());
         assertEquals("MESSAGE MESSAGE MESSAGE", line.getMessage());
     }
+
     @Test
     public void simpleTestIgnoreSome() {
         // 2021-01-01 12:10:10.0000 LEVEL ORIGIN MESSAGE
@@ -120,6 +121,38 @@ public class LogFileReaderConsumerTests {
         assertNull(line.getOrigin());
         assertNull(line.getMessage());
     }
+
+    @Test
+    public void simpleTestIgnoreMessage() {
+        // 2021-01-01 12:10:10.0000 LEVEL ORIGIN MESSAGE
+        ParsingProfile profile = new ParsingProfile();
+        profile.setName(VALUE);
+        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.DATE.getName(), TextClassesEnum.DATE.getName(), false, false));
+        profile.addPortion(createSeparator(SeparatorEnum.SPACE));
+        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.TIME.getName(), TextClassesEnum.TIME.getName(), false, false));
+        profile.addPortion(createSeparator(SeparatorEnum.SPACE));
+        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.LEVEL.getName(), TextClassesEnum.LEVEL.getName(), false, false));
+        profile.addPortion(createSeparator(SeparatorEnum.SPACE));
+        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.ORIGIN.getName(), TextClassesEnum.ORIGIN.getName(), true, false));
+        profile.addPortion(createSeparator(SeparatorEnum.SPACE));
+        profile.addPortion(new ParsingProfilePortion(TextClassesEnum.MESSAGE.getName(), TextClassesEnum.MESSAGE.getName(), true, false));
+        profile.finishProfile();
+        LogFileReaderConsumer consumer = new LogFileReaderConsumer(profile);
+
+        consumer.accept("2021-01-01 12:10:10.001 LEVEL ORIGIN MESSAGE MESSAGE MESSAGE");
+        consumer.accept("this should not be in the message in the end");
+
+        LogLine[] lines = consumer.getLines();
+        assertEquals(1, lines.length);
+        LogLine line = lines[0];
+
+        assertEquals("2021-01-01", dateFormat.format(line.getDate()));
+        assertEquals("12:10:10.001", timeFormat.format(line.getTime()));
+        assertEquals("LEVEL", line.getLevel());
+        assertNull(line.getOrigin());
+        assertNull(line.getMessage());
+    }
+
 
     @Test
     public void simpleTestMultipleLines() {

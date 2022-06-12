@@ -16,7 +16,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class LogFileReaderConsumer implements Consumer<String> {
-    private ParsingProfile parsingProfile;
+    private final boolean ignoreMessage;
+    private final ParsingProfile parsingProfile;
     protected ArrayList<LogLine> logLines;
     private static final Logger LOGGER = Logger.getLogger(LogFileReaderConsumer.class.getName());
     private LogLine latestValidLine;
@@ -25,6 +26,7 @@ public class LogFileReaderConsumer implements Consumer<String> {
 
     public LogFileReaderConsumer(ParsingProfile parsingProfile) {
         this.parsingProfile = parsingProfile;
+        this.ignoreMessage = shouldMessageTextClassBeIgnored();
         logLines = new ArrayList<>();
         this.position = 0;
     }
@@ -73,7 +75,7 @@ public class LogFileReaderConsumer implements Consumer<String> {
             position++;
             logLines.add(line);
         } else {
-            if(latestValidLine != null) {
+            if(latestValidLine != null && !ignoreMessage) {
                 String message = latestValidLine.getMessage();
                 message = message + System.lineSeparator() + originalString;
                 latestValidLine.setMessage(message);
@@ -163,4 +165,22 @@ public class LogFileReaderConsumer implements Consumer<String> {
     public ArrayList<String> getWarningMessages() {
         return warningMessages;
     }
+
+
+    private boolean shouldMessageTextClassBeIgnored() {
+        if(parsingProfile == null) {
+            LOGGER.log(Level.WARNING, "Parsing profile was null");
+            return true;
+        }
+
+        for (ParsingProfilePortion portion : parsingProfile.getPortions()) {
+            if(!portion.isSeparator()) {
+                if(portion.getPortionName().equals(TextClassesEnum.MESSAGE.getName())) {
+                    return portion.isIgnore();
+                }
+            }
+        }
+        return true;
+    }
+
 }
