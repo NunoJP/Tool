@@ -16,7 +16,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.logging.Logger;
 
 public class MetricsMonitoringScreenPresenter implements IPresenter {
 
@@ -25,10 +24,9 @@ public class MetricsMonitoringScreenPresenter implements IPresenter {
     private final ParsingProfileDo parsingProfile;
     private final MetricsProfileDo metricsProfile;
     private final MetricsMonitoringService metricsMonitoringService;
-    private static final Logger LOGGER = Logger.getLogger(MetricsMonitoringScreenPresenter.class.getName());
     private final LogFileReader logFileReader;
-    private AtomicBoolean stop;
-    private JFrame motherFrame;
+    private final AtomicBoolean stop;
+    private final JFrame motherFrame;
 
     public MetricsMonitoringScreenPresenter(JFrame motherFrame, File selectedFile, ParsingProfileDo parsingProfile, MetricsProfileDo metricsProfile) {
         this.motherFrame = motherFrame;

@@ -20,7 +20,7 @@ public class MetricsReportTests extends LogLineTests {
 
     @Test
     public void testStartDateEndDate() throws ParseException {
-        MetricsProfile profile = new MetricsProfile();
+        MetricsProfile profile = getMetricsProfile();
         setupLogLineData(); // produces 5 lines, start date is ...01, and last date is ...05
         MetricsReport report = new MetricsReport(profile, data);
         assertNotNull(report.getStartDate());
@@ -33,7 +33,7 @@ public class MetricsReportTests extends LogLineTests {
 
     @Test
     public void testLogLevelDistributionAllSamePercentage(){
-        MetricsProfile profile = new MetricsProfile();
+        MetricsProfile profile = getMetricsProfile();
         data = new LogLine[4];
         for (int i = 0; i < data.length; i++) {
             LogLine line = new LogLine();
@@ -50,7 +50,7 @@ public class MetricsReportTests extends LogLineTests {
 
     @Test
     public void testLogLevelDistributionOneLargePercentage(){
-        MetricsProfile profile = new MetricsProfile();
+        MetricsProfile profile = getMetricsProfile();
         data = new LogLine[100];
         for (int i = 0; i < 10; i++) {
             LogLine line = new LogLine();
@@ -79,7 +79,7 @@ public class MetricsReportTests extends LogLineTests {
 
     @Test
     public void testLogLevelDistributionSinglePercentage(){
-        MetricsProfile profile = new MetricsProfile();
+        MetricsProfile profile = getMetricsProfile();
         data = new LogLine[100];
         for (int i = 0; i < data.length; i++) {
             LogLine line = new LogLine();
@@ -95,7 +95,7 @@ public class MetricsReportTests extends LogLineTests {
 
     @Test
     public void testLogLevelDistributionNoPercentage(){
-        MetricsProfile profile = new MetricsProfile();
+        MetricsProfile profile = getMetricsProfile();
         data = new LogLine[100];
         for (int i = 0; i < data.length; i++) {
             LogLine line = new LogLine();
@@ -110,7 +110,7 @@ public class MetricsReportTests extends LogLineTests {
 
     @Test
     public void testLogLevelDistributionSmallPercentages(){
-        MetricsProfile profile = new MetricsProfile();
+        MetricsProfile profile = getMetricsProfile();
         data = new LogLine[1000];
         for (int i = 0; i < 10; i++) {
             LogLine line = new LogLine();
@@ -139,7 +139,7 @@ public class MetricsReportTests extends LogLineTests {
 
     @Test
     public void testMostCommonWords() {
-        MetricsProfile profile = new MetricsProfile();
+        MetricsProfile profile = getMetricsProfile();
         int [] amounts = new int[] { 100, 20, 10, 1, 1 };
         data = new LogLine[132];
 
@@ -163,7 +163,7 @@ public class MetricsReportTests extends LogLineTests {
 
     @Test
     public void testMostCommonWordsNoStopWords() {
-        MetricsProfile profile = new MetricsProfile();
+        MetricsProfile profile = getMetricsProfile();
         int [] amounts = new int[] { 100, 20, 10, 1, 1 };
         data = new LogLine[132];
 
@@ -187,7 +187,7 @@ public class MetricsReportTests extends LogLineTests {
 
     @Test
     public void testMostCommonWordsSomeStopWords() {
-        MetricsProfile profile = new MetricsProfile();
+        MetricsProfile profile = getMetricsProfile();
         int [] amounts = new int[] { 100, 20, 10, 1, 1 };
         data = new LogLine[132];
 
@@ -214,7 +214,7 @@ public class MetricsReportTests extends LogLineTests {
 
     @Test
     public void testMostCommonWordsAllStopWords() {
-        MetricsProfile profile = new MetricsProfile();
+        MetricsProfile profile = getMetricsProfile();
         int [] amounts = new int[] { 100, 20, 10, 1, 1 };
         data = new LogLine[132];
 
@@ -237,7 +237,7 @@ public class MetricsReportTests extends LogLineTests {
 
     @Test
     public void testMostCommonWordsNoWords() {
-        MetricsProfile profile = new MetricsProfile();
+        MetricsProfile profile = getMetricsProfile();
         data = new LogLine[132];
 
         for (int i = 0; i < data.length; i++) {
@@ -250,13 +250,22 @@ public class MetricsReportTests extends LogLineTests {
         assertEquals(0, wordsData.length);
     }
 
+    private MetricsProfile getMetricsProfile() {
+        MetricsProfile profile = new MetricsProfile();
+        profile.setHasKeywordHistogram(true);
+        profile.setHasMostCommonWords(true);
+        profile.setHasKeywordThreshold(true);
+        profile.setHasKeywordOverTime(true);
+        return profile;
+    }
+
 
     @Test
     public void testThresholdOccNonCaseSensitive() {
         HashMap<String, Integer> wordValues = new HashMap<>();
         HashMap<String, Keyword> wordKeyword = new HashMap<>();
         ArrayList<Keyword> kwds = new ArrayList<>();
-        MetricsProfile profile = new MetricsProfile();
+        MetricsProfile profile = getMetricsProfile();
         Keyword kwd0 = makeKeyword(kwds, "Word0", ThresholdTypeEnum.BIGGER_OR_EQUAL_THAN, 1, false);
         wordKeyword.put(kwd0.getKeywordText().toLowerCase(), kwd0);
         Keyword kwd1 = makeKeyword(kwds, "Word1", ThresholdTypeEnum.BIGGER_THAN, 1, false);
@@ -295,7 +304,7 @@ public class MetricsReportTests extends LogLineTests {
         HashMap<String, Integer> wordValues = new HashMap<>();
         HashMap<String, Keyword> wordKeyword = new HashMap<>();
         ArrayList<Keyword> kwds = new ArrayList<>();
-        MetricsProfile profile = new MetricsProfile();
+        MetricsProfile profile = getMetricsProfile();
         Keyword kwd0 = makeKeyword(kwds, "Word0", ThresholdTypeEnum.BIGGER_OR_EQUAL_THAN, 1, true);
         wordKeyword.put(kwd0.getKeywordText(), kwd0);
         Keyword kwd1 = makeKeyword(kwds, "word1", ThresholdTypeEnum.BIGGER_THAN, 1, true);
@@ -323,10 +332,23 @@ public class MetricsReportTests extends LogLineTests {
         MetricsReport report = new MetricsReport(profile, data);
         String[][] thresholdData = report.getKwdThresholdData();
 
-        assertEquals(1, thresholdData.length);
+        assertEquals(5, thresholdData.length);
 
-        assertEquals(makeThresholdMessage(wordKeyword.get(thresholdData[0][0]),
-                    String.valueOf(wordValues.get(thresholdData[0][0]))), thresholdData[0][1]);
+        HashMap<String, Integer> expectedResults = new HashMap<>();
+        expectedResults.put(kwd0.getKeywordText(), 1);
+        expectedResults.put(kwd1.getKeywordText(), 0);
+        expectedResults.put(kwd2.getKeywordText(), 0);
+        expectedResults.put(kwd3.getKeywordText(), 0);
+        expectedResults.put(kwd4.getKeywordText(), 0);
+
+
+        for (int i = 0; i < 5; i++) {
+            assertEquals(
+                    makeThresholdMessage(wordKeyword.get(thresholdData[i][0]), String.valueOf(expectedResults.get(thresholdData[i][0]))),
+                    thresholdData[i][1]
+            );
+        }
+
 
     }
 
@@ -336,7 +358,7 @@ public class MetricsReportTests extends LogLineTests {
         HashMap<String, Integer> wordValues = new HashMap<>();
         HashMap<String, Keyword> wordKeyword = new HashMap<>();
         ArrayList<Keyword> kwds = new ArrayList<>();
-        MetricsProfile profile = new MetricsProfile();
+        MetricsProfile profile = getMetricsProfile();
         Keyword kwd0 = makeKeyword(kwds, "Word0", ThresholdTypeEnum.BIGGER_OR_EQUAL_THAN, false);
         wordKeyword.put(kwd0.getKeywordText().toLowerCase(), kwd0);
         Keyword kwd1 = makeKeyword(kwds, "Word1", ThresholdTypeEnum.BIGGER_THAN, false);
@@ -377,7 +399,7 @@ public class MetricsReportTests extends LogLineTests {
         HashMap<String, Integer> wordValues = new HashMap<>();
         HashMap<String, Keyword> wordKeyword = new HashMap<>();
         ArrayList<Keyword> kwds = new ArrayList<>();
-        MetricsProfile profile = new MetricsProfile();
+        MetricsProfile profile = getMetricsProfile();
         Keyword kwd0 = makeKeyword(kwds, "Word0", ThresholdTypeEnum.BIGGER_OR_EQUAL_THAN, true);
         wordKeyword.put(kwd0.getKeywordText(), kwd0);
         Keyword kwd1 = makeKeyword(kwds, "Word1", ThresholdTypeEnum.BIGGER_THAN, true);
@@ -415,8 +437,8 @@ public class MetricsReportTests extends LogLineTests {
     @Test
     public void testThresholdForNonExistingWord() {
         ArrayList<Keyword> kwds = new ArrayList<>();
-        MetricsProfile profile = new MetricsProfile();
-        Keyword kwd0 = makeKeyword(kwds, "WordNon", ThresholdTypeEnum.BIGGER_OR_EQUAL_THAN, false);
+        MetricsProfile profile = getMetricsProfile();
+        makeKeyword(kwds, "WordNon", ThresholdTypeEnum.BIGGER_OR_EQUAL_THAN, false);
         int [] amounts = new int[] { 10, 15, 10, 5, 10, 50 };
         profile.setKeywords(kwds);
         data = new LogLine[100];
@@ -433,12 +455,13 @@ public class MetricsReportTests extends LogLineTests {
         MetricsReport report = new MetricsReport(profile, data);
         String[][] thresholdData = report.getKwdThresholdData();
 
-        assertEquals(0, thresholdData.length);
+        assertEquals(1, thresholdData.length);
+        assertEquals("WordNon Th: 0.1 Current: 0", thresholdData[0][1]);
     }
 
     @Test
     public void testExpectedNoThreshold() {
-        MetricsProfile profile = new MetricsProfile();
+        MetricsProfile profile = getMetricsProfile();
         int [] amounts = new int[] { 10, 15, 10, 5, 10, 50 };
         data = new LogLine[100];
 
