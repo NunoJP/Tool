@@ -26,19 +26,19 @@ public class MetricsProfileFunction implements Function<MetricsProfile, String> 
                 .append(System.lineSeparator());
 
         builder.append(MetricsProfileReadWriteConstants.MOST_COMMON_WORDS_TOKEN).append(SEPARATOR)
-                .append(metricsProfile.isHasMostCommonWords())
+                .append(metricsProfile.hasMostCommonWords())
                 .append(System.lineSeparator());
         builder.append(MetricsProfileReadWriteConstants.FILE_SIZE_TOKEN).append(SEPARATOR)
-                .append(metricsProfile.isHasFileSize())
+                .append(metricsProfile.hasFileSize())
                 .append(System.lineSeparator());
         builder.append(MetricsProfileReadWriteConstants.KEYWORD_HISTOGRAM_TOKEN).append(SEPARATOR)
-                .append(metricsProfile.isHasKeywordHistogram())
+                .append(metricsProfile.hasKeywordHistogram())
                 .append(System.lineSeparator());
         builder.append(MetricsProfileReadWriteConstants.KEYWORD_OVER_TIME_TOKEN).append(SEPARATOR)
-                .append(metricsProfile.isHasKeywordOverTime())
+                .append(metricsProfile.hasKeywordOverTime())
                 .append(System.lineSeparator());
         builder.append(MetricsProfileReadWriteConstants.KEYWORD_THRESHOLD_TOKEN).append(SEPARATOR)
-                .append(metricsProfile.isHasKeywordThreshold())
+                .append(metricsProfile.hasKeywordThreshold())
                 .append(System.lineSeparator());
 
         builder.append(MetricsProfileReadWriteConstants.START_KEYWORDS_TOKEN)

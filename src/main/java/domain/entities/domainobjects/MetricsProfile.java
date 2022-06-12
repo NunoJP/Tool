@@ -48,7 +48,7 @@ public class MetricsProfile {
         this.name = name;
     }
 
-    public boolean isHasMostCommonWords() {
+    public boolean hasMostCommonWords() {
         return hasMostCommonWords;
     }
 
@@ -56,7 +56,7 @@ public class MetricsProfile {
         this.hasMostCommonWords = hasMostCommonWords;
     }
 
-    public boolean isHasFileSize() {
+    public boolean hasFileSize() {
         return hasFileSize;
     }
 
@@ -64,7 +64,7 @@ public class MetricsProfile {
         this.hasFileSize = hasFileSize;
     }
 
-    public boolean isHasKeywordHistogram() {
+    public boolean hasKeywordHistogram() {
         return hasKeywordHistogram;
     }
 
@@ -72,7 +72,7 @@ public class MetricsProfile {
         this.hasKeywordHistogram = hasKeywordHistogram;
     }
 
-    public boolean isHasKeywordOverTime() {
+    public boolean hasKeywordOverTime() {
         return hasKeywordOverTime;
     }
 
@@ -80,7 +80,7 @@ public class MetricsProfile {
         this.hasKeywordOverTime = hasKeywordOverTime;
     }
 
-    public boolean isHasKeywordThreshold() {
+    public boolean hasKeywordThreshold() {
         return hasKeywordThreshold;
     }
 

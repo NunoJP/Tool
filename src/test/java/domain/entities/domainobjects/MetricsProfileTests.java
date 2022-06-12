@@ -20,11 +20,11 @@ public class MetricsProfileTests {
         profile.setHasKeywordThreshold(true);
 
         assertEquals("Name", profile.getName());
-        assertTrue(profile.isHasMostCommonWords());
-        assertTrue(profile.isHasFileSize());
-        assertTrue(profile.isHasKeywordHistogram());
-        assertTrue(profile.isHasKeywordOverTime());
-        assertTrue(profile.isHasKeywordThreshold());
+        assertTrue(profile.hasMostCommonWords());
+        assertTrue(profile.hasFileSize());
+        assertTrue(profile.hasKeywordHistogram());
+        assertTrue(profile.hasKeywordOverTime());
+        assertTrue(profile.hasKeywordThreshold());
     }
 
     @Test

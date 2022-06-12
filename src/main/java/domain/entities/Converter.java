@@ -29,11 +29,11 @@ public class Converter {
 
     public static MetricsProfileDo toDisplayObject(MetricsProfile metricsProfile) {
         MetricsProfileDo profileDo = new MetricsProfileDo(metricsProfile.getId(), metricsProfile.getName());
-        profileDo.setHasMostCommonWords(metricsProfile.isHasMostCommonWords());
-        profileDo.setHasFileSize(metricsProfile.isHasFileSize());
-        profileDo.setHasKeywordHistogram(metricsProfile.isHasKeywordHistogram());
-        profileDo.setHasKeywordOverTime(metricsProfile.isHasKeywordOverTime());
-        profileDo.setHasKeywordThreshold(metricsProfile.isHasKeywordThreshold());
+        profileDo.setHasMostCommonWords(metricsProfile.hasMostCommonWords());
+        profileDo.setHasFileSize(metricsProfile.hasFileSize());
+        profileDo.setHasKeywordHistogram(metricsProfile.hasKeywordHistogram());
+        profileDo.setHasKeywordOverTime(metricsProfile.hasKeywordOverTime());
+        profileDo.setHasKeywordThreshold(metricsProfile.hasKeywordThreshold());
         profileDo.setKeywords(metricsProfile.getKeywords());
         profileDo.setOriginFile(metricsProfile.getOriginFile());
         return profileDo;

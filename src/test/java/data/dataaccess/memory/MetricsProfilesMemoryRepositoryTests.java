@@ -41,7 +41,7 @@ public class MetricsProfilesMemoryRepositoryTests {
 
         MetricsProfile mapProfile = repository.getProfile(0);
         assertEquals(profile.getName(), mapProfile.getName());
-        assertEquals(profile.isHasKeywordOverTime(), mapProfile.isHasKeywordOverTime());
+        assertEquals(profile.hasKeywordOverTime(), mapProfile.hasKeywordOverTime());
     }
 
     @Test

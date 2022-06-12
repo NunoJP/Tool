@@ -37,11 +37,11 @@ public abstract class MetricsProfilesCommon {
     }
 
     protected void validateEnabledProfiles(MetricsProfile profile, boolean mCw, boolean fs, boolean kwdH, boolean kwdOt, boolean kwdTh) {
-        assertEquals(mCw, profile.isHasMostCommonWords());
-        assertEquals(fs, profile.isHasFileSize());
-        assertEquals(kwdH, profile.isHasKeywordHistogram());
-        assertEquals(kwdOt, profile.isHasKeywordOverTime());
-        assertEquals(kwdTh, profile.isHasKeywordThreshold());
+        assertEquals(mCw, profile.hasMostCommonWords());
+        assertEquals(fs, profile.hasFileSize());
+        assertEquals(kwdH, profile.hasKeywordHistogram());
+        assertEquals(kwdOt, profile.hasKeywordOverTime());
+        assertEquals(kwdTh, profile.hasKeywordThreshold());
     }
 
     protected void simulateWriteAndRead(MetricsProfileFunction function, MetricsProfileConsumer consumer, MetricsProfile profile) {

@@ -7,8 +7,8 @@ import java.util.HashMap;
 
 public class MostCommonWordsConsumer implements IMetricsReportConsumer{
 
-    private String[] stopWords;
-    private HashMap<String, Integer> occs = new HashMap<>();
+    private final String[] stopWords;
+    private final HashMap<String, Integer> occs = new HashMap<>();
 
     public MostCommonWordsConsumer(String [] stopWords) {
         this.stopWords = stopWords;

@@ -1,19 +1,21 @@
 package domain.entities.domainobjects;
 
+import domain.consumers.IMetricsReportConsumer;
+import domain.consumers.KeywordOccurrencesConsumer;
+import domain.consumers.LogLevelConsumer;
+import domain.consumers.MostCommonWordsConsumer;
+import domain.consumers.WordsInMessageOccurrencesConsumer;
 import domain.entities.common.Keyword;
 import domain.entities.common.ThresholdUnitEnum;
 import domain.entities.common.Warning;
-import general.strutures.SuffixTree;
 import general.util.DateTimeUtils;
 import general.util.Pair;
 import presentation.common.GuiMessages;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -24,16 +26,40 @@ public class MetricsReport {
 
     private final MetricsProfile metricsProfile;
     private final LogLine[] data;
-    private final String[] stopWords;
     private final ArrayList<Warning> warningMessages = new ArrayList<>();
-    private HashMap<Keyword, Integer> wordsFromMessages;
-    private int totalNumberOfNonStopWords = 0;
+    private ArrayList<IMetricsReportConsumer> consumers;
     private List<Pair<Long, Date>> fileSizeData;
+    private LogLevelConsumer logLevelConsumer;
+    private MostCommonWordsConsumer mostCommonWordsConsumer;
+    private WordsInMessageOccurrencesConsumer wordsInMessageOccurrencesConsumer;
+    private KeywordOccurrencesConsumer keywordOccurrencesConsumer;
 
     public MetricsReport(MetricsProfile metricsProfile, LogLine[] data, String [] stopWords) {
         this.metricsProfile = metricsProfile;
         this.data = data;
-        this.stopWords = stopWords;
+        setupConsumers(metricsProfile, stopWords);
+        processData();
+    }
+
+
+    // Sets up the consumers for the class, avoiding unnecessary if checks per line
+    private void setupConsumers(MetricsProfile metricsProfile, String[] stopWords) {
+        consumers = new ArrayList<>();
+        logLevelConsumer = new LogLevelConsumer();
+        wordsInMessageOccurrencesConsumer = new WordsInMessageOccurrencesConsumer(stopWords);
+
+        consumers.add(logLevelConsumer);
+        consumers.add(wordsInMessageOccurrencesConsumer);
+        if(metricsProfile.hasKeywordHistogram() ||
+                metricsProfile.hasKeywordOverTime() ||
+                metricsProfile.hasKeywordThreshold()) {
+            keywordOccurrencesConsumer = new KeywordOccurrencesConsumer(metricsProfile);
+            consumers.add(keywordOccurrencesConsumer);
+        }
+        if(metricsProfile.hasMostCommonWords()) {
+            mostCommonWordsConsumer = new MostCommonWordsConsumer(stopWords);
+            consumers.add(mostCommonWordsConsumer);
+        }
     }
 
     public MetricsReport(MetricsProfile metricsProfile, LogLine[] data, String [] stopWords,  List<Pair<Long, Date>> fileSizeData) {
@@ -49,40 +75,20 @@ public class MetricsReport {
         return data;
     }
 
-
-    public List<Pair<Long, Date>> getFileSizeData() {
-        return fileSizeData;
-    }
-
-    public HashMap<Keyword, Integer> getKwdOccurrences() {
-        if(wordsFromMessages != null) {
-            return wordsFromMessages;
+    private void processData() {
+        for (LogLine logLine : data) {
+            consumers.parallelStream().forEach(consumer -> consumer.processLine(logLine));
         }
-
-        wordsFromMessages = new HashMap<>();
-        this.totalNumberOfNonStopWords = 0;
-        for (LogLine datum : data) {
-            if (datum != null && datum.getMessage() != null) {
-                SuffixTree st = new SuffixTree(datum.getMessage(), true);
-                for (Keyword extractedKwd : metricsProfile.getKeywords()) {
-                    int size = st.getIndexes(extractedKwd.getKeywordText(), extractedKwd.isCaseSensitive()).size();
-                    int count = wordsFromMessages.getOrDefault(extractedKwd, 0);
-                    wordsFromMessages.put(extractedKwd, count + size);
-                }
-                this.totalNumberOfNonStopWords++;
-            }
-        }
-        return wordsFromMessages;
     }
 
     public String[][] getKwdThresholdData() {
-        HashMap<Keyword, Integer> kwdOccurrences = getKwdOccurrences();
+        HashMap<Keyword, Integer> kwdOccurrences = keywordOccurrencesConsumer.getKwdOccurrences();
 
         ArrayList<String[]> res = new ArrayList<>();
 
         for (Map.Entry<Keyword, Integer> keywordIntegerEntry : kwdOccurrences.entrySet()) {
             Optional<String[]> strings = processResult(evaluate(keywordIntegerEntry.getKey(),
-                    keywordIntegerEntry.getValue(), totalNumberOfNonStopWords));
+                    keywordIntegerEntry.getValue(), keywordOccurrencesConsumer.getTotalNumberOfNonStopWords()));
             strings.ifPresent(res::add);
         }
 
@@ -101,82 +107,36 @@ public class MetricsReport {
         return Optional.empty();
     }
 
-    private String makeThresholdMessage(EvaluationResult result) {
-        Keyword standard = result.getStandard();
-        return String.format(GuiMessages.THRESHOLD_VALUE_BASE, standard.getKeywordText(),
-                standard.getThresholdValue(), result.actualValue());
-    }
 
     public String[][] getLogLevelData() {
-        HashMap<String, Integer> occs = new HashMap<>();
-
-        for (LogLine datum : data) {
-            if (datum != null && datum.getLevel() != null) {
-                int count = occs.getOrDefault(datum.getLevel(), 0);
-                occs.put(datum.getLevel(), count + 1);
-            }
-        }
-
-        BigDecimal size = new BigDecimal(data.length);
-        String [][] res = new String [occs.size()][2];
-        int idx = 0;
-        for (String s : occs.keySet()) {
-            res[idx][0] = s;
-            BigDecimal val = new BigDecimal(occs.get(s));
-            res[idx][1] = new DecimalFormat("#,##0.00 %").format(val.divide(size, 4, RoundingMode.HALF_EVEN).doubleValue());
-            idx++;
-        }
-        return res;
+        return logLevelConsumer.getLogLevelData();
     }
 
     public String[][] getMostCommonWordsData() {
-        HashMap<String, Integer> occs = new HashMap<>();
-
-        for (LogLine datum : data) {
-            if (datum != null && datum.getMessage() != null) {
-                String[] split = datum.getMessage().split("\\s+");
-                for (String s : split) {
-                    if(isNotStopWord(s)) {
-                        int count = occs.getOrDefault(s, 0);
-                        occs.put(s, count + 1);
-                    }
-                }
-            }
-        }
-
-        String [][] res = new String [occs.size()][2];
-        int idx = 0;
-        for (String s : occs.keySet()) {
-            res[idx][0] = s;
-            res[idx][1] = String.valueOf(occs.get(s));
-            idx++;
-        }
-
-        // sort by descending order
-        return Arrays.stream(res).sorted((arr1, arr2) -> {
-            int i2 = Integer.parseInt(arr2[1]);
-            int i1 = Integer.parseInt(arr1[1]);
-            return i2 - i1;
-        }).toArray(String[][]::new);
+        return mostCommonWordsConsumer.getMostCommonWordsData();
     }
 
+    public List<Pair<Long, Date>> getFileSizeData() {
+        return fileSizeData;
+    }
+
+    public HashMap<Keyword, Integer> getKwdOccurrences() {
+        return keywordOccurrencesConsumer.getKwdOccurrences();
+    }
+
+    public ArrayList<Warning> getWarningsData() {
+        return warningMessages;
+    }
 
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     // Utils
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-    private boolean isNotStopWord(String s) {
-        for (String stopWord : stopWords) {
-            if(stopWord.equalsIgnoreCase(s)){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public ArrayList<Warning> getWarningsData() {
-        return warningMessages;
+    private String makeThresholdMessage(EvaluationResult result) {
+        Keyword standard = result.getStandard();
+        return String.format(GuiMessages.THRESHOLD_VALUE_BASE, standard.getKeywordText(),
+                standard.getThresholdValue(), result.actualValue());
     }
 
     public Date getStartDate() throws ParseException {
