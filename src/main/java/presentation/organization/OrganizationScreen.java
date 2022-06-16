@@ -6,6 +6,7 @@ import presentation.common.GuiConstants;
 import presentation.common.custom.GeneralTablePanel;
 import presentation.common.custom.LabelLabelPanel;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -13,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
 import static presentation.common.GuiConstants.H_GAP;
@@ -46,12 +48,19 @@ public class OrganizationScreen extends JPanel {
 
     private JPanel createWestPanel() {
         JPanel panel = new JPanel(new BorderLayout(H_GAP, V_GAP));
-        JPanel northPanel = new JPanel(new BorderLayout(H_GAP, V_GAP));
+        JPanel northPanel = new JPanel();
+        northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.Y_AXIS));
 
         chooseSourceFolderButton = new JButton(GuiConstants.CHOOSE_SOURCE_FOLDER_LABEL);
+        JPanel chooseSourceButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, H_GAP, V_GAP));
+        chooseSourceButtonPanel.add(chooseSourceFolderButton, BorderLayout.CENTER);
+
         sourceFolderName = new LabelLabelPanel(GuiConstants.FOLDER_LABEL + ": ");
-        northPanel.add(chooseSourceFolderButton, BorderLayout.NORTH);
-        northPanel.add(sourceFolderName);
+        JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, V_GAP));
+        namePanel.add(sourceFolderName);
+
+        northPanel.add(chooseSourceButtonPanel);
+        northPanel.add(namePanel);
         panel.add(northPanel, BorderLayout.NORTH);
 
         sourceFolderTable = new GeneralTablePanel(new String[]{GuiConstants.FILE_COLUMN}, false);
@@ -62,12 +71,19 @@ public class OrganizationScreen extends JPanel {
 
     private JPanel createEastPanel() {
         JPanel panel = new JPanel(new BorderLayout(H_GAP, V_GAP));
-        JPanel northPanel = new JPanel(new BorderLayout(H_GAP, V_GAP));
+        JPanel northPanel = new JPanel();
+        northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.Y_AXIS));
 
         chooseTargetFolderButton = new JButton(GuiConstants.CHOOSE_TARGET_FOLDER_LABEL);
+        JPanel chooseTargetButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, H_GAP, V_GAP));
+        chooseTargetButtonPanel.add(chooseTargetFolderButton, BorderLayout.CENTER);
+
         targetFolderName = new LabelLabelPanel(GuiConstants.FOLDER_LABEL + ": ");
-        northPanel.add(chooseTargetFolderButton, BorderLayout.NORTH);
-        northPanel.add(targetFolderName);
+        JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, V_GAP));
+        namePanel.add(targetFolderName);
+
+        northPanel.add(chooseTargetButtonPanel);
+        northPanel.add(namePanel);
         panel.add(northPanel, BorderLayout.NORTH);
 
         targetFolderTable = new GeneralTablePanel(new String[]{GuiConstants.FILE_COLUMN}, false);
@@ -79,16 +95,23 @@ public class OrganizationScreen extends JPanel {
 
     private JPanel createCenterPanel() {
         JPanel holder = new JPanel(new BorderLayout(H_GAP, V_GAP));
-
-        JPanel panel = new JPanel(new GridLayout(4, 1, H_GAP, V_GAP));
-//        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, H_GAP, V_GAP));
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         panel.add(createParsingProfilePanel());
         panel.add(createMetricsProfilePanel());
+
         copyButton = new JButton(GuiConstants.COPY_BUTTON);
+        JPanel copyButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, H_GAP, V_GAP));
+        copyButtonPanel.add(copyButton, BorderLayout.CENTER);
+
         moveButton = new JButton(GuiConstants.MOVE_BUTTON);
-        panel.add(copyButton);
-        panel.add(moveButton);
+        JPanel moveButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, H_GAP, V_GAP));
+        moveButtonPanel.add(moveButton, BorderLayout.CENTER);
+
+
+        panel.add(copyButtonPanel);
+        panel.add(moveButtonPanel);
         holder.add(panel, BorderLayout.NORTH);
         return holder;
     }
