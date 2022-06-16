@@ -123,6 +123,8 @@ public class GuiConstants {
     public static final String MESSAGE_LABEL = "Message";
     public static final String TARGET_FOLDER_LABEL = "Target folder";
     public static final String SOURCE_FOLDER_LABEL = "Source folder";
+    public static final String CHOOSE_SOURCE_FOLDER_LABEL = "Choose source folder";
+    public static final String CHOOSE_TARGET_FOLDER_LABEL = "Choose target folder";
     public static final String FOLDER_LABEL = "Folder";
     public static final String DESCRIPTION_LABEL = "Description";
     public static final String WORD_LABEL = "Word";
