@@ -45,11 +45,11 @@ public class MetricsProfileEditorScreenPresenter {
 
     private void populateViewWithExistingProfile() {
         if(existingProfile != null) {
-            dialogView.getMcwButton().setSelected(metricsProfileDo.isHasMostCommonWords());
-            dialogView.getFileSizeButton().setSelected(metricsProfileDo.isHasFileSize());
-            dialogView.getKwdHistButton().setSelected(metricsProfileDo.isHasKeywordHistogram());
-            dialogView.getKwdOverTimeButton().setSelected(metricsProfileDo.isHasKeywordOverTime());
-            dialogView.getKwdThresholdButton().setSelected(metricsProfileDo.isHasKeywordThreshold());
+            dialogView.getMcwButton().setSelected(metricsProfileDo.hasMostCommonWords());
+            dialogView.getFileSizeButton().setSelected(metricsProfileDo.hasFileSize());
+            dialogView.getKwdHistButton().setSelected(metricsProfileDo.hasKeywordHistogram());
+            dialogView.getKwdOverTimeButton().setSelected(metricsProfileDo.hasKeywordOverTime());
+            dialogView.getKwdThresholdButton().setSelected(metricsProfileDo.hasKeywordThreshold());
             dialogView.getCaseSensitiveButton().setSelected(false);
             dialogView.getUpdateKwdButton().setEnabled(false);
             dialogView.getDeleteKwdButton().setEnabled(false);

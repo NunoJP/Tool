@@ -17,11 +17,11 @@ public class Converter {
 
     public static MetricsProfile toDomainObject(MetricsProfileDo metricsProfileDo){
         MetricsProfile metricsProfile = new MetricsProfile(metricsProfileDo.getId(), metricsProfileDo.getName());
-        metricsProfile.setHasMostCommonWords(metricsProfileDo.isHasMostCommonWords());
-        metricsProfile.setHasFileSize(metricsProfileDo.isHasFileSize());
-        metricsProfile.setHasKeywordHistogram(metricsProfileDo.isHasKeywordHistogram());
-        metricsProfile.setHasKeywordOverTime(metricsProfileDo.isHasKeywordOverTime());
-        metricsProfile.setHasKeywordThreshold(metricsProfileDo.isHasKeywordThreshold());
+        metricsProfile.setHasMostCommonWords(metricsProfileDo.hasMostCommonWords());
+        metricsProfile.setHasFileSize(metricsProfileDo.hasFileSize());
+        metricsProfile.setHasKeywordHistogram(metricsProfileDo.hasKeywordHistogram());
+        metricsProfile.setHasKeywordOverTime(metricsProfileDo.hasKeywordOverTime());
+        metricsProfile.setHasKeywordThreshold(metricsProfileDo.hasKeywordThreshold());
         metricsProfile.setKeywords(metricsProfileDo.getKeywords());
         metricsProfile.setOriginFile(metricsProfileDo.getOriginFile());
         return metricsProfile;

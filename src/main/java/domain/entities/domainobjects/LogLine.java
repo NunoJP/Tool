@@ -2,6 +2,7 @@ package domain.entities.domainobjects;
 
 import general.strutures.SuffixTree;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class LogLine {
@@ -91,7 +92,7 @@ public class LogLine {
     }
 
     public void calculateSuffixTreeNonCaseSensitive() {
-        if(suffixTree == null) {
+        if (suffixTree == null) {
             this.suffixTree = new SuffixTree(this.message, true);
         } else {
             this.suffixTree.createNonCaseSensitiveTree();
@@ -100,5 +101,36 @@ public class LogLine {
 
     public SuffixTree getSuffixTree() {
         return suffixTree;
+    }
+
+    public Date getTemporalRepresentation() {
+
+        if (timestamp != null) {
+            return timestamp;
+        }
+
+        if (date != null && time != null) {
+            Calendar d = Calendar.getInstance();
+            d.setTime(date);
+            Calendar t = Calendar.getInstance();
+            t.setTime(time);
+
+            d.set(Calendar.HOUR_OF_DAY, t.get(Calendar.HOUR_OF_DAY));
+            d.set(Calendar.MINUTE, t.get(Calendar.MINUTE));
+            d.set(Calendar.SECOND, t.get(Calendar.SECOND));
+            d.set(Calendar.MILLISECOND, t.get(Calendar.MILLISECOND));
+
+            return d.getTime();
+        }
+
+        if (date != null) {
+            return date;
+        }
+
+        if (time != null) {
+            return time;
+        }
+
+        return null;
     }
 }

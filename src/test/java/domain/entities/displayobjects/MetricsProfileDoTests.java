@@ -20,11 +20,11 @@ public class MetricsProfileDoTests {
         profileDo.setOriginFile("Origin");
 
         assertEquals("Name", profileDo.getName());
-        assertTrue(profileDo.isHasMostCommonWords());
-        assertTrue(profileDo.isHasFileSize());
-        assertTrue(profileDo.isHasKeywordHistogram());
-        assertTrue(profileDo.isHasKeywordOverTime());
-        assertTrue(profileDo.isHasKeywordThreshold());
+        assertTrue(profileDo.hasMostCommonWords());
+        assertTrue(profileDo.hasFileSize());
+        assertTrue(profileDo.hasKeywordHistogram());
+        assertTrue(profileDo.hasKeywordOverTime());
+        assertTrue(profileDo.hasKeywordThreshold());
         assertEquals("Origin", profileDo.getOriginFile());
     }
 
@@ -80,11 +80,11 @@ public class MetricsProfileDoTests {
 
     private void validateOriginalObject(MetricsProfileDo profileDo) {
         assertEquals("Name", profileDo.getName());
-        assertTrue(profileDo.isHasMostCommonWords());
-        assertTrue(profileDo.isHasFileSize());
-        assertTrue(profileDo.isHasKeywordHistogram());
-        assertTrue(profileDo.isHasKeywordOverTime());
-        assertTrue(profileDo.isHasKeywordThreshold());
+        assertTrue(profileDo.hasMostCommonWords());
+        assertTrue(profileDo.hasFileSize());
+        assertTrue(profileDo.hasKeywordHistogram());
+        assertTrue(profileDo.hasKeywordOverTime());
+        assertTrue(profileDo.hasKeywordThreshold());
         assertEquals("Origin", profileDo.getOriginFile());
         assertEquals(2, profileDo.getKeywords().size());
         assertEquals("KWD", profileDo.getKeywords().get(0).getKeywordText());

@@ -128,6 +128,10 @@ public class MetricsReport {
         return warningMessages;
     }
 
+    public HashMap<Keyword, List<Pair<Long, Date>>> getKwdOverTime() {
+        return keywordOccurrencesConsumer.getKeywordsWithDate();
+    }
+
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     // Utils
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

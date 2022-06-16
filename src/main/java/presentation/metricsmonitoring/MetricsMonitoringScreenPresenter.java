@@ -66,12 +66,12 @@ public class MetricsMonitoringScreenPresenter implements IPresenter {
 
     public boolean updateView(MetricsReport metricsReport) {
         // File size chart
-        if(metricsProfile.isHasFileSize()) {
+        if(metricsProfile.hasFileSize()) {
             view.setFileSizeData(metricsReport.getFileSizeData());
         }
 
         // Keyword Threshold + Warnings
-        if(metricsProfile.isHasKeywordThreshold()) {
+        if(metricsProfile.hasKeywordThreshold()) {
             String[][] kwdThresholdData = metricsReport.getKwdThresholdData();
             view.getKwdThTable().setData(kwdThresholdData);
             view.getKwdThTable().setCellSelectionOnly();
@@ -81,18 +81,21 @@ public class MetricsMonitoringScreenPresenter implements IPresenter {
             view.getWarningsTable().setStringColorRenderMap(PresentationUtils.generateDefaultColorMap());
         }
         // Keyword Histogram
-        if(metricsProfile.isHasKeywordHistogram()) {
+        if(metricsProfile.hasKeywordHistogram()) {
             view.setKeywordHistogramData(metricsReport.getKwdOccurrences());
         }
 
         // Most common words
-        if(metricsProfile.isHasMostCommonWords()) {
+        if(metricsProfile.hasMostCommonWords()) {
             String[][] mostCommonWordsData = metricsReport.getMostCommonWordsData();
             view.getMostCommonWordsTable().setData(mostCommonWordsData);
             view.getMostCommonWordsTable().setCellSelectionOnly();
         }
 
         // Keywords over time
+        if(metricsProfile.hasMostCommonWords()) {
+            view.setKeywordOverTimeData(metricsReport.getKwdOverTime());
+        }
 
         return stop.get();
     }

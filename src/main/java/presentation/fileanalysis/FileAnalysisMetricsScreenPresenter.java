@@ -44,7 +44,7 @@ public class FileAnalysisMetricsScreenPresenter implements IViewPresenter {
         MetricsReport metricsReport = fileAnalysisMetricsService.getMetricsReport();
 
         // Keyword Threshold + Warnings
-        if(metricsProfile.isHasKeywordThreshold()) {
+        if(metricsProfile.hasKeywordThreshold()) {
             String[][] kwdThresholdData = metricsReport.getKwdThresholdData();
             view.getKwdThTable().setData(kwdThresholdData);
             view.getKwdThTable().setCellSelectionOnly();
@@ -60,7 +60,7 @@ public class FileAnalysisMetricsScreenPresenter implements IViewPresenter {
         view.getLogLevelTable().setCellSelectionOnly();
 
         // Most common words
-        if(metricsProfile.isHasMostCommonWords()) {
+        if(metricsProfile.hasMostCommonWords()) {
             String[][] mostCommonWordsData = metricsReport.getMostCommonWordsData();
             view.getMostCommonWordsTable().setData(mostCommonWordsData);
             view.getMostCommonWordsTable().setCellSelectionOnly();
@@ -88,8 +88,14 @@ public class FileAnalysisMetricsScreenPresenter implements IViewPresenter {
             view.getEndDatePanel().setVariableLabelText(GuiMessages.ERROR_TIMESTAMP_DATE_TIME_MISSING);
         }
 
-        if(metricsProfile.isHasKeywordHistogram()) {
+        // Keyword Histogram
+        if(metricsProfile.hasKeywordHistogram()) {
             view.setKeywordHistogramData(metricsReport.getKwdOccurrences());
+        }
+
+        // Keywords over time
+        if(metricsProfile.hasKeywordOverTime()) {
+            view.setKeywordOverTimeData(metricsReport.getKwdOverTime());
         }
 
     }

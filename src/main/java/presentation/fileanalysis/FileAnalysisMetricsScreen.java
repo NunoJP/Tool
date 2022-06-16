@@ -2,6 +2,7 @@ package presentation.fileanalysis;
 
 import domain.entities.common.Keyword;
 import domain.entities.displayobjects.MetricsProfileDo;
+import general.util.Pair;
 import presentation.common.GuiConstants;
 import presentation.common.custom.GeneralTablePanel;
 import presentation.common.custom.KeywordHistogramPanel;
@@ -16,7 +17,9 @@ import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import static presentation.common.GuiConstants.H_FILE_MONITORING_SCREEN_SIZE;
 import static presentation.common.GuiConstants.H_GAP;
@@ -32,10 +35,11 @@ public class FileAnalysisMetricsScreen extends JPanel {
     private LabelLabelPanel fileNamePanel;
     private LabelLabelPanel startDatePanel;
     private LabelLabelPanel endDatePanel;
-    private MetricsProfileDo metricsProfile;
+    private final MetricsProfileDo metricsProfile;
     private int numberOfItems;
-    private JFrame motherFrame;
+    private final JFrame motherFrame;
     private KeywordHistogramPanel keywordHistogram;
+    private KeywordsOverTimePanel keywordOverTime;
 
     public FileAnalysisMetricsScreen(JFrame motherFrame, MetricsProfileDo metricsProfile){
         this.motherFrame = motherFrame;
@@ -51,17 +55,15 @@ public class FileAnalysisMetricsScreen extends JPanel {
 
         createTablesPanel(tabbedPane);
 
-
-        // MCW - Tab
-        if(metricsProfile.isHasKeywordHistogram()) {
+        // KwdHt - Tab
+        if(metricsProfile.hasKeywordHistogram()) {
             keywordHistogram = new KeywordHistogramPanel(motherFrame);
             tabbedPane.addTab(GuiConstants.KEYWORD_HISTOGRAM_TAB, keywordHistogram);
         }
 
-
         // KwdOT - Tab
-        if(metricsProfile.isHasKeywordOverTime()) {
-            KeywordsOverTimePanel keywordOverTime = new KeywordsOverTimePanel();
+        if(metricsProfile.hasKeywordOverTime()) {
+            keywordOverTime = new KeywordsOverTimePanel(motherFrame);
             tabbedPane.addTab(GuiConstants.KEYWORD_OVER_TIME_TAB, keywordOverTime);
         }
     }
@@ -84,7 +86,7 @@ public class FileAnalysisMetricsScreen extends JPanel {
         logLevelTable.setMinimumSize(new Dimension(width, height));
 
         // Most common words
-        if(metricsProfile.isHasMostCommonWords()) {
+        if(metricsProfile.hasMostCommonWords()) {
             mostCommonWordsTable = new GeneralTablePanel(GuiConstants.MOST_COMMON_WORDS_LABEL,
                     new String[]{GuiConstants.WORD_COLUMN, GuiConstants.VALUE_COLUMN}, false);
             mostCommonWordsTable.setGeneralSelection(false);
@@ -93,7 +95,7 @@ public class FileAnalysisMetricsScreen extends JPanel {
         }
 
         // Keyword Threshold + Warnings
-        if(metricsProfile.isHasKeywordThreshold()) {
+        if(metricsProfile.hasKeywordThreshold()) {
             kwdThTable = new GeneralTablePanel(GuiConstants.KEYWORD_THRESHOLD_LABEL,
                     new String[]{GuiConstants.KEYWORD_COLUMN, GuiConstants.VALUE_COLUMN}, false);
             kwdThTable.setGeneralSelection(false);
@@ -105,7 +107,7 @@ public class FileAnalysisMetricsScreen extends JPanel {
         }
 
 
-        if(metricsProfile.isHasMostCommonWords() && metricsProfile.isHasKeywordThreshold()) {
+        if(metricsProfile.hasMostCommonWords() && metricsProfile.hasKeywordThreshold()) {
             // two top slots are log level and MCW
             JSplitPane topSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, logLevelTable, mostCommonWordsTable);
             topSplitPane.setMinimumSize(new Dimension(width, height));
@@ -116,11 +118,11 @@ public class FileAnalysisMetricsScreen extends JPanel {
             JSplitPane verticalSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topSplitPane, thSplitPane);
             tablesPanel.add(verticalSplit);
         } else {
-            if(metricsProfile.isHasMostCommonWords()) {
+            if(metricsProfile.hasMostCommonWords()) {
                 // top row is log level, bottom row is MCW
                 JSplitPane verticalSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, logLevelTable, mostCommonWordsTable);
                 tablesPanel.add(verticalSplit);
-            } else if(metricsProfile.isHasKeywordThreshold()) {
+            } else if(metricsProfile.hasKeywordThreshold()) {
                 // top row is log level
                 // bottom row is KwdTh + Warnings
                 JSplitPane thSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, kwdThTable, warningsTable);
@@ -172,5 +174,9 @@ public class FileAnalysisMetricsScreen extends JPanel {
 
     public void setKeywordHistogramData(HashMap<Keyword, Integer> barChartData) {
         this.keywordHistogram.updateChart(barChartData);
+    }
+
+    public void setKeywordOverTimeData(HashMap<Keyword, List<Pair<Long, Date>>> chartData) {
+        this.keywordOverTime.updateChart(chartData);
     }
 }

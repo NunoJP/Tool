@@ -31,11 +31,11 @@ public class MetricsProfileDo {
         this.id = existingProfile.getId();
         this.name = existingProfile.getName();
         this.keywords = new ArrayList<>(existingProfile.getKeywords());
-        this.hasMostCommonWords = existingProfile.isHasMostCommonWords();
-        this.hasFileSize = existingProfile.isHasFileSize();
-        this.hasKeywordHistogram = existingProfile.isHasKeywordHistogram();
-        this.hasKeywordOverTime = existingProfile.isHasKeywordOverTime();
-        this.hasKeywordThreshold = existingProfile.isHasKeywordThreshold();
+        this.hasMostCommonWords = existingProfile.hasMostCommonWords();
+        this.hasFileSize = existingProfile.hasFileSize();
+        this.hasKeywordHistogram = existingProfile.hasKeywordHistogram();
+        this.hasKeywordOverTime = existingProfile.hasKeywordOverTime();
+        this.hasKeywordThreshold = existingProfile.hasKeywordThreshold();
         this.originFile = existingProfile.getOriginFile();
     }
 
@@ -55,7 +55,7 @@ public class MetricsProfileDo {
         this.name = name;
     }
 
-    public boolean isHasMostCommonWords() {
+    public boolean hasMostCommonWords() {
         return hasMostCommonWords;
     }
 
@@ -63,7 +63,7 @@ public class MetricsProfileDo {
         this.hasMostCommonWords = hasMostCommonWords;
     }
 
-    public boolean isHasFileSize() {
+    public boolean hasFileSize() {
         return hasFileSize;
     }
 
@@ -71,7 +71,7 @@ public class MetricsProfileDo {
         this.hasFileSize = hasFileSize;
     }
 
-    public boolean isHasKeywordHistogram() {
+    public boolean hasKeywordHistogram() {
         return hasKeywordHistogram;
     }
 
@@ -79,7 +79,7 @@ public class MetricsProfileDo {
         this.hasKeywordHistogram = hasKeywordHistogram;
     }
 
-    public boolean isHasKeywordOverTime() {
+    public boolean hasKeywordOverTime() {
         return hasKeywordOverTime;
     }
 
@@ -87,7 +87,7 @@ public class MetricsProfileDo {
         this.hasKeywordOverTime = hasKeywordOverTime;
     }
 
-    public boolean isHasKeywordThreshold() {
+    public boolean hasKeywordThreshold() {
         return hasKeywordThreshold;
     }
 

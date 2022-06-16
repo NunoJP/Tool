@@ -36,11 +36,11 @@ public class MetricsMonitoringScreen extends JDialog {
     private GeneralTablePanel kwdThTable;
     private GeneralTablePanel warningsTable;
     private GeneralTablePanel mostCommonWordsTable;
-    private MetricsProfileDo metricsProfile;
+    private final MetricsProfileDo metricsProfile;
     private LabelLabelPanel namePanel;
     private JButton stopButton;
-    private JFrame motherFrame;
-    private Runnable stopReaderAndThread;
+    private final JFrame motherFrame;
+    private final Runnable stopReaderAndThread;
     private KeywordHistogramPanel keywordHistogram;
     private JTabbedPane tabbedPane;
     private JPanel keywordHistogramPanelHolder;
@@ -48,6 +48,7 @@ public class MetricsMonitoringScreen extends JDialog {
     private int fileSizeTabPosition = 1;
     private int keywordHistogramTabPosition = 2;
     private int keywordsOverTimeTabPosition = 3;
+    private KeywordsOverTimePanel keywordOverTime;
 
 
     public MetricsMonitoringScreen(Frame owner, String title, MetricsProfileDo metricsProfile, Runnable stopReaderAndThread) {
@@ -84,7 +85,7 @@ public class MetricsMonitoringScreen extends JDialog {
         createTablesPanel(tabbedPane);
 
         // File size chart
-        if(metricsProfile.isHasFileSize()) {
+        if(metricsProfile.hasFileSize()) {
             fileSizePanel = new PointPlotChartPanel();
             tabbedPane.addTab(GuiConstants.FILE_SIZE_TAB, fileSizePanel);
             panelIndex++;
@@ -92,7 +93,7 @@ public class MetricsMonitoringScreen extends JDialog {
         }
 
         // Keyword Histogram
-        if(metricsProfile.isHasKeywordHistogram()) {
+        if(metricsProfile.hasKeywordHistogram()) {
             keywordHistogram = new KeywordHistogramPanel(motherFrame);
             tabbedPane.addTab(GuiConstants.KEYWORD_HISTOGRAM_TAB, keywordHistogram);
             panelIndex++;
@@ -100,8 +101,8 @@ public class MetricsMonitoringScreen extends JDialog {
         }
 
         // Keywords over time
-        if(metricsProfile.isHasKeywordOverTime()) {
-            KeywordsOverTimePanel keywordOverTime = new KeywordsOverTimePanel();
+        if(metricsProfile.hasKeywordOverTime()) {
+            keywordOverTime = new KeywordsOverTimePanel(motherFrame);
             tabbedPane.addTab(GuiConstants.KEYWORD_OVER_TIME_TAB, keywordOverTime);
             panelIndex++;
             keywordsOverTimeTabPosition = panelIndex;
@@ -112,12 +113,12 @@ public class MetricsMonitoringScreen extends JDialog {
     private void createTablesPanel(JTabbedPane tabbedPane) {
 
         // neither metric is enabled, so return
-        if(!metricsProfile.isHasKeywordThreshold() && !metricsProfile.isHasMostCommonWords()) {
+        if(!metricsProfile.hasKeywordThreshold() && !metricsProfile.hasMostCommonWords()) {
             return;
         }
 
         // create tables for Keyword Threshold + Warnings
-        if(metricsProfile.isHasKeywordThreshold()) {
+        if(metricsProfile.hasKeywordThreshold()) {
             kwdThTable = new GeneralTablePanel(GuiConstants.KEYWORD_THRESHOLD_LABEL,
                     new String[]{GuiConstants.KEYWORD_COLUMN, GuiConstants.VALUE_COLUMN}, false);
             kwdThTable.setGeneralSelection(false);
@@ -127,7 +128,7 @@ public class MetricsMonitoringScreen extends JDialog {
         }
 
         // create table for Most common words
-        if(metricsProfile.isHasMostCommonWords()) {
+        if(metricsProfile.hasMostCommonWords()) {
             mostCommonWordsTable = new GeneralTablePanel(GuiConstants.MOST_COMMON_WORDS_LABEL,
                     new String[]{GuiConstants.WORD_COLUMN, GuiConstants.VALUE_COLUMN}, false);
             mostCommonWordsTable.setGeneralSelection(false);
@@ -138,7 +139,7 @@ public class MetricsMonitoringScreen extends JDialog {
         JPanel holder = new JPanel(new BorderLayout(H_GAP, V_GAP));
 
         // Both metrics are enabled
-        if(metricsProfile.isHasKeywordThreshold() && metricsProfile.isHasMostCommonWords()) {
+        if(metricsProfile.hasKeywordThreshold() && metricsProfile.hasMostCommonWords()) {
 
             int height = V_FILE_MONITORING_SCREEN_SIZE / 5;
             int width = H_FILE_MONITORING_SCREEN_SIZE / 5;
@@ -153,10 +154,10 @@ public class MetricsMonitoringScreen extends JDialog {
 
         } else {
             // Only one of them is enabled
-            if(metricsProfile.isHasKeywordThreshold()) {
+            if(metricsProfile.hasKeywordThreshold()) {
                 // Keyword Threshold + Warnings
                 holder.add(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, kwdThTable, warningsTable));
-            } else if(metricsProfile.isHasMostCommonWords()) {
+            } else if(metricsProfile.hasMostCommonWords()) {
                 // Most common words
                 holder.add(mostCommonWordsTable);
             }
@@ -215,4 +216,10 @@ public class MetricsMonitoringScreen extends JDialog {
         tabbedPane.setComponentAt(fileSizeTabPosition, fileSizePanel);
     }
 
+    public void setKeywordOverTimeData(HashMap<Keyword, List<Pair<Long, Date>>> chartData) {
+        keywordOverTime = null;
+        keywordOverTime = new KeywordsOverTimePanel(motherFrame);
+        keywordOverTime.updateChart(chartData);
+        tabbedPane.setComponentAt(keywordsOverTimeTabPosition, keywordOverTime);
+    }
 }

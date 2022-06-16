@@ -3,14 +3,10 @@ package presentation.common.custom;
 import domain.entities.common.Keyword;
 import presentation.common.custom.graphs.BarChartPanel;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.FlowLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -19,41 +15,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static presentation.common.GuiConstants.H_GAP;
-import static presentation.common.GuiConstants.V_GAP;
+public class KeywordHistogramPanel extends MultiPanelPanel<Keyword, Integer> {
 
-public class KeywordHistogramPanel extends JPanel {
 
-    private JButton previousPanelButton;
-    private JButton nextPanelButton;
-    private JLabel currPageLabel;
-    private int numberOfPanels = 0;
-    private int currentPanel = 0;
-    private CardLayout cardLayout;
-    private JPanel cardPanel;
     public static final int NUMBER_OF_BARS = 5;
 
     public KeywordHistogramPanel(JFrame frame) {
-        this.setLayout(new BorderLayout(H_GAP, V_GAP));
-        this.setBorder(new EmptyBorder(V_GAP, H_GAP, V_GAP, H_GAP));
-        this.add(createButtonPanel(), BorderLayout.SOUTH);
-        setBehaviour();
+        super(frame);
     }
 
-    private JPanel createButtonPanel() {
-        JPanel holder = new JPanel(new FlowLayout(FlowLayout.CENTER, H_GAP, V_GAP));
-        previousPanelButton = new JButton("<-");
-        nextPanelButton = new JButton("->");
-        currPageLabel = new JLabel(getCurrPageLabel());
-        holder.add(previousPanelButton);
-        holder.add(currPageLabel);
-        holder.add(nextPanelButton);
-        return holder;
-    }
-
-    private String getCurrPageLabel() {
-        return "   " + (currentPanel + 1) + "/" + numberOfPanels + "   ";
-    }
 
     public void updateChart(HashMap<Keyword, Integer> barChartData) {
         reset();
@@ -93,28 +63,5 @@ public class KeywordHistogramPanel extends JPanel {
         this.add(cardPanel, BorderLayout.CENTER);
     }
 
-    private void reset() {
-        cardLayout = null;
-        cardPanel = null;
-        numberOfPanels = 0;
-        currentPanel = 0;
-    }
 
-
-    private void setBehaviour() {
-        this.nextPanelButton.addActionListener(e -> {
-            if(currentPanel < numberOfPanels - 1) {
-                currentPanel++;
-                cardLayout.show(cardPanel, currentPanel + "");
-                currPageLabel.setText(getCurrPageLabel());
-            }
-        });
-        this.previousPanelButton.addActionListener(e -> {
-            if(currentPanel > 0) {
-                currentPanel--;
-                cardLayout.show(cardPanel, currentPanel + "");
-                currPageLabel.setText(getCurrPageLabel());
-            }
-        });
-    }
 }
