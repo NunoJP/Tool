@@ -30,7 +30,7 @@ public class ParsingProfileManagementScreen extends JPanel {
 
     private JPanel createParsingProfilesPanel() {
         parsingProfilesPanel = new GeneralTablePanel(
-                new String[]{GuiConstants.NAME_COLUMN, GuiConstants.DESCRIPTION_COLUMN}, false
+                new String[]{GuiConstants.NAME_COLUMN, GuiConstants.DESCRIPTION_COLUMN}, false, true
         );
         parsingProfilesPanel.changeColumnWidths(new int[] { 100, 500 });
         return parsingProfilesPanel;

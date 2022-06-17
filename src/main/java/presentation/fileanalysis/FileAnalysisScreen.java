@@ -50,7 +50,7 @@ public class FileAnalysisScreen extends JPanel {
         messageDetailsTextArea = new ScrollableTextArea();
         fileContentsTable = new GeneralTablePanel(
                 new String[]{GuiConstants.DATE_COLUMN, GuiConstants.TIME_COLUMN, GuiConstants.IDENTIFIER_COLUMN,
-                        GuiConstants.ORIGIN_COLUMN, GuiConstants.LEVEL_COLUMN, GuiConstants.MESSAGE_COLUMN}, false
+                        GuiConstants.ORIGIN_COLUMN, GuiConstants.LEVEL_COLUMN, GuiConstants.MESSAGE_COLUMN}, false, false
         );
         resizeTableToFitContents();
 

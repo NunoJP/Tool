@@ -78,7 +78,7 @@ public class FileAnalysisMetricsScreen extends JPanel {
         // Log level tables + statistics
         JPanel statisticsPanel = createStatisticsPanel();
         logLevelTable = new GeneralTablePanel(GuiConstants.LOG_LEVEL_DISTRIBUTION_LABEL,
-                new String[]{GuiConstants.LEVEL_COLUMN, GuiConstants.PERCENTAGE_COLUMN}, false);
+                new String[]{GuiConstants.LEVEL_COLUMN, GuiConstants.PERCENTAGE_COLUMN}, false, true);
         logLevelTable.setGeneralSelection(false);
         JPanel logLevelTable = new JPanel( new BorderLayout(H_GAP, V_GAP) );
         logLevelTable.add(statisticsPanel, BorderLayout.NORTH);
@@ -88,7 +88,7 @@ public class FileAnalysisMetricsScreen extends JPanel {
         // Most common words
         if(metricsProfile.hasMostCommonWords()) {
             mostCommonWordsTable = new GeneralTablePanel(GuiConstants.MOST_COMMON_WORDS_LABEL,
-                    new String[]{GuiConstants.WORD_COLUMN, GuiConstants.VALUE_COLUMN}, false);
+                    new String[]{GuiConstants.WORD_COLUMN, GuiConstants.VALUE_COLUMN}, false, true);
             mostCommonWordsTable.setGeneralSelection(false);
             mostCommonWordsTable.setIntegerColumnsSort(new int[] { 1 } );
             mostCommonWordsTable.setMinimumSize(new Dimension(width, height));
@@ -97,11 +97,11 @@ public class FileAnalysisMetricsScreen extends JPanel {
         // Keyword Threshold + Warnings
         if(metricsProfile.hasKeywordThreshold()) {
             kwdThTable = new GeneralTablePanel(GuiConstants.KEYWORD_THRESHOLD_LABEL,
-                    new String[]{GuiConstants.KEYWORD_COLUMN, GuiConstants.VALUE_COLUMN}, false);
+                    new String[]{GuiConstants.KEYWORD_COLUMN, GuiConstants.VALUE_COLUMN}, false, true);
             kwdThTable.setGeneralSelection(false);
             kwdThTable.setMinimumSize(new Dimension(width, height));
             warningsTable = new GeneralTablePanel(GuiConstants.WARNINGS_LABEL,
-                    new String[]{GuiConstants.LEVEL_COLUMN, GuiConstants.MESSAGE_COLUMN}, false);
+                    new String[]{GuiConstants.LEVEL_COLUMN, GuiConstants.MESSAGE_COLUMN}, false, true);
             warningsTable.setGeneralSelection(false);
             warningsTable.setMinimumSize(new Dimension(width, height));
         }

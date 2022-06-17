@@ -159,7 +159,7 @@ public class MetricsProfileEditorScreen extends JDialog {
 
         keywordTable = new GeneralTablePanel(
                 new String[]{GuiConstants.KEYWORD_COLUMN, GuiConstants.CASE_SENSITIVE_COLUMN,
-                        GuiConstants.THRESHOLD_COLUMN, GuiConstants.WARNING_LEVEL_COLUMN}, false
+                        GuiConstants.THRESHOLD_COLUMN, GuiConstants.WARNING_LEVEL_COLUMN}, false, true
         );
 
         holder.add(northPanel, BorderLayout.NORTH);

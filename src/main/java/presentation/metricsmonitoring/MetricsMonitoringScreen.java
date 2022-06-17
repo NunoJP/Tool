@@ -120,17 +120,17 @@ public class MetricsMonitoringScreen extends JDialog {
         // create tables for Keyword Threshold + Warnings
         if(metricsProfile.hasKeywordThreshold()) {
             kwdThTable = new GeneralTablePanel(GuiConstants.KEYWORD_THRESHOLD_LABEL,
-                    new String[]{GuiConstants.KEYWORD_COLUMN, GuiConstants.VALUE_COLUMN}, false);
+                    new String[]{GuiConstants.KEYWORD_COLUMN, GuiConstants.VALUE_COLUMN}, false, true);
             kwdThTable.setGeneralSelection(false);
             warningsTable = new GeneralTablePanel(GuiConstants.WARNINGS_LABEL,
-                    new String[]{GuiConstants.LEVEL_COLUMN, GuiConstants.MESSAGE_COLUMN}, false);
+                    new String[]{GuiConstants.LEVEL_COLUMN, GuiConstants.MESSAGE_COLUMN}, false, true);
             warningsTable.setGeneralSelection(false);
         }
 
         // create table for Most common words
         if(metricsProfile.hasMostCommonWords()) {
             mostCommonWordsTable = new GeneralTablePanel(GuiConstants.MOST_COMMON_WORDS_LABEL,
-                    new String[]{GuiConstants.WORD_COLUMN, GuiConstants.VALUE_COLUMN}, false);
+                    new String[]{GuiConstants.WORD_COLUMN, GuiConstants.VALUE_COLUMN}, false, true);
             mostCommonWordsTable.setGeneralSelection(false);
             mostCommonWordsTable.setIntegerColumnsSort(new int[] { 1 } );
         }

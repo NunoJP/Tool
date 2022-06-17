@@ -59,4 +59,10 @@ public class GuiMessages {
     public static final String NO_LINES_PRODUCED_MESSAGE = "No lines were produced by parsing the sample text";
     public static final String MORE_LINES_PRODUCED_MESSAGE = "More than one line was produced by parsing the sample text";
 
+    // Organization Messages
+    public static final String FILE_COPY_WAS_SUCCESSFUL = "Files were copied successfully";
+    public static final String FILE_COPY_FAILED = "Files copy failed";
+    public static final String FILE_MOVE_WAS_SUCCESSFUL = "Files were moved successfully";
+    public static final String FILE_MOVE_FAILED = "Files move failed";
+    public static final String NO_FILES_SELECTED = "No files were selected";
 }

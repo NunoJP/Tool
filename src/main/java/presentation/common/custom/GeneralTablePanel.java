@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -29,16 +30,15 @@ import static presentation.common.GuiConstants.V_GAP;
 public class GeneralTablePanel extends JPanel {
 
     private final JTable table;
-    private HashMap<String, Pair<Color,Color>> colorRenderMap;
 
-    public GeneralTablePanel(String title, String [] columns, boolean editable) {
-        this(title, columns, editable, 25);
+    public GeneralTablePanel(String title, String [] columns, boolean editable, boolean isSortable) {
+        this(title, columns, editable, 25, isSortable);
     }
-    public GeneralTablePanel(String [] columns, boolean editable) {
-        this(null, columns, editable, 25);
+    public GeneralTablePanel(String [] columns, boolean editable, boolean isSortable) {
+        this(null, columns, editable, 25, isSortable);
     }
 
-    public GeneralTablePanel(String title, String [] columns, boolean editable, int numberOfRows) {
+    public GeneralTablePanel(String title, String[] columns, boolean editable, int numberOfRows, boolean isSortable) {
         this.setLayout(new BorderLayout(H_GAP, V_GAP));
         this.setBorder(new EmptyBorder(V_GAP, H_GAP, V_GAP, H_GAP));
         if(title != null) {
@@ -51,10 +51,14 @@ public class GeneralTablePanel extends JPanel {
                 return editable;
             }
         });
-        JScrollPane scrollPane = new JScrollPane(table);
+        JScrollPane scrollPane = new JScrollPane(table,
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         this.add(scrollPane, BorderLayout.CENTER);
-        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>((DefaultTableModel) table.getModel());
-        table.setRowSorter(sorter);
+        if(isSortable) {
+            TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>((DefaultTableModel) table.getModel());
+            table.setRowSorter(sorter);
+        }
     }
 
     public void setGeneralSelection(boolean selectable){
@@ -71,6 +75,11 @@ public class GeneralTablePanel extends JPanel {
     public void setCellSelectionOnly() {
         table.setCellSelectionEnabled(true);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    }
+
+    public void setMultiLineSelection() {
+        table.setRowSelectionAllowed(true);
+        table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
     }
 
     public void addRowSelectionEvent(ListSelectionListener listSelectionListener) {
@@ -143,7 +152,6 @@ public class GeneralTablePanel extends JPanel {
     }
 
     public void setStringColorRenderMap(HashMap<String, Pair<Color,Color>> colorRenderMap){
-        this.colorRenderMap = colorRenderMap;
         table.setDefaultRenderer(Object.class, new LevelRenderer(table, colorRenderMap));
     }
 

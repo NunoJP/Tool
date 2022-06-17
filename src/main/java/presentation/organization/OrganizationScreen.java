@@ -63,7 +63,8 @@ public class OrganizationScreen extends JPanel {
         northPanel.add(namePanel);
         panel.add(northPanel, BorderLayout.NORTH);
 
-        sourceFolderTable = new GeneralTablePanel(new String[]{GuiConstants.FILE_COLUMN}, false);
+        sourceFolderTable = new GeneralTablePanel(new String[]{GuiConstants.FILE_COLUMN}, false, false);
+        sourceFolderTable.setMultiLineSelection();
         panel.add(sourceFolderTable, BorderLayout.CENTER);
 
         return panel;
@@ -86,7 +87,7 @@ public class OrganizationScreen extends JPanel {
         northPanel.add(namePanel);
         panel.add(northPanel, BorderLayout.NORTH);
 
-        targetFolderTable = new GeneralTablePanel(new String[]{GuiConstants.FILE_COLUMN}, false);
+        targetFolderTable = new GeneralTablePanel(new String[]{GuiConstants.FILE_COLUMN}, false, false);
         panel.add(targetFolderTable, BorderLayout.CENTER);
 
         return panel;
@@ -137,4 +138,43 @@ public class OrganizationScreen extends JPanel {
         return metricsPanel;
     }
 
+    public JButton getChooseSourceFolderButton() {
+        return chooseSourceFolderButton;
+    }
+
+    public JButton getChooseTargetFolderButton() {
+        return chooseTargetFolderButton;
+    }
+
+    public GeneralTablePanel getSourceFolderTable() {
+        return sourceFolderTable;
+    }
+
+    public GeneralTablePanel getTargetFolderTable() {
+        return targetFolderTable;
+    }
+
+    public LabelLabelPanel getSourceFolderName() {
+        return sourceFolderName;
+    }
+
+    public LabelLabelPanel getTargetFolderName() {
+        return targetFolderName;
+    }
+
+    public JComboBox<ParsingProfileDo> getParsingProfileDropdown() {
+        return parsingProfileDropdown;
+    }
+
+    public JComboBox<MetricsProfileDo> getMetricsProfileDropdown() {
+        return metricsProfileDropdown;
+    }
+
+    public JButton getCopyButton() {
+        return copyButton;
+    }
+
+    public JButton getMoveButton() {
+        return moveButton;
+    }
 }

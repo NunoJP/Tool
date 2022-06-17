@@ -31,7 +31,7 @@ public class MetricsProfileManagementScreen extends JPanel {
 
     private JPanel createMetricProfilesPanel() {
         metricProfilesPanel = new GeneralTablePanel(
-                new String[]{GuiConstants.NAME_COLUMN, GuiConstants.DESCRIPTION_COLUMN}, false
+                new String[]{GuiConstants.NAME_COLUMN, GuiConstants.DESCRIPTION_COLUMN}, false, true
         );
         metricProfilesPanel.changeColumnWidths(new int[] { 100, 500 });
         return metricProfilesPanel;
