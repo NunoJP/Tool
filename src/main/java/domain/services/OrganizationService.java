@@ -1,7 +1,9 @@
 package domain.services;
 
+import domain.entities.Converter;
 import domain.entities.displayobjects.MetricsProfileDo;
 import domain.entities.displayobjects.ParsingProfileDo;
+import domain.entities.domainobjects.MetricsReport;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,14 +32,23 @@ public class OrganizationService {
 
         try {
             for (File selectedFile : selectedFiles) {
-                if(isMove) {
-                    Files.move(selectedFile.toPath(),
-                            new File(targetFolder.toPath() + File.separator + selectedFile.getName()).toPath(),
-                            StandardCopyOption.REPLACE_EXISTING);
-                } else {
-                    Files.copy(selectedFile.toPath(),
-                            new File(targetFolder.toPath() + File.separator + selectedFile.getName()).toPath(),
-                            StandardCopyOption.REPLACE_EXISTING);
+
+                FileAnalysisService fileAnalysisService = new FileAnalysisService(selectedFile, Converter.toDomainObject(parsingProfile),
+                        Converter.toDomainObject(metricsProfile));
+                FileAnalysisMetricsService fileAnalysisMetricsService = new FileAnalysisMetricsService(fileAnalysisService, Converter.toDomainObject(metricsProfile));
+                MetricsReport metricsReport = fileAnalysisMetricsService.getMetricsReport();
+                metricsReport.getKwdThresholdData();
+
+                if(!metricsReport.getWarningsData().isEmpty()) {
+                    if (isMove) {
+                        Files.move(selectedFile.toPath(),
+                                new File(targetFolder.toPath() + File.separator + selectedFile.getName()).toPath(),
+                                StandardCopyOption.REPLACE_EXISTING);
+                    } else {
+                        Files.copy(selectedFile.toPath(),
+                                new File(targetFolder.toPath() + File.separator + selectedFile.getName()).toPath(),
+                                StandardCopyOption.REPLACE_EXISTING);
+                    }
                 }
             }
         } catch (IOException e) {
