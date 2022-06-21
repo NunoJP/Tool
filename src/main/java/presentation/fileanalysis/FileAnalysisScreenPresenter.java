@@ -77,7 +77,7 @@ public class FileAnalysisScreenPresenter implements IViewPresenter {
         addMessageCellSelectionEvent();
 
         view.getSearchButton().addActionListener(actionEvent ->  {
-            fileAnalysisService.getStringPositionMatches(data, view.getMessage().getVariableLabelText());
+//            fileAnalysisService.getStringPositionMatches(data, view.getMessage().getVariableLabelText());
         });
 
         view.getClearButton().addActionListener(actionEvent ->  {

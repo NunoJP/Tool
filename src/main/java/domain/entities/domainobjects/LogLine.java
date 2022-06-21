@@ -87,9 +87,9 @@ public class LogLine {
         this.position = position;
     }
 
-    public void calculateSuffixTree() {
-        this.suffixTree = new SuffixTree(this.message);
-    }
+//    public void calculateSuffixTree() {
+//        this.suffixTree = new SuffixTree(this.message);
+//    }
 
     public void calculateSuffixTreeNonCaseSensitive() {
         if (suffixTree == null) {
