@@ -1,6 +1,6 @@
 package domain.entities.domainobjects;
 
-import general.strutures.SuffixTree;
+import general.strutures.SuffixArray;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -13,7 +13,8 @@ public class LogLine {
     private String origin;
     private String message;
     private String identifier;
-    private SuffixTree suffixTree;
+//    private SuffixTree suffixTree;
+    private SuffixArray suffixArray;
     private int position;
 
     public LogLine() {
@@ -87,20 +88,28 @@ public class LogLine {
         this.position = position;
     }
 
+    public void calculateSuffixArray() {
+        this.suffixArray = new SuffixArray().createSuffixArray(this.message);
+    }
+
 //    public void calculateSuffixTree() {
 //        this.suffixTree = new SuffixTree(this.message);
 //    }
 
-    public void calculateSuffixTreeNonCaseSensitive() {
-        if (suffixTree == null) {
-            this.suffixTree = new SuffixTree(this.message, true);
-        } else {
-            this.suffixTree.createNonCaseSensitiveTree();
-        }
-    }
+//    public void calculateSuffixTreeNonCaseSensitive() {
+//        if (suffixTree == null) {
+//            this.suffixTree = new SuffixTree(this.message, true);
+//        } else {
+//            this.suffixTree.createNonCaseSensitiveTree();
+//        }
+//    }
 
-    public SuffixTree getSuffixTree() {
-        return suffixTree;
+//    public SuffixTree getSuffixTree() {
+//        return suffixTree;
+//    }
+
+    public SuffixArray getSuffixArray() {
+        return suffixArray;
     }
 
     public Date getTemporalRepresentation() {

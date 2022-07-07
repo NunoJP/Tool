@@ -11,6 +11,7 @@ import domain.entities.domainobjects.ParsingProfile;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.function.Consumer;
 import java.util.logging.Level;
@@ -40,16 +41,15 @@ public class FileAnalysisService {
         }
         hasLoadedData = true;
         data = logFileReader.read(logMessageConsumer);
-//        generateSuffixTrees(data);
+        generateSearchStructure(data);
         return data;
     }
 
-//    private void generateSuffixTrees(LogLine[] data) {
-//        if(!isMessageIgnored()) {
-//            Arrays.stream(data).parallel().forEach(LogLine::calculateSuffixTree);
-//        }
-//
-//    }
+    private void generateSearchStructure(LogLine[] data) {
+        if(!isMessageIgnored()) {
+            Arrays.stream(data).parallel().forEach(LogLine::calculateSuffixArray);
+        }
+    }
 
     private boolean isMessageIgnored() {
         if(parsingProfile == null) {
