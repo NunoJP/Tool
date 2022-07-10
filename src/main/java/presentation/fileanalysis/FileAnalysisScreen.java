@@ -26,6 +26,8 @@ public class FileAnalysisScreen extends JPanel {
     private DateComponent toDateComponent;
     private LabelTextFieldPanel message;
     private JButton searchButton;
+    private JButton nextSearchButton;
+    private JButton previousSearchButton;
     private JButton filterButton;
     private JButton clearButton;
     private JButton exportButton;
@@ -78,9 +80,15 @@ public class FileAnalysisScreen extends JPanel {
         toDateComponent = new DateComponent(GuiConstants.TO_LABEL);
         message = new LabelTextFieldPanel(GuiConstants.MESSAGE_LABEL, GuiConstants.MESSAGE_FIELD_SIZE);
         searchButton = new JButton(GuiConstants.SEARCH_BUTTON);
+        nextSearchButton = new JButton(GuiConstants.NEXT_BUTTON);
+        previousSearchButton = new JButton(GuiConstants.PREVIOUS_BUTTON);
         secondRow.add(toDateComponent);
         secondRow.add(message);
         secondRow.add(searchButton);
+        nextSearchButton.setEnabled(false);
+        previousSearchButton.setEnabled(false);
+        secondRow.add(nextSearchButton);
+        secondRow.add(previousSearchButton);
 
         // Filter, Clear, Export buttons
         JPanel thirdRow = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, 0));
@@ -135,6 +143,14 @@ public class FileAnalysisScreen extends JPanel {
 
     public JButton getSearchButton() {
         return searchButton;
+    }
+
+    public JButton getNextSearchButton() {
+        return nextSearchButton;
+    }
+
+    public JButton getPreviousSearchButton() {
+        return previousSearchButton;
     }
 
     public JButton getFilterButton() {

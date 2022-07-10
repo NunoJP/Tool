@@ -223,7 +223,7 @@ public class TestSuffixTree {
 
         SuffixTree tree = new SuffixTree(t);
 
-        List<Integer> indexes = tree.getIndexes("G", true).stream().sorted().collect(Collectors.toList());
+        List<Integer> indexes = tree.searchStringIndexes("G", true).stream().sorted().collect(Collectors.toList());
 
         assertEquals(3, indexes.size());
         assertEquals(2, indexes.get(0).intValue());
@@ -238,13 +238,13 @@ public class TestSuffixTree {
 
         SuffixTree tree = new SuffixTree(t);
 
-        List<Integer> indexes = tree.getIndexes("CA", true).stream().sorted().collect(Collectors.toList());
+        List<Integer> indexes = tree.searchStringIndexes("CA", true).stream().sorted().collect(Collectors.toList());
 
         assertEquals(2, indexes.size());
         assertEquals(0, indexes.get(0).intValue());
         assertEquals(4, indexes.get(1).intValue());
 
-        indexes = tree.getIndexes("GG", true).stream().sorted().collect(Collectors.toList());
+        indexes = tree.searchStringIndexes("GG", true).stream().sorted().collect(Collectors.toList());
 
         assertEquals(1, indexes.size());
         assertEquals(6, indexes.get(0).intValue());
@@ -256,13 +256,13 @@ public class TestSuffixTree {
 
         SuffixTree tree = new SuffixTree(t);
 
-        List<Integer> indexes = tree.getIndexes("CAG", true).stream().sorted().collect(Collectors.toList());
+        List<Integer> indexes = tree.searchStringIndexes("CAG", true).stream().sorted().collect(Collectors.toList());
 
         assertEquals(2, indexes.size());
         assertEquals(0, indexes.get(0).intValue());
         assertEquals(4, indexes.get(1).intValue());
 
-        indexes = tree.getIndexes("AGG", true).stream().sorted().collect(Collectors.toList());
+        indexes = tree.searchStringIndexes("AGG", true).stream().sorted().collect(Collectors.toList());
 
         assertEquals(1, indexes.size());
         assertEquals(5, indexes.get(0).intValue());
@@ -275,7 +275,7 @@ public class TestSuffixTree {
 
         SuffixTree tree = new SuffixTree(t);
 
-        List<Integer> indexes = tree.getIndexes("G", true).stream().sorted().collect(Collectors.toList());
+        List<Integer> indexes = tree.searchStringIndexes("G", true).stream().sorted().collect(Collectors.toList());
 
         assertEquals(5, indexes.size());
         assertEquals(0, indexes.get(0).intValue());
@@ -291,14 +291,14 @@ public class TestSuffixTree {
 
         SuffixTree tree = new SuffixTree(t);
 
-        List<Integer> indexes = tree.getIndexes("GA", true).stream().sorted().collect(Collectors.toList());
+        List<Integer> indexes = tree.searchStringIndexes("GA", true).stream().sorted().collect(Collectors.toList());
 
         assertEquals(3, indexes.size());
         assertEquals(0, indexes.get(0).intValue());
         assertEquals(5, indexes.get(1).intValue());
         assertEquals(9, indexes.get(2).intValue());
 
-        indexes = tree.getIndexes("FG", true).stream().sorted().collect(Collectors.toList());
+        indexes = tree.searchStringIndexes("FG", true).stream().sorted().collect(Collectors.toList());
 
         assertEquals(1, indexes.size());
         assertEquals(11, indexes.get(0).intValue());
@@ -310,13 +310,13 @@ public class TestSuffixTree {
 
         SuffixTree tree = new SuffixTree(t);
 
-        List<Integer> indexes = tree.getIndexes("GAF", true).stream().sorted().collect(Collectors.toList());
+        List<Integer> indexes = tree.searchStringIndexes("GAF", true).stream().sorted().collect(Collectors.toList());
 
         assertEquals(2, indexes.size());
         assertEquals(5, indexes.get(0).intValue());
         assertEquals(9, indexes.get(1).intValue());
 
-        indexes = tree.getIndexes("AFG", true).stream().sorted().collect(Collectors.toList());
+        indexes = tree.searchStringIndexes("AFG", true).stream().sorted().collect(Collectors.toList());
 
         assertEquals(1, indexes.size());
         assertEquals(10, indexes.get(0).intValue());
@@ -328,7 +328,7 @@ public class TestSuffixTree {
 
         SuffixTree tree = new SuffixTree(t);
 
-        List<Integer> indexes = tree.getIndexes("G", true).stream().sorted().collect(Collectors.toList());
+        List<Integer> indexes = tree.searchStringIndexes("G", true).stream().sorted().collect(Collectors.toList());
 
         assertEquals(5, indexes.size());
         assertEquals(0, indexes.get(0).intValue());
@@ -338,7 +338,7 @@ public class TestSuffixTree {
         assertEquals(12, indexes.get(4).intValue());
 
 
-        indexes = tree.getIndexes("g", true).stream().sorted().collect(Collectors.toList());
+        indexes = tree.searchStringIndexes("g", true).stream().sorted().collect(Collectors.toList());
 
         assertEquals(0, indexes.size());
     }
@@ -349,12 +349,12 @@ public class TestSuffixTree {
 
         SuffixTree tree = new SuffixTree(t);
 
-        List<Integer> indexes = tree.getIndexes("gA", true).stream().sorted().collect(Collectors.toList());
+        List<Integer> indexes = tree.searchStringIndexes("gA", true).stream().sorted().collect(Collectors.toList());
 
         assertEquals(1, indexes.size());
         assertEquals(0, indexes.get(0).intValue());
 
-        indexes = tree.getIndexes("fg", true).stream().sorted().collect(Collectors.toList());
+        indexes = tree.searchStringIndexes("fg", true).stream().sorted().collect(Collectors.toList());
 
         assertEquals(0, indexes.size());
     }
@@ -365,12 +365,12 @@ public class TestSuffixTree {
 
         SuffixTree tree = new SuffixTree(t);
 
-        List<Integer> indexes = tree.getIndexes("Gaf", true).stream().sorted().collect(Collectors.toList());
+        List<Integer> indexes = tree.searchStringIndexes("Gaf", true).stream().sorted().collect(Collectors.toList());
 
         assertEquals(1, indexes.size());
         assertEquals(9, indexes.get(0).intValue());
 
-        indexes = tree.getIndexes("AFG", true).stream().sorted().collect(Collectors.toList());
+        indexes = tree.searchStringIndexes("AFG", true).stream().sorted().collect(Collectors.toList());
 
         assertEquals(0, indexes.size());
     }
@@ -381,7 +381,7 @@ public class TestSuffixTree {
 
         SuffixTree tree = new SuffixTree(t, true);
 
-        List<Integer> indexes = tree.getIndexes("G", false).stream().sorted().collect(Collectors.toList());
+        List<Integer> indexes = tree.searchStringIndexes("G", false).stream().sorted().collect(Collectors.toList());
 
         assertEquals(5, indexes.size());
         assertEquals(0, indexes.get(0).intValue());
@@ -391,7 +391,7 @@ public class TestSuffixTree {
         assertEquals(12, indexes.get(4).intValue());
 
 
-        indexes = tree.getIndexes("g", false).stream().sorted().collect(Collectors.toList());
+        indexes = tree.searchStringIndexes("g", false).stream().sorted().collect(Collectors.toList());
 
 
         assertEquals(5, indexes.size());
@@ -408,14 +408,14 @@ public class TestSuffixTree {
 
         SuffixTree tree = new SuffixTree(t, true);
 
-        List<Integer> indexes = tree.getIndexes("gA", false).stream().sorted().collect(Collectors.toList());
+        List<Integer> indexes = tree.searchStringIndexes("gA", false).stream().sorted().collect(Collectors.toList());
 
         assertEquals(3, indexes.size());
         assertEquals(0, indexes.get(0).intValue());
         assertEquals(5, indexes.get(1).intValue());
         assertEquals(9, indexes.get(2).intValue());
 
-        indexes = tree.getIndexes("fG", false).stream().sorted().collect(Collectors.toList());
+        indexes = tree.searchStringIndexes("fG", false).stream().sorted().collect(Collectors.toList());
 
         assertEquals(1, indexes.size());
         assertEquals(11, indexes.get(0).intValue());
@@ -427,13 +427,13 @@ public class TestSuffixTree {
 
         SuffixTree tree = new SuffixTree(t, true);
 
-        List<Integer> indexes = tree.getIndexes("Gaf", false).stream().sorted().collect(Collectors.toList());
+        List<Integer> indexes = tree.searchStringIndexes("Gaf", false).stream().sorted().collect(Collectors.toList());
 
         assertEquals(2, indexes.size());
         assertEquals(5, indexes.get(0).intValue());
         assertEquals(9, indexes.get(1).intValue());
 
-        indexes = tree.getIndexes("AFG", false).stream().sorted().collect(Collectors.toList());
+        indexes = tree.searchStringIndexes("AFG", false).stream().sorted().collect(Collectors.toList());
 
         assertEquals(1, indexes.size());
         assertEquals(10, indexes.get(0).intValue());
@@ -477,18 +477,18 @@ public class TestSuffixTree {
 
         SuffixTree tree = new SuffixTree(t);
 
-        List<Integer> indexes = tree.getIndexes("reader", true).stream().sorted().collect(Collectors.toList());
+        List<Integer> indexes = tree.searchStringIndexes("reader", true).stream().sorted().collect(Collectors.toList());
 
         assertEquals(4, indexes.size());
 
-        indexes = tree.getIndexes("Reader", false).stream().sorted().collect(Collectors.toList());
+        indexes = tree.searchStringIndexes("Reader", false).stream().sorted().collect(Collectors.toList());
 
         assertEquals(0, indexes.size());
 
         tree.createNonCaseSensitiveTree();
 
 
-        indexes = tree.getIndexes("Reader", false).stream().sorted().collect(Collectors.toList());
+        indexes = tree.searchStringIndexes("Reader", false).stream().sorted().collect(Collectors.toList());
 
         assertEquals(11, indexes.size());
     }

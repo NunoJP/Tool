@@ -20,12 +20,15 @@ import javax.swing.table.TableRowSorter;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Rectangle;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.function.ToIntFunction;
 
 import static presentation.common.GuiConstants.H_GAP;
 import static presentation.common.GuiConstants.V_GAP;
+import static presentation.fileanalysis.FileAnalysisScreenPresenter.MESSAGE_COLUMN_IDX;
 
 public class GeneralTablePanel extends JPanel {
 
@@ -158,6 +161,21 @@ public class GeneralTablePanel extends JPanel {
     public void setNumberOfRows(int i) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(i);
+    }
+
+    public Rectangle getCellRect(int currentSearchIndex, int column, boolean includeSpacing) {
+        return table.getCellRect(currentSearchIndex, column, includeSpacing);
+    }
+
+    public void scrollRectToVisible(Rectangle targetRect) {
+        table.scrollRectToVisible(targetRect);
+    }
+
+    public void scrollToRow(Pair<Integer, ? extends List> pair) {
+        Rectangle currentRect = table.getCellRect(pair.getLeft(), MESSAGE_COLUMN_IDX, true);
+//        Rectangle pt = table.getVisibleRect();
+//        currentRect.setLocation(currentRect.x - pt.x, currentRect.y - pt.y);
+        table.scrollRectToVisible(currentRect);
     }
 
     static class LevelRenderer extends DefaultTableCellRenderer {

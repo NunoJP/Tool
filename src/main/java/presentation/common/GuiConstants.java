@@ -71,6 +71,8 @@ public class GuiConstants {
     public static final String CHOOSE_FILE_BUTTON = "Choose file";
     public static final String START_BUTTON = "Start";
     public static final String STOP_BUTTON = "Stop";
+    public static final String NEXT_BUTTON = "Next";
+    public static final String PREVIOUS_BUTTON = "Previous";
     public static final String NEW_PROFILE_BUTTON = "New profile";
     public static final String UPDATE_SELECTED_BUTTON = "Update selected";
     public static final String DELETE_SELECTED_BUTTON = "Delete selected";

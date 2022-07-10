@@ -106,7 +106,7 @@ public class TestSuffixArray {
         SuffixArray suffixArray = new SuffixArray().createSuffixArray(t);
         assertNotNull(suffixArray);
 
-        List<Integer> indexes = suffixArray.getIndexes("G").stream().sorted().collect(Collectors.toList());
+        List<Integer> indexes = suffixArray.searchStringIndexes("G").stream().sorted().collect(Collectors.toList());
 
         assertEquals(3, indexes.size());
         assertEquals(2, indexes.get(0).intValue());
@@ -121,13 +121,13 @@ public class TestSuffixArray {
         SuffixArray suffixArray = new SuffixArray().createSuffixArray(t);
         assertNotNull(suffixArray);
 
-        List<Integer> indexes = suffixArray.getIndexes("CA").stream().sorted().collect(Collectors.toList());
+        List<Integer> indexes = suffixArray.searchStringIndexes("CA").stream().sorted().collect(Collectors.toList());
 
         assertEquals(2, indexes.size());
         assertEquals(0, indexes.get(0).intValue());
         assertEquals(4, indexes.get(1).intValue());
 
-        indexes = suffixArray.getIndexes("GG").stream().sorted().collect(Collectors.toList());
+        indexes = suffixArray.searchStringIndexes("GG").stream().sorted().collect(Collectors.toList());
 
         assertEquals(1, indexes.size());
         assertEquals(6, indexes.get(0).intValue());
@@ -140,13 +140,13 @@ public class TestSuffixArray {
         SuffixArray suffixArray = new SuffixArray().createSuffixArray(t);
         assertNotNull(suffixArray);
 
-        List<Integer> indexes = suffixArray.getIndexes("CAG").stream().sorted().collect(Collectors.toList());
+        List<Integer> indexes = suffixArray.searchStringIndexes("CAG").stream().sorted().collect(Collectors.toList());
 
         assertEquals(2, indexes.size());
         assertEquals(0, indexes.get(0).intValue());
         assertEquals(4, indexes.get(1).intValue());
 
-        indexes = suffixArray.getIndexes("AGG").stream().sorted().collect(Collectors.toList());
+        indexes = suffixArray.searchStringIndexes("AGG").stream().sorted().collect(Collectors.toList());
 
         assertEquals(1, indexes.size());
         assertEquals(5, indexes.get(0).intValue());
@@ -160,7 +160,7 @@ public class TestSuffixArray {
         SuffixArray suffixArray = new SuffixArray().createSuffixArray(t);
         assertNotNull(suffixArray);
 
-        List<Integer> indexes = suffixArray.getIndexes("G").stream().sorted().collect(Collectors.toList());
+        List<Integer> indexes = suffixArray.searchStringIndexes("G").stream().sorted().collect(Collectors.toList());
 
         assertEquals(5, indexes.size());
         assertEquals(0, indexes.get(0).intValue());
@@ -177,14 +177,14 @@ public class TestSuffixArray {
         SuffixArray suffixArray = new SuffixArray().createSuffixArray(t);
         assertNotNull(suffixArray);
 
-        List<Integer> indexes = suffixArray.getIndexes("GA").stream().sorted().collect(Collectors.toList());
+        List<Integer> indexes = suffixArray.searchStringIndexes("GA").stream().sorted().collect(Collectors.toList());
 
         assertEquals(3, indexes.size());
         assertEquals(0, indexes.get(0).intValue());
         assertEquals(5, indexes.get(1).intValue());
         assertEquals(9, indexes.get(2).intValue());
 
-        indexes = suffixArray.getIndexes("FG").stream().sorted().collect(Collectors.toList());
+        indexes = suffixArray.searchStringIndexes("FG").stream().sorted().collect(Collectors.toList());
 
         assertEquals(1, indexes.size());
         assertEquals(11, indexes.get(0).intValue());
@@ -197,13 +197,13 @@ public class TestSuffixArray {
         SuffixArray suffixArray = new SuffixArray().createSuffixArray(t);
         assertNotNull(suffixArray);
 
-        List<Integer> indexes = suffixArray.getIndexes("GAF").stream().sorted().collect(Collectors.toList());
+        List<Integer> indexes = suffixArray.searchStringIndexes("GAF").stream().sorted().collect(Collectors.toList());
 
         assertEquals(2, indexes.size());
         assertEquals(5, indexes.get(0).intValue());
         assertEquals(9, indexes.get(1).intValue());
 
-        indexes = suffixArray.getIndexes("AFG").stream().sorted().collect(Collectors.toList());
+        indexes = suffixArray.searchStringIndexes("AFG").stream().sorted().collect(Collectors.toList());
 
         assertEquals(1, indexes.size());
         assertEquals(10, indexes.get(0).intValue());
@@ -215,7 +215,7 @@ public class TestSuffixArray {
 
         SuffixArray suffixArray = new SuffixArray().createSuffixArray(t);
         assertNotNull(suffixArray);
-        List<Integer> indexes = suffixArray.getIndexes("G").stream().sorted().collect(Collectors.toList());
+        List<Integer> indexes = suffixArray.searchStringIndexes("G").stream().sorted().collect(Collectors.toList());
 
         assertEquals(5, indexes.size());
         assertEquals(0, indexes.get(0).intValue());
@@ -225,7 +225,7 @@ public class TestSuffixArray {
         assertEquals(12, indexes.get(4).intValue());
 
 
-        indexes = suffixArray.getIndexes("g").stream().sorted().collect(Collectors.toList());
+        indexes = suffixArray.searchStringIndexes("g").stream().sorted().collect(Collectors.toList());
 
         assertEquals(0, indexes.size());
     }

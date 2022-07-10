@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SuffixTree {
+public class SuffixTree implements ISearchStructure {
 
     private final SfNode head;
     private final SfNode headLowerCase;
@@ -113,7 +113,13 @@ public class SuffixTree {
         return isCaseSensitive ? head : headLowerCase;
     }
 
-    public List<Integer> getIndexes(String toFind, boolean isCaseSensitive) {
+    @Override
+    public List<Integer> searchStringIndexes(String toFind) {
+        return searchStringIndexes(toFind, true);
+    }
+
+    @Override
+    public List<Integer> searchStringIndexes(String toFind, boolean isCaseSensitive) {
         SfNode currHead = getTree(isCaseSensitive);
 
         ArrayList<Integer> toRet = new ArrayList<>();

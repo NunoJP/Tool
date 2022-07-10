@@ -7,7 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SuffixArray {
+public class SuffixArray implements ISearchStructure {
 
 
     protected String source;
@@ -73,7 +73,8 @@ public class SuffixArray {
         return LCP;
     }
 
-    public List<Integer> getIndexes(String toFind) {
+    @Override
+    public List<Integer> searchStringIndexes(String toFind) {
         List<Integer> toRet = new ArrayList<>();
 
         boolean foundAlready = false;
@@ -104,6 +105,11 @@ public class SuffixArray {
             }
         }
         return toRet;
+    }
+
+    @Override
+    public List<Integer> searchStringIndexes(String toFind, boolean caseSensitive) {
+        return searchStringIndexes(toFind);
     }
 
     static int compareStrings(char[] currStr, char[] toFind, int toFindLength) {

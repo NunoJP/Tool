@@ -1,5 +1,6 @@
 package domain.entities.domainobjects;
 
+import general.strutures.ISearchStructure;
 import general.strutures.SuffixArray;
 
 import java.util.Calendar;
@@ -88,15 +89,19 @@ public class LogLine {
         this.position = position;
     }
 
-    public void calculateSuffixArray() {
+    public void calculateSearchStructure() {
         this.suffixArray = new SuffixArray().createSuffixArray(this.message);
     }
 
-//    public void calculateSuffixTree() {
+    public ISearchStructure getSearchStructure() {
+        return suffixArray;
+    }
+
+//    public void calculateSearchStructure() {
 //        this.suffixTree = new SuffixTree(this.message);
 //    }
 
-//    public void calculateSuffixTreeNonCaseSensitive() {
+//    public void calculateSearchStructureNonCaseSensitive() {
 //        if (suffixTree == null) {
 //            this.suffixTree = new SuffixTree(this.message, true);
 //        } else {
@@ -104,13 +109,9 @@ public class LogLine {
 //        }
 //    }
 
-//    public SuffixTree getSuffixTree() {
+//    public SuffixTree getSearchStructure() {
 //        return suffixTree;
 //    }
-
-    public SuffixArray getSuffixArray() {
-        return suffixArray;
-    }
 
     public Date getTemporalRepresentation() {
 
@@ -142,4 +143,5 @@ public class LogLine {
 
         return null;
     }
+
 }

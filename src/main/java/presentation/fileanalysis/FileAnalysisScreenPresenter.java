@@ -7,6 +7,7 @@ import domain.entities.displayobjects.ParsingProfileDo;
 import domain.entities.domainobjects.LogLine;
 import domain.services.FileAnalysisService;
 import general.util.DateTimeUtils;
+import general.util.Pair;
 import presentation.common.GuiConstants;
 import presentation.common.GuiMessages;
 import presentation.common.IViewPresenter;
@@ -20,7 +21,9 @@ import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,11 +37,14 @@ public class FileAnalysisScreenPresenter implements IViewPresenter {
     private final FileAnalysisScreen view;
     private final FileAnalysisService fileAnalysisService;
     private LogLine[] data;
+    public static final int MESSAGE_COLUMN_IDX = 5;
     private Date fileStartDate;
     private Date fileStartTime;
     private Date fileEndDate;
     private Date fileEndTime;
     private LogLine[] filteredData;
+    private List<Pair<Integer, ? extends List>> stringPositionMatches = new ArrayList<>();
+    private int currentSearchIndex = 0;
 
     private static final Logger LOGGER = Logger.getLogger(FileAnalysisScreenPresenter.class.getName());
 
@@ -77,13 +83,43 @@ public class FileAnalysisScreenPresenter implements IViewPresenter {
         addMessageCellSelectionEvent();
 
         view.getSearchButton().addActionListener(actionEvent ->  {
-//            fileAnalysisService.getStringPositionMatches(data, view.getMessage().getVariableLabelText());
+            stringPositionMatches = fileAnalysisService.getStringPositionMatches(data, view.getMessage().getVariableLabelText());
+
+            view.getNextSearchButton().setEnabled(true);
+            view.getPreviousSearchButton().setEnabled(true);
         });
+
+        view.getNextSearchButton().addActionListener(actionEvent ->  {
+            if(stringPositionMatches == null || stringPositionMatches.size() == 0) {
+                return;
+            }
+            currentSearchIndex++;
+            if(currentSearchIndex >= stringPositionMatches.size()) {
+                currentSearchIndex = 0;
+            }
+
+            view.getFileContentsTable().scrollToRow(stringPositionMatches.get(currentSearchIndex));
+        });
+
+        view.getPreviousSearchButton().addActionListener(actionEvent ->  {
+            if(stringPositionMatches == null || stringPositionMatches.size() == 0) {
+                return;
+            }
+            currentSearchIndex--;
+            if(currentSearchIndex < 0) {
+                currentSearchIndex = stringPositionMatches.size() -1;
+            }
+
+            view.getFileContentsTable().scrollToRow(stringPositionMatches.get(currentSearchIndex));
+        });
+
 
         view.getClearButton().addActionListener(actionEvent ->  {
             view.getLevel().setVariableLabelText("");
             view.getOrigin().setVariableLabelText("");
             view.getMessage().setVariableLabelText("");
+            view.getNextSearchButton().setEnabled(false);
+            view.getPreviousSearchButton().setEnabled(false);
             setDefaultDateTimeFilters();
             updateFileContentsTableData(data);
             try {
