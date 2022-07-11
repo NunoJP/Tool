@@ -11,7 +11,7 @@ import static org.junit.Assert.assertNotNull;
 
 public class TestSuffixArray {
 
-
+    // TODO add no find tests
 
 
     @Test
@@ -48,6 +48,13 @@ public class TestSuffixArray {
         // to the expected suffix
         for (int i = 0; i < sortedSuffixes.length; i++) {
             assertEquals(sortedSuffixes[i], t.substring(suffixIndexes.get(i)));
+        }
+        int [] expectedLcp = new int[] {
+                0, 2, 0, 3, 0, 1, 1, 0
+        };
+        int[] lcp = suffixArray.getLCP();
+        for (int i = 0; i < lcp.length; i++) {
+            assertEquals(expectedLcp[i], lcp[i]);
         }
     }
 
@@ -96,6 +103,14 @@ public class TestSuffixArray {
         // to the expected suffix
         for (int i = 0; i < sortedSuffixes.length; i++) {
             assertEquals(sortedSuffixes[i], t.substring(suffixIndexes.get(i)));
+        }
+
+        int [] expectedLcp = new int[] {
+                0, 2, 1, 0, 0, 0, 1, 0, 1, 3, 2, 1, 0
+        };
+        int[] lcp = suffixArray.getLCP();
+        for (int i = 0; i < lcp.length; i++) {
+            assertEquals(expectedLcp[i], lcp[i]);
         }
     }
 

@@ -1,7 +1,9 @@
 package domain.entities.domainobjects;
 
 import general.strutures.ISearchStructure;
+import general.strutures.NoStructure;
 import general.strutures.SuffixArray;
+import general.strutures.SuffixTree;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -14,8 +16,9 @@ public class LogLine {
     private String origin;
     private String message;
     private String identifier;
-//    private SuffixTree suffixTree;
+    private SuffixTree suffixTree;
     private SuffixArray suffixArray;
+    private NoStructure noStructure;
     private int position;
 
     public LogLine() {
@@ -90,11 +93,15 @@ public class LogLine {
     }
 
     public void calculateSearchStructure() {
-        this.suffixArray = new SuffixArray().createSuffixArray(this.message);
+//        this.suffixArray = new SuffixArray().createSuffixArray(this.message);
+//        this.suffixTree = new SuffixTree(this.message);
+        this.noStructure = new NoStructure(this.message);
     }
 
     public ISearchStructure getSearchStructure() {
-        return suffixArray;
+//        return suffixArray;
+//        return suffixTree;
+        return noStructure;
     }
 
 //    public void calculateSearchStructure() {

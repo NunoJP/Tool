@@ -26,7 +26,7 @@ public class NoStructure implements ISearchStructure{
 
     @Override
     public List<Integer> searchStringIndexes(String toFind, boolean caseSensitive) {
-        return null;
+        return searchStringIndexes(toFind);
     }
 
     public String getSource() {
