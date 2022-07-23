@@ -93,15 +93,17 @@ public class LogLine {
     }
 
     public void calculateSearchStructure() {
+        this.noStructure = new NoStructure(this.message);
 //        this.suffixArray = new SuffixArray().createSuffixArray(this.message);
 //        this.suffixTree = new SuffixTree(this.message);
-        this.noStructure = new NoStructure(this.message);
+
     }
 
     public ISearchStructure getSearchStructure() {
+        return noStructure;
 //        return suffixArray;
 //        return suffixTree;
-        return noStructure;
+
     }
 
 //    public void calculateSearchStructure() {
