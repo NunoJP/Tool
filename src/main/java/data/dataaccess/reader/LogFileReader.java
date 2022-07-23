@@ -50,8 +50,8 @@ public class LogFileReader {
     public void readDynamic(Consumer<String> logMessageConsumer, DynamicLogFileReaderConsumer logLineConsumer) {
         try (BufferedReader br = new BufferedReader(new FileReader(selectedFile))) {
             String line = null;
-            while (keepReading.get() && (line = br.readLine()) != null) {
-                if(!line.isEmpty()) {
+            while (keepReading.get()) {
+                if((line = br.readLine()) != null && !line.isEmpty()) {
                     logLineConsumer.accept(Pair.of(line, selectedFile.length()));
                 }
             }
