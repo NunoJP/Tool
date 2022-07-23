@@ -74,14 +74,13 @@ public class SuffixArray implements ISearchStructure {
     public List<Integer> searchStringIndexes(String toFind) {
         List<Integer> toRet = new ArrayList<>();
 
-        int left = findLeftLimit(0, suffixIndexes.size()-1, toFind);
-        int right = findRightLimit(0, suffixIndexes.size()-1, toFind);
+        int [] bounds = findLeftLimit(0, suffixIndexes.size()-1, toFind);
 
-        if(left == -1 && right == -1) {
+        if(bounds.length == 0) {
             return toRet;
         }
 
-        for (int i = left; i <= right; i++) {
+        for (int i = bounds[0]; i <= bounds[1]; i++) {
             toRet.add(suffixIndexes.get(i));
         }
 
@@ -97,10 +96,12 @@ public class SuffixArray implements ISearchStructure {
        Negative number means that the toFind is larger than the currString
     */
     static int compareStrings(char[] currStr, char[] toFind, int toFindLength) {
+        if(currStr[0] != toFind[0]) {
+            return currStr[0] - toFind[0];
+        }
 
         int length = Math.min(currStr.length, toFind.length);
-
-        for (int i = 0; i < length; i++) {
+        for (int i = 1; i < length; i++) {
             if(currStr[i] != toFind[i]) {
                 return currStr[i] - toFind[i];
             }
@@ -114,53 +115,66 @@ public class SuffixArray implements ISearchStructure {
     }
 
 
-    private int findLeftLimit(int left, int right, String toFind) {
+    private int[] findLeftLimit(int left, int right, String toFind) {
         if(left > right) {
-            return -1;
+            return new int[0];
         }
 
-        int mid = left + (right-left)/2;
-        String currStr = source.substring(suffixIndexes.get(mid));
-        int res = compareStrings(currStr.toCharArray(), toFind.toCharArray(), toFind.length());
-
-        if(res == 0) {
-            // if the LCP is equal or above the size of the string to find, then we have more hits to the left
-            while(LCP[mid] >= toFind.length() && mid > 0) {
-                mid--;
+        while(left <= right) {
+            int mid = left + (right-left)/2;
+            String currStr = source.substring(suffixIndexes.get(mid));
+            int res = compareStrings(currStr.toCharArray(), toFind.toCharArray(), toFind.length());
+            if(res == 0) {
+                int leftBound = mid;
+                int rightBound = mid;
+                // if the LCP is equal or above the size of the string to find, then we have more hits to the left
+                while(LCP[leftBound] >= toFind.length() && leftBound > 0) {
+                    leftBound--;
+                }
+                while(LCP[rightBound + 1] >= toFind.length() && rightBound < suffixIndexes.size() - 2) {
+                    rightBound++;
+                }
+                return new int [] { leftBound, rightBound };
             }
-            return mid;
-        }
-        // if the value in mid is smaller than the toFind
-        if(res < 0) {
-            return findLeftLimit(mid + 1, right, toFind);
-        } else {
-            return findLeftLimit(left, mid - 1, toFind);
-        }
+            // if the value in mid is smaller than the toFind
+            if(res < 0) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
 
+        }
+        return new int[0];
     }
 
-    private int findRightLimit(int left, int right, String toFind) {
-        if(right < left) {
-            return -1;
-        }
-
-        int mid = left + (right-left)/2;
-        String currStr = source.substring(suffixIndexes.get(mid));
-        int res = compareStrings(currStr.toCharArray(), toFind.toCharArray(), toFind.length());
-
-        if(res == 0) {
-            // if the LCP is equal or above the size of the string to find, then we have more hits to the left
-            while(LCP[mid + 1] >= toFind.length() && mid < suffixIndexes.size() - 2) {
-                mid++;
-            }
-            return mid;
-        }
-        // if the value in mid is smaller than the toFind
-        if(res < 0) {
-            return findRightLimit(mid + 1, right, toFind);
-        } else {
-            return findRightLimit(left, mid - 1, toFind);
-        }
-    }
+//    private int[] findLeftLimit(int left, int right, String toFind) {
+//        if(left > right) {
+//            return new int[0];
+//        }
+//
+//        int mid = left + (right-left)/2;
+//        String currStr = source.substring(suffixIndexes.get(mid));
+//        int res = compareStrings(currStr.toCharArray(), toFind.toCharArray(), toFind.length());
+//
+//        if(res == 0) {
+//            int leftBound = mid;
+//            int rightBound = mid;
+//            // if the LCP is equal or above the size of the string to find, then we have more hits to the left
+//            while(LCP[leftBound] >= toFind.length() && leftBound > 0) {
+//                leftBound--;
+//            }
+//            while(LCP[rightBound + 1] >= toFind.length() && rightBound < suffixIndexes.size() - 2) {
+//                rightBound++;
+//            }
+//            return new int [] { leftBound, rightBound };
+//        }
+//        // if the value in mid is smaller than the toFind
+//        if(res < 0) {
+//            return findLeftLimit(mid + 1, right, toFind);
+//        } else {
+//            return findLeftLimit(left, mid - 1, toFind);
+//        }
+//
+//    }
 
 }
