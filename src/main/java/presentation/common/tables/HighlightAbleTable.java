@@ -31,10 +31,6 @@ public class HighlightAbleTable extends GeneralTablePanel {
         table.setDefaultRenderer(Object.class, getTableCellRenderer());
     }
 
-    public HighlightAbleTable(String title, String [] columns, boolean editable, boolean isSortable) {
-        this(title, columns, editable, 25, isSortable);
-    }
-
     public HighlightAbleTable(String [] columns, boolean editable, boolean isSortable) {
         this(null, columns, editable, 25, isSortable);
     }
@@ -52,8 +48,6 @@ public class HighlightAbleTable extends GeneralTablePanel {
         this.currentRow = row;
         this.currentIndex = index;
         Rectangle currentRect = table.getCellRect(row, MESSAGE_COLUMN_IDX, true);
-//        Rectangle pt = table.getVisibleRect();
-//        currentRect.setLocation(currentRect.x - pt.x, currentRect.y - pt.y);
         table.scrollRectToVisible(currentRect);
         table.repaint();
     }
@@ -75,7 +69,6 @@ public class HighlightAbleTable extends GeneralTablePanel {
                         String text = value.toString();
                         try {
                             highlightByIndexes(text, row);
-//                            highlightByIndexes(row);
                         } catch (BadLocationException e) {
                             LOGGER.log(Level.WARNING, e.getMessage());
                         }
@@ -92,14 +85,12 @@ public class HighlightAbleTable extends GeneralTablePanel {
                 int ctr = 0;
                 textField.getHighlighter().removeAllHighlights();
                 while((idx = text.indexOf(textToHighlight, idxAcc)) != -1) {
-                    System.out.println("text: " + text);
+
                     idxAcc = idx + textToHighlight.length();
                     if (row == currentRow && ctr == currentIndex) {
-                        System.out.println("blue: " + row + " " + currentRow);
                         textField.getHighlighter().addHighlight(idx, idx + textToHighlight.length(),
                                 new DefaultHighlighter.DefaultHighlightPainter(Color.BLUE));
                     } else {
-                        System.out.println("cyan: " + row + " " + currentRow);
                         textField.getHighlighter().addHighlight(idx, idx + textToHighlight.length(),
                                 new DefaultHighlighter.DefaultHighlightPainter(Color.CYAN));
                     }
@@ -107,42 +98,8 @@ public class HighlightAbleTable extends GeneralTablePanel {
                 }
             }
 
-            private void highlightByIndexes(int row) throws BadLocationException {
-                System.out.println("row: " + row + " current" + currentRow + " currentIndex: " + currentIndex);
-                if (row == currentRow) {
-                    textField.getHighlighter().addHighlight(currentIndex, currentIndex + textToHighlight.length(),
-                            new DefaultHighlighter.DefaultHighlightPainter(Color.BLUE));
-                } else {
-                    textField.getHighlighter().addHighlight(currentIndex, currentIndex + textToHighlight.length(),
-                            new DefaultHighlighter.DefaultHighlightPainter(Color.CYAN));
-                }
-            }
+
         };
     }
-//
-//    private TableCellRenderer getTableCellRenderer() {
-//        return new TableCellRenderer() {
-//            final JTextField textField = new JTextField();
-//
-//            @Override
-//            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-//                if (value != null) {
-//                    textField.setText(value.toString());
-//                    String text = value.toString();
-//                    int idx = text.indexOf(textToHighlight);
-//                    try {
-//
-//                        textField.getHighlighter().addHighlight(idx, idx + textToHighlight.length(),
-//                                new DefaultHighlighter.DefaultHighlightPainter(Color.BLUE));
-//                    } catch (BadLocationException e) {
-//                        LOGGER.log(Level.WARNING, e.getMessage());
-//                    }
-//                } else {
-//                    textField.getHighlighter().removeAllHighlights();
-//                }
-//
-//                return textField;
-//            }
-//        };
-//    }
+
 }

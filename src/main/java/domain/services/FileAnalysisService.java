@@ -81,17 +81,6 @@ public class FileAnalysisService {
         }).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
-//    public List<Pair<Integer, List<Integer>>> getStringPositionMatches(LogLine[] source, String toFind) {
-//        return Arrays.stream(source).parallel().map(logLine -> {
-//            List<Integer> indexes = logLine.getSearchStructure().searchStringIndexes(toFind, true);
-//            if(!indexes.isEmpty()) {
-//                return Pair.of(logLine.getPosition(), indexes);
-//            }
-//            return Pair.of(-1, new ArrayList());
-//        }).filter(pair -> pair.getLeft() >= 0).collect(ArrayList::new);
-//    }
-
-
     public LogLine[] getFilteredData(FileAnalysisFilterDo filterDo) {
         ArrayList<LogLine> filteredLines = new ArrayList<>();
         if(!hasLoadedData) {
