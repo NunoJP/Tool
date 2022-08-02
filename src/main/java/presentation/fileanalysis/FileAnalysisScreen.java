@@ -2,9 +2,9 @@ package presentation.fileanalysis;
 
 import presentation.common.GuiConstants;
 import presentation.common.custom.DateComponent;
-import presentation.common.custom.GeneralTablePanel;
 import presentation.common.custom.LabelTextFieldPanel;
 import presentation.common.custom.ScrollableTextArea;
+import presentation.common.tables.HighlightAbleTable;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -18,7 +18,7 @@ import static presentation.common.GuiConstants.V_GAP;
 
 public class FileAnalysisScreen extends JPanel {
 
-    private GeneralTablePanel fileContentsTable;
+    private HighlightAbleTable fileContentsTable;
     private LabelTextFieldPanel identifier;
     private LabelTextFieldPanel origin;
     private LabelTextFieldPanel level;
@@ -50,7 +50,7 @@ public class FileAnalysisScreen extends JPanel {
     private JPanel createCenterPanel() {
         JPanel holder = new JPanel(new BorderLayout());
         messageDetailsTextArea = new ScrollableTextArea();
-        fileContentsTable = new GeneralTablePanel(
+        fileContentsTable = new HighlightAbleTable(
                 new String[]{GuiConstants.DATE_COLUMN, GuiConstants.TIME_COLUMN, GuiConstants.IDENTIFIER_COLUMN,
                         GuiConstants.ORIGIN_COLUMN, GuiConstants.LEVEL_COLUMN, GuiConstants.MESSAGE_COLUMN}, false, false
         );
@@ -87,8 +87,8 @@ public class FileAnalysisScreen extends JPanel {
         secondRow.add(searchButton);
         nextSearchButton.setEnabled(false);
         previousSearchButton.setEnabled(false);
-        secondRow.add(nextSearchButton);
         secondRow.add(previousSearchButton);
+        secondRow.add(nextSearchButton);
 
         // Filter, Clear, Export buttons
         JPanel thirdRow = new JPanel(new FlowLayout(FlowLayout.LEFT, H_GAP, 0));
@@ -113,7 +113,7 @@ public class FileAnalysisScreen extends JPanel {
         fileContentsTable.resizeToMatchContents();
     }
 
-    public GeneralTablePanel getFileContentsTable() {
+    public HighlightAbleTable getFileContentsTable() {
         return fileContentsTable;
     }
 

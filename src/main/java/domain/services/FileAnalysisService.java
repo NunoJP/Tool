@@ -3,19 +3,19 @@ package domain.services;
 import data.dataaccess.reader.LogFileReader;
 import data.dataaccess.writer.LogFileWriter;
 import domain.entities.common.ParsingProfilePortion;
+import domain.entities.common.SearchResultLine;
 import domain.entities.common.TextClassesEnum;
 import domain.entities.displayobjects.FileAnalysisFilterDo;
 import domain.entities.domainobjects.LogLine;
 import domain.entities.domainobjects.MetricsProfile;
 import domain.entities.domainobjects.ParsingProfile;
-import general.util.Pair;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -71,15 +71,25 @@ public class FileAnalysisService {
         return true;
     }
 
-    public List<Pair<Integer, ? extends List>> getStringPositionMatches(LogLine[] source, String toFind) {
+    public List<SearchResultLine> getStringPositionMatches(LogLine[] source, String toFind) {
         return Arrays.stream(source).parallel().map(logLine -> {
-            List<Integer> indexes = logLine.getSearchStructure().searchStringIndexes(toFind, true);
-            if(!indexes.isEmpty()) {
-                return Pair.of(logLine.getPosition(), indexes);
+            Integer[] indexes = logLine.getSearchStructure().searchStringIndexes(toFind, true).toArray(Integer[]::new);
+            if(indexes.length > 0) {
+                return new SearchResultLine(logLine.getPosition(), indexes);
             }
-            return Pair.of(-1, Collections.EMPTY_LIST);
-        }).filter(pair -> pair.getLeft() >= 0).collect(Collectors.toList());
+            return null;
+        }).filter(Objects::nonNull).collect(Collectors.toList());
     }
+
+//    public List<Pair<Integer, List<Integer>>> getStringPositionMatches(LogLine[] source, String toFind) {
+//        return Arrays.stream(source).parallel().map(logLine -> {
+//            List<Integer> indexes = logLine.getSearchStructure().searchStringIndexes(toFind, true);
+//            if(!indexes.isEmpty()) {
+//                return Pair.of(logLine.getPosition(), indexes);
+//            }
+//            return Pair.of(-1, new ArrayList());
+//        }).filter(pair -> pair.getLeft() >= 0).collect(ArrayList::new);
+//    }
 
 
     public LogLine[] getFilteredData(FileAnalysisFilterDo filterDo) {

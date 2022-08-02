@@ -7,7 +7,7 @@ public class GuiConstants {
     public static final int MAIN_FRAME_WIDTH = 800;
     public static final int MAIN_FRAME_HEIGHT = 500;
     public static final int H_FILE_ANALYSIS_SCREEN_SIZE = 1200;
-    public static final int V_FILE_ANALYSIS_SCREEN_SIZE = 700;
+    public static final int V_FILE_ANALYSIS_SCREEN_SIZE = 740;
     public static final int H_FILE_MONITORING_SCREEN_SIZE = 1200;
     public static final int V_FILE_MONITORING_SCREEN_SIZE = 700;
     public static final int H_PARSING_PROFILES_EDITOR_SCREEN_SIZE = 650;

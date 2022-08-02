@@ -1,13 +1,13 @@
 package presentation.fileanalysis;
 
 import domain.entities.Converter;
+import domain.entities.common.SearchResultLine;
 import domain.entities.displayobjects.FileAnalysisFilterDo;
 import domain.entities.displayobjects.MetricsProfileDo;
 import domain.entities.displayobjects.ParsingProfileDo;
 import domain.entities.domainobjects.LogLine;
 import domain.services.FileAnalysisService;
 import general.util.DateTimeUtils;
-import general.util.Pair;
 import presentation.common.GuiConstants;
 import presentation.common.GuiMessages;
 import presentation.common.IViewPresenter;
@@ -43,8 +43,11 @@ public class FileAnalysisScreenPresenter implements IViewPresenter {
     private Date fileEndDate;
     private Date fileEndTime;
     private LogLine[] filteredData;
-    private List<Pair<Integer, ? extends List>> stringPositionMatches = new ArrayList<>();
-    private int currentSearchIndex = 0;
+    private List<SearchResultLine> indexesFound = new ArrayList<>();
+    private int currentSearchIndex = -1;
+    private int subSearchIndex = 0;
+    private boolean searchingWithinLine = false;
+    private SearchResultLine currentSearchResultLine;
 
     private static final Logger LOGGER = Logger.getLogger(FileAnalysisScreenPresenter.class.getName());
 
@@ -83,34 +86,36 @@ public class FileAnalysisScreenPresenter implements IViewPresenter {
         addMessageCellSelectionEvent();
 
         view.getSearchButton().addActionListener(actionEvent ->  {
-            stringPositionMatches = fileAnalysisService.getStringPositionMatches(data, view.getMessage().getVariableLabelText());
-
-            view.getNextSearchButton().setEnabled(true);
-            view.getPreviousSearchButton().setEnabled(true);
+            long start = System.nanoTime();
+            String textToFind = view.getMessage().getVariableLabelText();
+            if(textToFind != null && !textToFind.isEmpty()) {
+                indexesFound = fileAnalysisService.getStringPositionMatches(data, textToFind);
+                long end = System.nanoTime();
+                long acc = 0;
+                for (SearchResultLine stringPositionMatch : indexesFound) {
+                    acc += stringPositionMatch.getSearchIdx().length;
+                }
+                view.getFileContentsTable().updateHighlight(textToFind);
+                System.out.println(start + "\t" + end + "\t" + acc);
+                view.getNextSearchButton().setEnabled(true);
+                view.getPreviousSearchButton().setEnabled(true);
+            }
         });
 
         view.getNextSearchButton().addActionListener(actionEvent ->  {
-            if(stringPositionMatches == null || stringPositionMatches.size() == 0) {
+            if(indexesFound == null || indexesFound.size() == 0) {
                 return;
             }
-            currentSearchIndex++;
-            if(currentSearchIndex >= stringPositionMatches.size()) {
-                currentSearchIndex = 0;
-            }
 
-            view.getFileContentsTable().scrollToRow(stringPositionMatches.get(currentSearchIndex));
+            scrollToRowNext();
         });
 
         view.getPreviousSearchButton().addActionListener(actionEvent ->  {
-            if(stringPositionMatches == null || stringPositionMatches.size() == 0) {
+            if(indexesFound == null || indexesFound.size() == 0) {
                 return;
             }
-            currentSearchIndex--;
-            if(currentSearchIndex < 0) {
-                currentSearchIndex = stringPositionMatches.size() -1;
-            }
 
-            view.getFileContentsTable().scrollToRow(stringPositionMatches.get(currentSearchIndex));
+            scrollToRowPrev();
         });
 
 
@@ -162,6 +167,60 @@ public class FileAnalysisScreenPresenter implements IViewPresenter {
                 }
             }
         });
+    }
+
+    private void scrollToRowNext() {
+
+        if(searchingWithinLine) {
+            subSearchIndex++;
+            if(subSearchIndex >= currentSearchResultLine.numberOfResults()) {
+                searchingWithinLine = false;
+            } else {
+                view.getFileContentsTable().scrollToRow(currentSearchResultLine.getLogLineIdx(), subSearchIndex);
+                return;
+            }
+        }
+        // either wasn't searching within a line or the line has ended
+        currentSearchIndex++;
+        subSearchIndex = 0;
+        if(currentSearchIndex >= indexesFound.size()) {
+            currentSearchIndex = 0;
+        }
+
+        // get new line
+        currentSearchResultLine = indexesFound.get(currentSearchIndex);
+        if(currentSearchResultLine.numberOfResults() > 1) {
+            searchingWithinLine = true;
+        }
+        view.getFileContentsTable().scrollToRow(currentSearchResultLine.getLogLineIdx(), subSearchIndex);
+    }
+
+
+    private void scrollToRowPrev() {
+
+        if(searchingWithinLine) {
+            subSearchIndex--;
+            if(subSearchIndex < 0) {
+                searchingWithinLine = false;
+            } else {
+                view.getFileContentsTable().scrollToRow(currentSearchResultLine.getLogLineIdx(), subSearchIndex);
+                return;
+            }
+        }
+        // either wasn't searching within a line or the line has ended
+        currentSearchIndex--;
+        subSearchIndex = 0;
+        if(currentSearchIndex < 0) {
+            currentSearchIndex = indexesFound.size() -1;
+        }
+
+        // get new line
+        currentSearchResultLine = indexesFound.get(currentSearchIndex);
+        if(currentSearchResultLine.numberOfResults() > 1) {
+            searchingWithinLine = true;
+            subSearchIndex = currentSearchResultLine.numberOfResults() - 1;
+        }
+        view.getFileContentsTable().scrollToRow(currentSearchResultLine.getLogLineIdx(), subSearchIndex);
     }
 
     private void setDefaultDateTimeFilters() {
