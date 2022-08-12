@@ -10,6 +10,7 @@ public class EvaluationResult {
 
     private Keyword standard;
     private String actualValue;
+    private String total;
     private boolean thresholdMet;
 
     private EvaluationResult() {}
@@ -17,6 +18,12 @@ public class EvaluationResult {
     public EvaluationResult(Keyword standard, String actualValue) {
         this.standard = standard;
         this.actualValue = actualValue;
+    }
+
+    public EvaluationResult(Keyword standard, String actualValue, String total) {
+        this.standard = standard;
+        this.actualValue = actualValue;
+        this.total = total;
     }
 
     public static EvaluationResult emptyResult() {
@@ -40,5 +47,9 @@ public class EvaluationResult {
 
     public String actualValue() {
         return actualValue;
+    }
+
+    public String getTotal() {
+        return total;
     }
 }

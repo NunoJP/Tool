@@ -23,8 +23,15 @@ public class Warning {
                 break;
         }
 
-        message = String.format(GuiMessages.WARNING_MESSAGE_BASE, standard.getThresholdValue(), standard.getKeywordText(), particle);
+        message = String.format(getMessageBase(standard), standard.getThresholdValue(), standard.getKeywordText(), particle);
         warningLevel = standard.getWarningLevel();
+    }
+
+    private String getMessageBase(Keyword standard) {
+        if(ThresholdUnitEnum.PERCENTAGE.getName().equals(standard.getThresholdUnit().getName())) {
+            return GuiMessages.WARNING_MESSAGE_BASE_PERCENTAGE;
+        }
+        return GuiMessages.WARNING_MESSAGE_BASE_OCCURRENCES;
     }
 
     public String getMessage() {

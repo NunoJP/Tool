@@ -139,7 +139,11 @@ public class MetricsReport {
 
     private String makeThresholdMessage(EvaluationResult result) {
         Keyword standard = result.getStandard();
-        return String.format(GuiMessages.THRESHOLD_VALUE_BASE, standard.getKeywordText(),
+        if(ThresholdUnitEnum.PERCENTAGE.getName().equals(standard.getThresholdUnit().getName())) {
+            return String.format(GuiMessages.THRESHOLD_VALUE_BASE_PERCENTAGE, standard.getKeywordText(),
+                    standard.getThresholdValue(), result.actualValue(), result.getTotal());
+        }
+        return String.format(GuiMessages.THRESHOLD_VALUE_BASE_OCCURRENCE, standard.getKeywordText(),
                 standard.getThresholdValue(), result.actualValue());
     }
 
@@ -162,11 +166,11 @@ public class MetricsReport {
 
 
     protected Optional<EvaluationResult> evaluate(Keyword standard, Integer currValue, Integer total) {
-        EvaluationResult evaluationResult = new EvaluationResult(standard, String.valueOf(currValue));
         if(ThresholdUnitEnum.PERCENTAGE.equals(standard.getThresholdUnit())) {
+            EvaluationResult evaluationResult = new EvaluationResult(standard, String.valueOf(currValue), String.valueOf(total));
             BigDecimal curr = new BigDecimal(currValue);
             BigDecimal tot = new BigDecimal(total);
-            BigDecimal percentage = curr.divide(tot, 4, RoundingMode.HALF_EVEN);
+            BigDecimal percentage = curr.multiply(new BigDecimal(100)).divide(tot, 4, RoundingMode.HALF_EVEN);
             switch (standard.getThresholdType()) {
                 case EQUAL_TO:
                     if(standard.getThresholdValue().compareTo(percentage) == 0) {
@@ -174,28 +178,29 @@ public class MetricsReport {
                     }
                     break;
                 case BIGGER_THAN:
-                    if(standard.getThresholdValue().compareTo(percentage) > 0) {
+                    if(standard.getThresholdValue().compareTo(percentage) < 0) {
                         evaluationResult.setThresholdMet();
                     }
                     break;
                 case BIGGER_OR_EQUAL_THAN:
-                    if(standard.getThresholdValue().compareTo(percentage) >= 0) {
-                        evaluationResult.setThresholdMet();
-                    }
-                    break;
-                case SMALLER_OR_EQUAL_THAN:
                     if(standard.getThresholdValue().compareTo(percentage) <= 0) {
                         evaluationResult.setThresholdMet();
                     }
                     break;
+                case SMALLER_OR_EQUAL_THAN:
+                    if(standard.getThresholdValue().compareTo(percentage) >= 0) {
+                        evaluationResult.setThresholdMet();
+                    }
+                    break;
                 case SMALLER_THAN:
-                    if(standard.getThresholdValue().compareTo(percentage) < 0) {
+                    if(standard.getThresholdValue().compareTo(percentage) > 0) {
                         evaluationResult.setThresholdMet();
                     }
                     break;
             }
             return Optional.of(evaluationResult);
         } else if(ThresholdUnitEnum.OCCURRENCES.equals(standard.getThresholdUnit())) {
+            EvaluationResult evaluationResult = new EvaluationResult(standard, String.valueOf(currValue));
             switch (standard.getThresholdType()) {
                 case EQUAL_TO:
                     if(standard.getThresholdValue().intValue() == currValue) {

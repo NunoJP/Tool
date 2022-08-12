@@ -158,10 +158,14 @@ public class MetricsProfileEditorScreenPresenter {
             JSpinner valueInput = dialogView.getThresholdValueInput();
             if(event.getItem().equals(ThresholdUnitEnum.PERCENTAGE)) {
                 valueInput.setEnabled(true);
-                valueInput.setModel(new SpinnerNumberModel(0.0, 0.0, 1, .1));
+                valueInput.setModel(new SpinnerNumberModel(0.0, 0.0, 100, .1));
+                JSpinner.NumberEditor editor = new JSpinner.NumberEditor(valueInput, "0.00");
+                valueInput.setEditor(editor);
             } else if(event.getItem().equals(ThresholdUnitEnum.OCCURRENCES)) {
                 valueInput.setEnabled(true);
                 valueInput.setModel(new SpinnerNumberModel(0, 0, 100000.0, 1));
+                JSpinner.NumberEditor editor = new JSpinner.NumberEditor(valueInput, "#");
+                valueInput.setEditor(editor);
             } else {
                 valueInput.setEnabled(false);
             }

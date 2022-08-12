@@ -40,17 +40,24 @@ public class WarningTests {
         Keyword kwd5 = new Keyword(word5, false);
         kwd5.setThresholdTrio(biggerOrEqualThan, ThresholdUnitEnum.OCCURRENCES, new BigDecimal(val));
         warning = new Warning(kwd5);
-        assertEquals(makeMessage(kwd5, warningMessageParticleSurpassed), warning.getMessage());
+        assertEquals(makeWarningMessage(kwd5, warningMessageParticleSurpassed), warning.getMessage());
     }
 
     private void testCombination(String word0, ThresholdTypeEnum biggerOrEqualThan, String warningMessageParticleMetOrSurpassed) {
         Keyword kwd0 = new Keyword(word0, false);
         kwd0.setThresholdTrio(biggerOrEqualThan, ThresholdUnitEnum.PERCENTAGE, new BigDecimal("0.1"));
         warning = new Warning(kwd0);
-        assertEquals(makeMessage(kwd0, warningMessageParticleMetOrSurpassed), warning.getMessage());
+        assertEquals(makeWarningMessage(kwd0, warningMessageParticleMetOrSurpassed), warning.getMessage());
     }
 
-    private String makeMessage(Keyword keyword, String particle) {
-        return String.format(GuiMessages.WARNING_MESSAGE_BASE, keyword.getThresholdValue(), keyword.getKeywordText(), particle);
+    public static String makeWarningMessage(Keyword keyword, String particle) {
+        return String.format(getMessageBase(keyword), keyword.getThresholdValue(), keyword.getKeywordText(), particle);
+    }
+
+    private static String getMessageBase(Keyword standard) {
+        if(ThresholdUnitEnum.PERCENTAGE.getName().equals(standard.getThresholdUnit().getName())) {
+            return GuiMessages.WARNING_MESSAGE_BASE_PERCENTAGE;
+        }
+        return GuiMessages.WARNING_MESSAGE_BASE_OCCURRENCES;
     }
 }
