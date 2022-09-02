@@ -31,7 +31,7 @@ public abstract class BaseGraphPanel extends JPanel {
 
     protected abstract void drawContents(Graphics2D g2);
     
-    private void calculateGraphSize() {
+    protected void calculateGraphSize() {
 
         // area size
         chartWidth = this.getWidth() - 4 * AXIS_OFFSET;
@@ -71,7 +71,7 @@ public abstract class BaseGraphPanel extends JPanel {
         BigDecimal maxBigDec = new BigDecimal((int)max);
 
         int numberOfLabels = Math.min(numberOfPoints, MAX_Y_LABELS);
-        BigDecimal maxFraction = maxBigDec.divide(new BigDecimal(numberOfLabels), RoundingMode.HALF_UP);
+        BigDecimal maxFraction = maxBigDec.divide(new BigDecimal(numberOfLabels), RoundingMode.CEILING);
 
         graphics2D.setColor(new Color(13, 25, 80));
         int fractionAccumulator = 0;

@@ -42,9 +42,12 @@ public class KeywordOccurrencesConsumer implements IMetricsReportConsumer {
                 }
                 int count = wordsFromMessages.getOrDefault(extractedKwd, 0);
                 wordsFromMessages.put(extractedKwd, count + ctr);
-                List<Pair<Long, Date>> pairs = keywordsWithDate.getOrDefault(extractedKwd, new ArrayList<>());
-                pairs.add(Pair.of((long) ctr, logLine.getTemporalRepresentation()));
-                keywordsWithDate.put(extractedKwd, pairs);
+
+                if (ctr != 0) {
+                    List<Pair<Long, Date>> pairs = keywordsWithDate.getOrDefault(extractedKwd, new ArrayList<>());
+                    pairs.add(Pair.of((long) ctr, logLine.getTemporalRepresentation()));
+                    keywordsWithDate.put(extractedKwd, pairs);
+                }
                 ctr = 0;
             }
 
