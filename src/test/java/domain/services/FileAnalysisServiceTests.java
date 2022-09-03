@@ -1,6 +1,7 @@
 package domain.services;
 
 import data.dataaccess.reader.LogFileReader;
+import domain.entities.common.SearchResultLine;
 import domain.entities.displayobjects.FileAnalysisFilterDo;
 import domain.entities.domainobjects.LogLine;
 import domain.entities.domainobjects.MetricsProfile;
@@ -14,6 +15,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.function.Consumer;
 
 import static org.junit.Assert.assertEquals;
@@ -44,6 +46,7 @@ public class FileAnalysisServiceTests {
             line.setIdentifier(IDENTIFIER_BASE + i);
             line.setDate(dateFormat.parse(DATE_BASE + i));
             line.setTime(timeFormat.parse(TIME_BASE + i));
+            line.setPosition(i);
             data[i] = line;
         }
     }
@@ -262,6 +265,120 @@ public class FileAnalysisServiceTests {
         Date time2 = timeFormat.parse(TIME_BASE + 2);
         assertFalse(serviceWrapper.checkDateTimeIsAfter(date1, date2));
         assertFalse(serviceWrapper.checkDateTimeIsAfter(time1, time2));
+    }
+
+    @Test
+    public void testStringPositionMatches() throws ParseException {
+        String [] messages = new String[] {
+                "Test at position 0",
+                "01234Test at position 5",
+                "01234Test at position 5 and 31 Test",
+                "No match",
+                "TestTestTest"
+        };
+
+
+        data = new LogLine[5];
+        for (int i = 0; i < data.length; i++) {
+            LogLine line = new LogLine();
+            line.setLevel(LEVEL_BASE + i);
+            line.setOrigin(ORIGIN_BASE + i);
+            line.setIdentifier(IDENTIFIER_BASE + i);
+            line.setDate(dateFormat.parse(DATE_BASE + i));
+            line.setTime(timeFormat.parse(TIME_BASE + i));
+            line.setMessage(messages[i]);
+            line.setPosition(i);
+            line.calculateSearchStructure();
+            data[i] = line;
+        }
+
+
+        FileAnalysisServiceWrapper serviceWrapper = new FileAnalysisServiceWrapper(null, null, null, data);
+        List<SearchResultLine> positionMatches = serviceWrapper.getStringPositionMatches(data, "Test");
+        assertEquals(4, positionMatches.size());
+
+        assertEquals(0, positionMatches.get(0).getSearchIdx()[0].intValue());
+        assertEquals(0, positionMatches.get(0).getLogLineIdx());
+        assertEquals(1, positionMatches.get(0).numberOfResults());
+
+        assertEquals(5, positionMatches.get(1).getSearchIdx()[0].intValue());
+        assertEquals(1, positionMatches.get(1).getLogLineIdx());
+        assertEquals(1, positionMatches.get(1).numberOfResults());
+
+        assertEquals(5, positionMatches.get(2).getSearchIdx()[0].intValue());
+        assertEquals(31, positionMatches.get(2).getSearchIdx()[1].intValue());
+        assertEquals(2, positionMatches.get(2).getLogLineIdx());
+        assertEquals(2, positionMatches.get(2).numberOfResults());
+
+        assertEquals(0, positionMatches.get(3).getSearchIdx()[0].intValue());
+        assertEquals(4, positionMatches.get(3).getSearchIdx()[1].intValue());
+        assertEquals(8, positionMatches.get(3).getSearchIdx()[2].intValue());
+        assertEquals(4, positionMatches.get(3).getLogLineIdx());
+        assertEquals(3, positionMatches.get(3).numberOfResults());
+    }
+
+
+    @Test
+    public void testStringPositionMatchesNoMatches() throws ParseException {
+        String [] messages = new String[] {
+                "Will find nothing",
+                "because I want to tes-t that",
+                "t est te st tes t",
+                "No match",
+                ""
+        };
+
+
+        data = new LogLine[5];
+        for (int i = 0; i < data.length; i++) {
+            LogLine line = new LogLine();
+            line.setLevel(LEVEL_BASE + i);
+            line.setOrigin(ORIGIN_BASE + i);
+            line.setIdentifier(IDENTIFIER_BASE + i);
+            line.setDate(dateFormat.parse(DATE_BASE + i));
+            line.setTime(timeFormat.parse(TIME_BASE + i));
+            line.setMessage(messages[i]);
+            line.setPosition(i);
+            line.calculateSearchStructure();
+            data[i] = line;
+        }
+
+
+        FileAnalysisServiceWrapper serviceWrapper = new FileAnalysisServiceWrapper(null, null, null, data);
+        List<SearchResultLine> positionMatches = serviceWrapper.getStringPositionMatches(data, "Test");
+        assertEquals(0, positionMatches.size());
+    }
+
+
+    @Test
+    public void testStringPositionMatchesNoMatchesCaseSensitive() throws ParseException {
+        String [] messages = new String[] {
+                "Test at position 0",
+                "01234Test at position 5",
+                "01234Test at position 5 and 31 Test",
+                "No match",
+                "TestTestTest"
+        };
+
+
+        data = new LogLine[5];
+        for (int i = 0; i < data.length; i++) {
+            LogLine line = new LogLine();
+            line.setLevel(LEVEL_BASE + i);
+            line.setOrigin(ORIGIN_BASE + i);
+            line.setIdentifier(IDENTIFIER_BASE + i);
+            line.setDate(dateFormat.parse(DATE_BASE + i));
+            line.setTime(timeFormat.parse(TIME_BASE + i));
+            line.setMessage(messages[i]);
+            line.setPosition(i);
+            line.calculateSearchStructure();
+            data[i] = line;
+        }
+
+
+        FileAnalysisServiceWrapper serviceWrapper = new FileAnalysisServiceWrapper(null, null, null, data);
+        List<SearchResultLine> positionMatches = serviceWrapper.getStringPositionMatches(data, "test");
+        assertEquals(0, positionMatches.size());
     }
 
 

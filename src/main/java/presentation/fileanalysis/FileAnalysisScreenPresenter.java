@@ -95,6 +95,8 @@ public class FileAnalysisScreenPresenter implements IViewPresenter {
                 for (SearchResultLine stringPositionMatch : indexesFound) {
                     acc += stringPositionMatch.getSearchIdx().length;
                 }
+                subSearchIndex = 0;
+                currentSearchIndex = -1;
                 view.getFileContentsTable().updateHighlight(textToFind);
                 System.out.println(start + "\t" + end + "\t" + acc);
                 view.getNextSearchButton().setEnabled(true);

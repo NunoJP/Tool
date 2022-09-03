@@ -89,7 +89,7 @@ public class HighlightAbleTable extends GeneralTablePanel {
                     idxAcc = idx + textToHighlight.length();
                     if (row == currentRow && ctr == currentIndex) {
                         textField.getHighlighter().addHighlight(idx, idx + textToHighlight.length(),
-                                new DefaultHighlighter.DefaultHighlightPainter(Color.BLUE));
+                                new DefaultHighlighter.DefaultHighlightPainter(Color.decode("#03adfc")));
                     } else {
                         textField.getHighlighter().addHighlight(idx, idx + textToHighlight.length(),
                                 new DefaultHighlighter.DefaultHighlightPainter(Color.CYAN));
