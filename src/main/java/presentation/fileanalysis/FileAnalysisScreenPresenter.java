@@ -241,10 +241,14 @@ public class FileAnalysisScreenPresenter implements IViewPresenter {
     }
 
     private void calculateFirstAndLastDateTime() throws ParseException {
-        fileStartDate = DateTimeUtils.getDateFromLogLine(data[0]);
-        fileStartTime = DateTimeUtils.getTimeFromLogLine(data[0]);
-        fileEndDate = DateTimeUtils.getDateFromLogLine(data[data.length-1]);
-        fileEndTime = DateTimeUtils.getTimeFromLogLine(data[data.length-1]);
+        if (parsingProfile.hasDateOrTimestamp()){
+            fileStartDate = DateTimeUtils.getDateFromLogLine(data[0]);
+            fileEndDate = DateTimeUtils.getDateFromLogLine(data[data.length-1]);
+        }
+        if (parsingProfile.hasTimeOrTimestamp()) {
+            fileStartTime = DateTimeUtils.getTimeFromLogLine(data[0]);
+            fileEndTime = DateTimeUtils.getTimeFromLogLine(data[data.length - 1]);
+        }
     }
 
 

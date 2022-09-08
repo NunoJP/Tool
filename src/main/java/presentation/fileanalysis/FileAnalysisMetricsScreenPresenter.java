@@ -2,6 +2,7 @@ package presentation.fileanalysis;
 
 import domain.entities.Converter;
 import domain.entities.displayobjects.MetricsProfileDo;
+import domain.entities.displayobjects.ParsingProfileDo;
 import domain.entities.domainobjects.MetricsReport;
 import domain.services.FileAnalysisMetricsService;
 import domain.services.FileAnalysisService;
@@ -25,10 +26,12 @@ public class FileAnalysisMetricsScreenPresenter implements IViewPresenter {
     private final FileAnalysisMetricsScreen view;
     private final FileAnalysisMetricsService fileAnalysisMetricsService;
     private static final Logger LOGGER = Logger.getLogger(FileAnalysisMetricsScreenPresenter.class.getName());
+    private ParsingProfileDo parsingProfile;
 
     public FileAnalysisMetricsScreenPresenter(JFrame motherFrame,
                                               MetricsProfileDo metricsProfile,
-                                              FileAnalysisService fileAnalysisService) {
+                                              ParsingProfileDo parsingProfile, FileAnalysisService fileAnalysisService) {
+        this.parsingProfile = parsingProfile;
         view = new FileAnalysisMetricsScreen(motherFrame, metricsProfile);
         fileAnalysisService.setLogMessageConsumer(this::messagePopup);
         this.fileAnalysisMetricsService = new FileAnalysisMetricsService(fileAnalysisService, Converter.toDomainObject(metricsProfile));
@@ -70,7 +73,7 @@ public class FileAnalysisMetricsScreenPresenter implements IViewPresenter {
         view.getFileNamePanel().setVariableLabelText(metricsReport.getFileName());
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_TIME_FORMATTER);
         try {
-            view.getStartDatePanel().setVariableLabelText(sdf.format(metricsReport.getStartDate()));
+            view.getStartDatePanel().setVariableLabelText(adaptDateToProfile(sdf.format(metricsReport.getStartDate())));
         } catch (ParseException pe) {
             LOGGER.log(Level.WARNING, pe.getMessage());
             view.getStartDatePanel().setVariableLabelText(GuiMessages.ERROR_PARSING_DATE);
@@ -79,7 +82,7 @@ public class FileAnalysisMetricsScreenPresenter implements IViewPresenter {
             view.getStartDatePanel().setVariableLabelText(GuiMessages.ERROR_TIMESTAMP_DATE_TIME_MISSING);
         }
         try {
-            view.getEndDatePanel().setVariableLabelText(sdf.format(metricsReport.getEndDate()));
+            view.getEndDatePanel().setVariableLabelText(adaptDateToProfile(sdf.format(metricsReport.getEndDate())));
         } catch (ParseException pe) {
             LOGGER.log(Level.WARNING, pe.getMessage());
             view.getEndDatePanel().setVariableLabelText(GuiMessages.ERROR_PARSING_DATE);
@@ -98,6 +101,15 @@ public class FileAnalysisMetricsScreenPresenter implements IViewPresenter {
             view.setKeywordOverTimeData(metricsReport.getKwdOverTime());
         }
 
+    }
+
+    private String adaptDateToProfile(String formattedDate) {
+        if (parsingProfile.hasDateOrTimestamp()) {
+            return formattedDate;
+        } else if (parsingProfile.hasTime()) {
+            return formattedDate.substring(formattedDate.indexOf(" ") + 1);
+        }
+        return "";
     }
 
 

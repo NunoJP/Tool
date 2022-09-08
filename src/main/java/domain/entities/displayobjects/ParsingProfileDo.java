@@ -1,6 +1,7 @@
 package domain.entities.displayobjects;
 
 import domain.entities.common.ParsingProfilePortion;
+import domain.entities.common.TextClassesEnum;
 
 import java.util.ArrayList;
 
@@ -147,4 +148,32 @@ public class ParsingProfileDo {
     }
 
 
+    public boolean hasDateOrTimestamp() {
+        for (ParsingProfilePortion portion : portions) {
+            if (portion.getPortionName().equals(TextClassesEnum.DATE.getName()) ||
+                    portion.getPortionName().equals(TextClassesEnum.TIMESTAMP.getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasTimeOrTimestamp() {
+        for (ParsingProfilePortion portion : portions) {
+            if (portion.getPortionName().equals(TextClassesEnum.TIME.getName()) ||
+                    portion.getPortionName().equals(TextClassesEnum.TIMESTAMP.getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasTime() {
+        for (ParsingProfilePortion portion : portions) {
+            if (portion.getPortionName().equals(TextClassesEnum.TIME.getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
