@@ -33,27 +33,20 @@ public class MetricsMonitoringService {
     }
 
     public void start() {
-        System.out.println("MetricsMonitoringService 1");
         logLineConsumer = new DynamicLogFileReaderConsumer((this::updateLocalReport), parsingProfile, metricsProfile);
-        System.out.println("MetricsMonitoringService 2");
         LogFileReaderWrapper logFileReaderWrapper = new LogFileReaderWrapper(logFileReader, logLineConsumer);
         (new Thread(logFileReaderWrapper)).start();
 
-
-        System.out.println("MetricsMonitoringService 3");
         while (keepGoing.get()) {
-            System.out.println("MetricsMonitoringService 4");
             try {
-                Thread.sleep(300);
+                Thread.sleep(600);
             } catch (InterruptedException e) {
                 LOGGER.log(Level.SEVERE, "Error in thread sleep at MetricsMonitoringService", e);
             }
-            System.out.println("MetricsMonitoringService 5");
             if (wasChanged) {
                 System.out.println("changed");
                 reportConsumer.accept(getCurrentReportAndMarkUnchanged());
             }
-            System.out.println("MetricsMonitoringService 6");
         }
     }
 
@@ -63,7 +56,6 @@ public class MetricsMonitoringService {
     }
 
     private void updateLocalReport(MetricsReport report){
-//        System.out.println("MetricsMonitoringService 7");
         this.previousReport = currentReport;
         this.currentReport = report;
         this.wasChanged = true;

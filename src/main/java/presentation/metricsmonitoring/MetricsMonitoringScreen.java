@@ -204,8 +204,9 @@ public class MetricsMonitoringScreen extends JDialog {
     }
 
     public void setKeywordHistogramData(HashMap<Keyword, Integer> barChartData) {
+        int [] indexes = keywordOverTime.getIndexes();
         keywordHistogram = null;
-        keywordHistogram = new KeywordHistogramPanel(motherFrame);
+        keywordHistogram = new KeywordHistogramPanel(motherFrame, indexes);
         keywordHistogram.updateChart(barChartData);
         tabbedPane.setComponentAt(keywordHistogramTabPosition, keywordHistogram);
     }
@@ -217,8 +218,9 @@ public class MetricsMonitoringScreen extends JDialog {
     }
 
     public void setKeywordOverTimeData(HashMap<Keyword, List<Pair<Long, Date>>> chartData) {
+        int [] indexes = keywordOverTime.getIndexes();
         keywordOverTime = null;
-        keywordOverTime = new KeywordsOverTimePanel(motherFrame);
+        keywordOverTime = new KeywordsOverTimePanel(motherFrame, indexes);
         keywordOverTime.updateChart(chartData);
         tabbedPane.setComponentAt(keywordsOverTimeTabPosition, keywordOverTime);
     }
