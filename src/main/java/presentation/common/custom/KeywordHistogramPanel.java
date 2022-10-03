@@ -24,6 +24,10 @@ public class KeywordHistogramPanel extends MultiPanelPanel<Keyword, Integer> {
         super(frame);
     }
 
+    public KeywordHistogramPanel(JFrame motherFrame, int[] indexes) {
+        super(motherFrame, indexes);
+    }
+
 
     public void updateChart(HashMap<Keyword, Integer> barChartData) {
         reset();
@@ -61,6 +65,8 @@ public class KeywordHistogramPanel extends MultiPanelPanel<Keyword, Integer> {
 
         currPageLabel.setText(getCurrPageLabel());
         this.add(cardPanel, BorderLayout.CENTER);
+
+        setToPreviouslySelectedCard();
     }
 
 

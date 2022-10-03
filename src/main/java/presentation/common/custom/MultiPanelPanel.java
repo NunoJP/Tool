@@ -20,13 +20,21 @@ public abstract class MultiPanelPanel<T, V> extends JPanel{
     protected JLabel currPageLabel;
     protected int numberOfPanels = 0;
     protected int currentPanel = 0;
+    protected int oldNumberOfPanels = 0;
+    protected int oldCurrentPanel = 0;
     protected CardLayout cardLayout;
     protected JPanel cardPanel;
 
     public MultiPanelPanel(JFrame frame) {
+        this(frame, new int[] { 0, 0 });
+    }
+
+    public MultiPanelPanel(JFrame motherFrame, int[] indexes) {
         this.setLayout(new BorderLayout(H_GAP, V_GAP));
         this.setBorder(new EmptyBorder(V_GAP, H_GAP, V_GAP, H_GAP));
         this.add(createButtonPanel(), BorderLayout.SOUTH);
+        this.oldCurrentPanel = indexes[0];
+        this.oldNumberOfPanels = indexes[1];
         setBehaviour();
     }
 
@@ -54,6 +62,21 @@ public abstract class MultiPanelPanel<T, V> extends JPanel{
         currentPanel = 0;
     }
 
+    public void setToPreviouslySelectedCard() {
+
+        // there are new panels, we cannot guarantee that the order is the same
+        if(oldNumberOfPanels != numberOfPanels) {
+            return;
+        }
+
+        // it should not happen, but if there are fewer panels now, we cannot go beyond the size obviously
+        if(oldCurrentPanel < numberOfPanels) {
+            this.cardLayout.show(cardPanel, oldCurrentPanel + "");
+            this.currentPanel = oldCurrentPanel;
+            currPageLabel.setText(getCurrPageLabel());
+        }
+    }
+
 
     private void setBehaviour() {
         this.nextPanelButton.addActionListener(e -> {
@@ -70,5 +93,9 @@ public abstract class MultiPanelPanel<T, V> extends JPanel{
                 currPageLabel.setText(getCurrPageLabel());
             }
         });
+    }
+
+    public int[] getIndexes() {
+        return new int[] { currentPanel, numberOfPanels };
     }
 }

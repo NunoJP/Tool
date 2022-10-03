@@ -21,10 +21,15 @@ public class KeywordsOverTimePanel extends MultiPanelPanel<Keyword, List<Pair<Lo
         super(frame);
     }
 
+    public KeywordsOverTimePanel(JFrame motherFrame, int[] indexes) {
+        super(motherFrame, indexes);
+    }
+
     @Override
     public void updateChart(HashMap<Keyword, List<Pair<Long, Date>>> pointChartData) {
-        reset();
+
         Set<Map.Entry<Keyword, List<Pair<Long, Date>>>> entries = pointChartData.entrySet();
+        reset();
 
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
@@ -36,6 +41,8 @@ public class KeywordsOverTimePanel extends MultiPanelPanel<Keyword, List<Pair<Lo
 
         currPageLabel.setText(getCurrPageLabel());
         this.add(cardPanel, BorderLayout.CENTER);
+
+        setToPreviouslySelectedCard();
     }
 
 
