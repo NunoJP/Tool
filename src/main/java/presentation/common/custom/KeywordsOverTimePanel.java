@@ -2,7 +2,7 @@ package presentation.common.custom;
 
 import domain.entities.common.Keyword;
 import general.util.Pair;
-import presentation.common.custom.graphs.PointPlotChartPanel;
+import presentation.common.custom.graphs.PointPlotChartPanelHolder;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -34,7 +34,7 @@ public class KeywordsOverTimePanel extends MultiPanelPanel<Keyword, List<Pair<Lo
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
         for (Map.Entry<Keyword, List<Pair<Long, Date>>> section : entries) {
-            PointPlotChartPanel chartPanel = new PointPlotChartPanel(section.getValue());
+            PointPlotChartPanelHolder chartPanel = new PointPlotChartPanelHolder(section.getValue(), section.getKey().getKeywordText());
             cardPanel.add(chartPanel, numberOfPanels + "");
             numberOfPanels++;
         }

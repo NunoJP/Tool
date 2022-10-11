@@ -1,15 +1,14 @@
 package presentation.common.custom.graphs;
 
 import general.util.Pair;
-import presentation.common.GuiConstants;
 
+import javax.swing.BorderFactory;
+import javax.swing.border.BevelBorder;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,11 +20,12 @@ public class PointPlotChartPanel extends BaseGraphPanel {
     private final List<Pair<Long, Date>> mapping;
 
     public PointPlotChartPanel(List<Pair<Long, Date>> mapping) {
-        this.mapping = mapping;
+        this.mapping = new ArrayList<>(mapping);
+        setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
     }
 
     public PointPlotChartPanel() {
-        this.mapping = new ArrayList<>();
+        this(new ArrayList<>());
     }
 
     @Override
@@ -44,16 +44,18 @@ public class PointPlotChartPanel extends BaseGraphPanel {
         int cutOffForEntries = new BigDecimal(numberOfPoints).divide(new BigDecimal(totalAllowedPoints), RoundingMode.CEILING).intValue();
         boolean shouldSkipEntries = numberOfPoints > (totalAllowedPoints * 2);
         int pointSpacing;
-        if(shouldSkipEntries) {
-            pointSpacing = MIN_POINT_SPACING;
-        } else {
-            pointSpacing = chartWidth / POINT_SIZE / (Math.min(numberOfPoints, totalAllowedPoints));
-        }
+//        if(shouldSkipEntries) {
+//            pointSpacing = MIN_POINT_SPACING;
+//        } else {
+//            pointSpacing = chartWidth / POINT_SIZE / (Math.min(numberOfPoints, totalAllowedPoints));
+            pointSpacing = chartWidth / (Math.min(numberOfPoints, totalAllowedPoints));
+//        }
 
+//        System.out.println("=======================");
         int counter = 0;
         int skeCounter = 0;
         for (Pair<Long, Date> pair : mapping) {
-
+//            System.out.println("OCCs: " + pair.getLeft() + " Date: " + pair.getRight());
             if(shouldSkipEntries) { // to avoid over crowding the screen
                 if(counter % cutOffForEntries == 0){
                     createPoint(graphics2D, maxValue, pointSpacing, skeCounter, pair);
@@ -66,6 +68,8 @@ public class PointPlotChartPanel extends BaseGraphPanel {
             // general counter, needed for regular charts and for calculating which points to skip
             counter++;
         }
+
+
 
     }
 
@@ -82,23 +86,8 @@ public class PointPlotChartPanel extends BaseGraphPanel {
 
         // draw point
         graphics2D.fill(new Ellipse2D.Double(xLeft, yTopLeft - POINT_SIZE, POINT_SIZE, POINT_SIZE));
-
-        // draw X label
-        if (counter == 0) {
-            graphics2D.drawString(convertToString(pair.getRight()), xLeft, chartZeroY + AXIS_OFFSET / 2 + AXIS_OFFSET / 3);
-        } else if (counter == mapping.size() / 2) {
-            graphics2D.drawString(convertToString(pair.getRight()), xLeft - pointSpacing / 2, chartZeroY + AXIS_OFFSET / 2 + AXIS_OFFSET / 3);
-        } else if (counter == mapping.size() - 1) {
-            String s = convertToString(pair.getRight());
-            graphics2D.drawString(s, xLeft - graphics2D.getFontMetrics().stringWidth(s),
-                    chartZeroY + AXIS_OFFSET / 2 + AXIS_OFFSET / 3);
-        }
     }
 
-    private String convertToString(Date instant) {
-        DateFormat timeStampFormat = new SimpleDateFormat(GuiConstants.DATE_TIME_FORMATTER);
-        return timeStampFormat.format(instant);
-    }
 
 
 }

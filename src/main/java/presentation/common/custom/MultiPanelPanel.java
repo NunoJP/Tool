@@ -24,12 +24,14 @@ public abstract class MultiPanelPanel<T, V> extends JPanel{
     protected int oldCurrentPanel = 0;
     protected CardLayout cardLayout;
     protected JPanel cardPanel;
+    protected JFrame motherFrame;
 
     public MultiPanelPanel(JFrame frame) {
         this(frame, new int[] { 0, 0 });
     }
 
     public MultiPanelPanel(JFrame motherFrame, int[] indexes) {
+        this.motherFrame = motherFrame;
         this.setLayout(new BorderLayout(H_GAP, V_GAP));
         this.setBorder(new EmptyBorder(V_GAP, H_GAP, V_GAP, H_GAP));
         this.add(createButtonPanel(), BorderLayout.SOUTH);

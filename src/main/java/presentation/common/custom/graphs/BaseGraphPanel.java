@@ -17,6 +17,7 @@ public abstract class BaseGraphPanel extends JPanel {
     protected final int MAX_STRING_SIZE = 20;
     protected static final int ELLIPSIS_SIZE = 3;
     private static final int MAX_Y_LABELS = 20;
+    protected int endOfAxisX;
 
     @Override
     public void paintComponent(Graphics g) {
@@ -46,7 +47,7 @@ public abstract class BaseGraphPanel extends JPanel {
 
     protected void drawAxis(Graphics2D graphics2D) {
         // calculate the end points for the axis
-        int endOfAxisX = chartZeroX + chartWidth;
+        endOfAxisX = chartZeroX + chartWidth;
         int endOfAxisY = chartZeroY - chartHeight;
 
         graphics2D.drawLine(chartZeroX, chartZeroY, endOfAxisX, chartZeroY);
