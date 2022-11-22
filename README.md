@@ -12,16 +12,12 @@ Lisbon Engineering School, LISBON, PORTUGAL
 
 
 TESTED PLATFORMS
-This code was developed using ....
-
-The operating systems used were Microsoft Windows .......
+The operating systems used were Microsoft Windows 10
 
 
 DISCLAIMER
 This code is provided as is. The author CANNOT be held responsable for any damage caused by the use or reuse of this code (or part of it).
 
 
-FEEDBACK
-The author appreciates any feedback on his work: a40292@alunos.isel.pt; 40292@alunos.isel.ipl.pt
 -----------------------------------------------------------------------------
 
