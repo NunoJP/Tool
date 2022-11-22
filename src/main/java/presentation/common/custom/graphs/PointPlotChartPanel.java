@@ -40,25 +40,24 @@ public class PointPlotChartPanel extends BaseGraphPanel {
         writeYaxisLabels(graphics2D, numberOfPoints, maxValue);
 
         // We can only have as many points as we can properly draw.
-        int totalAllowedPoints = (chartWidth / POINT_SIZE) / MIN_POINT_SPACING;
+        int totalAllowedPoints = chartWidth / (POINT_SIZE * MIN_POINT_SPACING);
         int cutOffForEntries = new BigDecimal(numberOfPoints).divide(new BigDecimal(totalAllowedPoints), RoundingMode.CEILING).intValue();
         boolean shouldSkipEntries = numberOfPoints > (totalAllowedPoints * 2);
-        int pointSpacing;
-//        if(shouldSkipEntries) {
-//            pointSpacing = MIN_POINT_SPACING;
-//        } else {
-//            pointSpacing = chartWidth / POINT_SIZE / (Math.min(numberOfPoints, totalAllowedPoints));
-            pointSpacing = chartWidth / (Math.min(numberOfPoints, totalAllowedPoints));
-//        }
 
-//        System.out.println("=======================");
+        int pointSpacing;
+        if (shouldSkipEntries) {
+            pointSpacing = chartWidth / totalAllowedPoints / POINT_SIZE;
+        } else {
+            pointSpacing = chartWidth / numberOfPoints / POINT_SIZE;
+        }
+
         int counter = 0;
         int skeCounter = 0;
         for (Pair<Long, Date> pair : mapping) {
-//            System.out.println("OCCs: " + pair.getLeft() + " Date: " + pair.getRight());
+
             if(shouldSkipEntries) { // to avoid over crowding the screen
                 if(counter % cutOffForEntries == 0){
-                    createPoint(graphics2D, maxValue, pointSpacing, skeCounter, pair);
+                    createPoint(graphics2D, maxValue, pointSpacing * 3 + 1, skeCounter, pair);
                     // the number of points drawn in the skip mode
                     skeCounter++;
                 }
